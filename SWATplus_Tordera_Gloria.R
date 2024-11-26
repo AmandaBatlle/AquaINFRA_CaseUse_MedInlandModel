@@ -17,7 +17,7 @@ library(dplyr) # To convert data for export
 run_swat_process <- function (TxtInOut) {
   #Run SWAT+ simulation
   q_sim_plus <- run_swatplus(project_path = TxtInOut,
-                             output = define_output(file = 'channel_sd_day',
+                             output = define_output(file = 'channel_sd_mon',
                                                     variable = 'flo_out',
                                                     unit = 1))
   
@@ -29,7 +29,7 @@ run_swat_process <- function (TxtInOut) {
   
 }
 
-# Executable has to me marked as executable
+# Executable has to be marked:
 # ‘chmod +x rev688_64rel_linux’ 
 
 
