@@ -2,9 +2,8 @@
 
 # AquaINFRA Case Study: Mediterranean Inland Model- SWAT+ TORDERA MODEL
 
-# If the package remotes is not installed run first:
+# install packages:
 install.packages('remotes', "dplyr")
-
 remotes::install_github('chrisschuerz/SWATrunR')
 
 # Load required libraries
@@ -19,7 +18,10 @@ run_swat_process <- function (TxtInOut) {
   q_sim_plus <- run_swatplus(project_path = TxtInOut,
                              output = define_output(file = 'channel_sd_mon',
                                                     variable = 'flo_out',
-                                                    unit = 1))
+                                                    unit = 1),
+                             start_date= 20160101,
+                             end_date=20201231,
+                             start_date_print = 20190601)
   
   # Process the output: rename the column to Sim_Flow
   q_plus <- q_sim_plus$simulation$flo_out %>%
@@ -34,7 +36,7 @@ run_swat_process <- function (TxtInOut) {
 
 
 # Example of how to call the function
-path_TxtInOut <- "C:/Users/a.batlle/OneDrive - CREAF/Documentos/local_AquaINFRA/SWATrunR_model/Tordera_Data/Scenario_Gloria_windows"
+path_TxtInOut <- "C:(PATH TO DATA DIRECTORY)/Scenario_Gloria_windows"
 q_plus_result <- run_swat_process(path_TxtInOut)
 
 # View the result
