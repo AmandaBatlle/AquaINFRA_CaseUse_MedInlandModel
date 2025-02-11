@@ -1,0 +1,110 @@
+{
+    "version": "0.1.0",
+    "id": "tordera-gloria",
+    "use_case": "Catalunya Inland",
+    "title": {
+        "en": "First process from Amanda"
+    },
+    "description": {
+        "en": "First process blabla tordera gloria..."
+    },
+    "jobControlOptions": ["sync-execute", "async-execute"],
+    "keywords": ["tordera use case", "AquaINFRA", "R"],
+    "links": [{
+        "type": "text/html",
+        "rel": "about",
+        "title": "GitHub repo",
+        "href": "https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel",
+        "hreflang": "en-US"
+    }],
+    "inputs": {
+        "unit": {
+            "title": "Spatial unit",
+            "description": "Number of the spatial unit. Example: 1. This could be for example the channel number, which would be the portion of the river that you want to know about (TODO Amanda where exactly?). You ",
+            "schema": {
+                "type": "integer"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": []
+        },
+        "file": {
+            "title": "SWAT Output File",
+            "description": "SWAT Output File to use. Example: 'channel_sd_day'. For possible values, please check the SWAT documentation (TODO Amanda where exactly?).<br />Note: You can look into print.prt, take any of the variables there and append '_day' or '_month', or '_year'. TODO Amanda please check.",
+            "schema": {
+                "type": "string"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": []
+        },
+        "variable": {
+            "title": "SWAT Variable",
+            "description": "Variable to simulate. Example: 'flo_out'. For possible values, please check the SWAT documentation (TODO Amanda where exactly?)",
+            "schema": {
+                "type": "string"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": []
+        },
+        "start_date": {
+            "title": "Start date",
+            "description": "Start date of the simulation in the format yyyymmdd. Defaults to: 20160101. Earliest possible date: (TODO).",
+            "schema": {
+                "type": "integer"
+            },
+            "minOccurs": 0,
+            "maxOccurs": 1,
+            "keywords": []
+        },
+        "start_date_print": {
+            "title": "Start date",
+            "description": "Start date for printing in the format yyyymmdd. Defaults to: 20190601. Earliest possible date: (TODO).",
+            "schema": {
+                "type": "integer"
+            },
+            "minOccurs": 0,
+            "maxOccurs": 1,
+            "keywords": []
+        },
+        "end_date": {
+            "title": "End date",
+            "description": "End date of the simulation in the format yyyymmdd. Defaults to: 20201231. Latest possible date: (TODO).",
+            "schema": {
+                "type": "integer"
+            },
+            "minOccurs": 0,
+            "maxOccurs": 1,
+            "keywords": ["bla"]
+        }
+    },
+    "outputs": {
+        "swat_output_file": {
+            "title": "Some output param Amanda",
+            "description": "The result as a SWAT output file.",
+            "schema": {
+                "type": "object",
+                "contentMediaType": "application/csv"
+            }
+        },
+        "parameter_calibration": {
+            "title": "Parameter Calibration",
+            "description": "SWAT Parameter calibration used by the simulation, calibrated by Amanda Batlle, CREAF, Barcelona, Spain (TODO - AManda what needs to be here?).",
+            "schema": {
+                "type": "object",
+                "contentMediaType": "application/csv"
+            }
+        }
+    },
+    "example": {
+        "inputs": {
+            "unit": 1,
+            "file": "channel",
+            "variable": "flo_out",
+            "start_date": 20160101,
+            "end_date": 20201231,
+            "start_date_print": 20190601
+        }
+    }
+}
