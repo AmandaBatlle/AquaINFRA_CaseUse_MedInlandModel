@@ -86,8 +86,9 @@ par_cal <- c("cn2.hru | change=absval" = -15.238,
 # Store parameter files to pass back to user
 out_param_path <- file.path(out_result_path, out_param_file)
 message("Storing parameter calibration to: ", out_param_path)
+par_cal_string <- paste(names(par_cal), par_cal, sep = ": ", collapse = ", ")
 fileConn<-file(out_param_path)
-writeLines(par_cal, fileConn)
+writeLines(par_cal_string, fileConn)
 close(fileConn)
 
 
