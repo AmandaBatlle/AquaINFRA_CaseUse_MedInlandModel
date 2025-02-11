@@ -61,6 +61,7 @@ unit_number <- args[5]
 start_date <- args[6]
 end_date <- args[7]
 start_date_print <- args[8]
+out_param_file <- args[9]
 
 
 # Function call
@@ -72,6 +73,11 @@ par_cal <- c("cn2.hru | change=absval" = -15.238,
               "perco.hru | change=absval" = 0.892,
               "cn3_swf.hru | change=absval" = 0.819
               )
+
+# Store parameter files to pass back to user
+fileConn<-file(out_param_file)
+writeLines(par_cal, fileConn)
+close(fileConn)
 
 
 q_plus_result <- run_swat_process(

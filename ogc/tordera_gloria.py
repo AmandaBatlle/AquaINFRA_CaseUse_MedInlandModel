@@ -62,7 +62,8 @@ class TorderaGloriaProcessor(BaseProcessor):
             in_end_date,
             in_start_date_print
             download_dir, 
-            downloadfilename_swat_output_file
+            downloadfilename_swat_output_file,
+            downloadfilename_parameter_calibration
         )
 
         # print R stderr/stdout to debug log:
@@ -110,7 +111,8 @@ def run_docker_container(
         in_end_date,
         in_start_date_print
         download_dir, 
-        outputFilename
+        downloadfilename_swat_output_file,
+        downloadfilename_parameter_calibration
     ):
     LOGGER.debug('Prepare running docker container')
     container_name = f'daugava-workflow-image_{os.urandom(5).hex()}'
@@ -143,14 +145,14 @@ def run_docker_container(
         image_name,
         "--",  # Indicates the end of Docker's internal arguments and the start of the user's arguments
         container_out,
-        outputFilename,
+        downloadfilename_swat_output_file,
         in_swat_file,
         in_variable,
         in_unit,
         in_start_date,
         in_end_date,
-        in_start_date_print
-
+        in_start_date_print,
+        downloadfilename_parameter_calibration
     ]
 
     LOGGER.debug('Docker command: %s' % docker_command)
