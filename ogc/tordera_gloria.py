@@ -28,7 +28,7 @@ class TorderaGloriaProcessor(BaseProcessor):
     def execute(self, data, outputs=None):
 
         # Get config
-        config_file_path = os.environ.get('CATALUNYA_CONFIG_FILE', "./config.json")
+        config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
         with open(config_file_path, 'r') as configFile:
             configJSON = json.load(configFile)
 
