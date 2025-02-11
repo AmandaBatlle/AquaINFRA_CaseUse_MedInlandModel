@@ -38,7 +38,7 @@ class TorderaGloriaProcessor(BaseProcessor):
 
         # Get user inputs
         in_unit = data.get('unit')
-        in_file = data.get('file')
+        in_swat_file = data.get('file')
         in_variable = data.get('variable')
         in_start_date = data.get('start_date')
         in_end_date = data.get('end_date')
@@ -60,7 +60,7 @@ class TorderaGloriaProcessor(BaseProcessor):
             in_unit,
             in_start_date,
             in_end_date,
-            in_start_date_print
+            in_start_date_print,
             download_dir, 
             downloadfilename_swat_output_file,
             downloadfilename_parameter_calibration
@@ -109,7 +109,7 @@ def run_docker_container(
         in_unit,
         in_start_date,
         in_end_date,
-        in_start_date_print
+        in_start_date_print,
         download_dir, 
         downloadfilename_swat_output_file,
         downloadfilename_parameter_calibration
