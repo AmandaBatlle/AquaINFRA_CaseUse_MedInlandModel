@@ -21,11 +21,16 @@ run_swat_process <- function (TxtInOut, par_comb, out_result_path, out_result_fi
                              start_date= 20160101,
                              end_date=20201231,
                              start_date_print = 20190601,
-                            parameter=par_comb,
-                            save_path = out_result_path,
-                            save_file = out_result_file,
-                            return_output = TRUE)
+                             parameter=par_comb,
+                             save_path = out_result_path,
+                             save_file = out_result_file,
+                             return_output = TRUE)
   message("Running run_swatplus... Done.")
+
+  # check:
+  message("Debug: Is the result NULL? ", is.null(q_sim_plus))
+  head(q_sim_plus)
+  message("Debug: Display the result:  ", q_sim_plus)
   
   # Process the output: rename the column to Sim_Flow
   message("Renaming the result...")
