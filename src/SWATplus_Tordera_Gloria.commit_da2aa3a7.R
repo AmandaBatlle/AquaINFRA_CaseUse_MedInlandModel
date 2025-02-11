@@ -16,11 +16,18 @@ library(dplyr) # To convert data for export
 
 run_swat_process <- function (TxtInOut) {
   #Run SWAT+ simulation
+  message("Debug: Running run_swatplus...")
   q_sim_plus <- run_swatplus(project_path = TxtInOut,
                              output = define_output(file = 'channel_sd_day',
                                                     variable = 'flo_out',
                                                     unit = 1))
-  
+
+  message("Debug: Running run_swatplus... Done.")
+
+  # check:
+  message("Debug: Is the result NULL? ", is.null(q_sim_plus))
+  head(q_sim_plus)
+  message("Debug: Display the result:  ", q_sim_plus)
   # Process the output: rename the column to Sim_Flow
   q_plus <- q_sim_plus$simulation$flo_out %>%
     rename(Sim_Flow = run_1)  # Rename the output to Sim_Flow
