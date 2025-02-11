@@ -55,12 +55,12 @@ class TorderaGloriaProcessor(BaseProcessor):
         
         returncode, stdout, stderr = run_docker_container(
             docker_executable,
-            #in_unit, 
-            #in_file, 
-            #in_variable, 
-            #in_start_date,
-            #in_end_date,
-            #in_start_date_print, 
+            in_swat_file,
+            in_variable,
+            in_unit,
+            in_start_date,
+            in_end_date,
+            in_start_date_print
             download_dir, 
             downloadfilename_swat_output_file
         )
@@ -103,10 +103,12 @@ class TorderaGloriaProcessor(BaseProcessor):
 
 def run_docker_container(
         docker_executable,
-        #regions_url, 
-        #dpoints_url, 
-        #long_col_name, 
-        #lat_col_name, 
+        in_swat_file,
+        in_variable,
+        in_unit,
+        in_start_date,
+        in_end_date,
+        in_start_date_print
         download_dir, 
         outputFilename
     ):
@@ -140,11 +142,15 @@ def run_docker_container(
         "-e", f"R_SCRIPT={script}",  # Set the R_SCRIPT environment variable
         image_name,
         "--",  # Indicates the end of Docker's internal arguments and the start of the user's arguments
-        #regions_url,
-        #dpoints_url,
-        #long_col_name,
-        #lat_col_name,
-        f"{container_out}/{outputFilename}"  # Output filename
+        container_out,
+        outputFilename,
+        in_swat_file,
+        in_variable,
+        in_unit,
+        in_start_date,
+        in_end_date,
+        in_start_date_print
+
     ]
 
     LOGGER.debug('Docker command: %s' % docker_command)

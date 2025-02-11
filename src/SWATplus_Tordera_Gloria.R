@@ -9,18 +9,22 @@ library(dplyr) # To convert data for export
 
 # Funtion to run SWAt+ and process output
 
-run_swat_process <- function (project_path, parameter_calibration, out_result_path, out_result_file) {
+run_swat_process <- function(
+  project_path, parameter_calibration, swat_file, variable, unit_number,
+  start_date, end_date, start_date_print
+  out_result_path, out_result_file) {
+
   #Run SWAT+ simulation
   message("Will store result to: ", out_result_path)
   message("Will name result as:  ", out_result_file)
   message("Running run_swatplus...")
   q_sim_plus <- run_swatplus(project_path = project_path,
-                             output = define_output(file = 'channel_sd_day',
-                                                    variable = 'flo_out',
-                                                    unit = 1),
-                             start_date= 20160101,
-                             end_date=20201231,
-                             start_date_print = 20190601,
+                             output = define_output(file = swat_file,
+                                                    variable = variable,
+                                                    unit = unit_number),
+                             start_date = start_date,
+                             end_date =  end_date,
+                             start_date_print = start_date_print,
                              parameter = parameter_calibration,
                              save_path = out_result_path,
                              save_file = out_result_file,
@@ -33,8 +37,9 @@ run_swat_process <- function (project_path, parameter_calibration, out_result_pa
   message("Debug: Display the result:  ", q_sim_plus)
   
   # Process the output: rename the column to Sim_Flow
+  # TODO: Test whether single pair of square brackets are enough?
   message("Renaming the result...")
-  q_plus <- q_sim_plus$simulation$flo_out %>%
+  q_plus <- q_sim_plus$simulation[variable] %>%
     rename(Sim_Flow = run_1)  # Rename the output to Sim_Flow
   message("Renaming the result... Done.")
   
@@ -50,7 +55,12 @@ args <- commandArgs(trailingOnly = TRUE)
 print(paste0('R Command line args: ', args))
 out_result_path <- args[1]
 out_result_file <- args[2]
-
+swat_file <- args[3]
+variable <- args[4]
+unit_number <- args[5]
+start_date <- args[6]
+end_date <- args[7]
+start_date_print <- args[8]
 
 
 # Function call
@@ -63,7 +73,11 @@ par_cal <- c("cn2.hru | change=absval" = -15.238,
               "cn3_swf.hru | change=absval" = 0.819
               )
 
-q_plus_result <- run_swat_process(project_path, par_cal, out_result_path, out_result_file)
+
+q_plus_result <- run_swat_process(
+  project_path, par_cal, swat_file, variable, unit_number,
+  start_date, end_date, start_date_print
+  out_result_path, out_result_file)
 
 # View the result
 head(q_plus_result)
