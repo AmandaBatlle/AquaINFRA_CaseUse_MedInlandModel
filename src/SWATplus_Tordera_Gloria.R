@@ -63,6 +63,12 @@ end_date <- args[7]
 start_date_print <- args[8]
 out_param_file <- args[9]
 
+# Make integer from those that need:
+unit_number <- as.integer(unit_number)
+start_date <- as.integer(start_date)
+end_date <- as.integer(end_date)
+start_date_print <- as.integer(start_date_print)
+
 # Function call
 # TODO ONE DAY: Let users pass individual (or all of the) input files!
 project_path <- "/swat/Scenario_Gloria_linux"
