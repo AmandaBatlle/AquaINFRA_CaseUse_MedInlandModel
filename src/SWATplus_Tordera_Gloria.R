@@ -9,7 +9,7 @@ library(dplyr) # To convert data for export
 
 # Funtion to run SWAt+ and process output
 
-run_swat_process <- function (TxtInOut, par_comb) {
+run_swat_process <- function (TxtInOut, par_comb, out_result_path, out_result_file) {
   #Run SWAT+ simulation
   q_sim_plus <- run_swatplus(project_path = TxtInOut,
                              output = define_output(file = 'channel_sd_day',
@@ -18,7 +18,10 @@ run_swat_process <- function (TxtInOut, par_comb) {
                              start_date= 20160101,
                              end_date=20201231,
                              start_date_print = 20190601,
-                            parameter=par_comb)
+                            parameter=par_comb,
+                            save_path = out_result_path,
+                            save_file = out_result_file,
+                            return_output = TRUE)
   
   # Process the output: rename the column to Sim_Flow
   q_plus <- q_sim_plus$simulation$flo_out %>%
@@ -31,6 +34,13 @@ run_swat_process <- function (TxtInOut, par_comb) {
 # Executable has to be marked: (Done in Dockerfile)
 # ‘chmod +x rev688_64rel_linux’ 
 
+# Retrieve command line arguments
+args <- commandArgs(trailingOnly = TRUE)
+print(paste0('R Command line args: ', args))
+out_result_path <- args[1]
+out_result_file <- args[2]
+
+
 
 # Function call
 path_TxtInOut <- "/swat/Scenario_Gloria_linux"
@@ -42,7 +52,7 @@ par_cal <- c("cn2.hru | change=absval" = -15.238,
               "cn3_swf.hru | change=absval" = 0.819
               )
 
-q_plus_result <- run_swat_process(path_TxtInOut, par_cal)
+q_plus_result <- run_swat_process(path_TxtInOut, par_cal, out_result_path, out_result_file)
 
 # View the result
 head(q_plus_result)
