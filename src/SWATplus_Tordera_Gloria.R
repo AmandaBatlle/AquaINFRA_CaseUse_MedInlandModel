@@ -63,10 +63,13 @@ end_date <- args[7]
 start_date_print <- args[8]
 out_param_file <- args[9]
 
-
 # Function call
+# TODO ONE DAY: Let users pass individual (or all of the) input files!
 project_path <- "/swat/Scenario_Gloria_linux"
+
+
 # Parameter change
+# TODO ONE DAY: Let user change/pass these, instead of using Amanda's defaults!
 par_cal <- c("cn2.hru | change=absval" = -15.238,
               "esco.hru | change=absval" = 0.805,
               "canmx.hru | change=absval" = 81.537,

@@ -115,8 +115,8 @@ def run_docker_container(
         downloadfilename_parameter_calibration
     ):
     LOGGER.debug('Prepare running docker container')
-    container_name = f'daugava-workflow-image_{os.urandom(5).hex()}'
-    image_name = 'daugava-workflow-image'
+    container_name = f'catalunya-tordera-image_{os.urandom(5).hex()}'
+    image_name = 'catalunya-tordera-image'
 
     # Prepare container command
 
@@ -132,7 +132,7 @@ def run_docker_container(
     os.makedirs(local_in, exist_ok=True)
     os.makedirs(local_out, exist_ok=True)
 
-    script = 'points_att_polygon.R'
+    script = 'SWATplus_Tordera_Gloria.R'
 
     print("------------------------------------------------")
 
