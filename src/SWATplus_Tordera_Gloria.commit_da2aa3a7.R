@@ -3,9 +3,9 @@
 # AquaINFRA Case Study: Mediterranean Inland Model- SWAT+ TORDERA MODEL
 
 # If the package remotes is not installed run first:
-install.packages('remotes', "dplyr")
+#install.packages('remotes', "dplyr")
 
-remotes::install_github('chrisschuerz/SWATrunR')
+#remotes::install_github('chrisschuerz/SWATrunR')
 
 # Load required libraries
 library(SWATrunR) # To run SWAT
@@ -34,7 +34,8 @@ run_swat_process <- function (TxtInOut) {
 
 
 # Example of how to call the function
-path_TxtInOut <- "C:/Users/a.batlle/OneDrive - CREAF/Documentos/local_AquaINFRA/SWATrunR_model/Tordera_Data/Scenario_Gloria_windows"
+#path_TxtInOut <- "C:/Users/a.batlle/OneDrive - CREAF/Documentos/local_AquaINFRA/SWATrunR_model/Tordera_Data/Scenario_Gloria_windows"
+path_TxtInOut <- "/swat/Scenario_Gloria_linux"
 q_plus_result <- run_swat_process(path_TxtInOut)
 
 # View the result
