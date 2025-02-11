@@ -11,7 +11,7 @@ library(dplyr) # To convert data for export
 
 run_swat_process <- function(
   project_path, parameter_calibration, swat_file, variable, unit_number,
-  start_date, end_date, start_date_print
+  start_date, end_date, start_date_print,
   out_result_path, out_result_file) {
 
   #Run SWAT+ simulation
@@ -91,7 +91,7 @@ close(fileConn)
 
 q_plus_result <- run_swat_process(
   project_path, par_cal, swat_file, variable, unit_number,
-  start_date, end_date, start_date_print
+  start_date, end_date, start_date_print,
   out_result_path, out_result_file)
 
 # View the result
