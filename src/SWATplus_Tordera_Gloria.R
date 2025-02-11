@@ -9,19 +9,19 @@ library(dplyr) # To convert data for export
 
 # Funtion to run SWAt+ and process output
 
-run_swat_process <- function (TxtInOut, par_comb, out_result_path, out_result_file) {
+run_swat_process <- function (project_path, parameter_calibration, out_result_path, out_result_file) {
   #Run SWAT+ simulation
   message("Will store result to: ", out_result_path)
   message("Will name result as:  ", out_result_file)
   message("Running run_swatplus...")
-  q_sim_plus <- run_swatplus(project_path = TxtInOut,
+  q_sim_plus <- run_swatplus(project_path = project_path,
                              output = define_output(file = 'channel_sd_day',
                                                     variable = 'flo_out',
                                                     unit = 1),
                              start_date= 20160101,
                              end_date=20201231,
                              start_date_print = 20190601,
-                             parameter=par_comb,
+                             parameter = parameter_calibration,
                              save_path = out_result_path,
                              save_file = out_result_file,
                              return_output = TRUE)
@@ -54,7 +54,7 @@ out_result_file <- args[2]
 
 
 # Function call
-path_TxtInOut <- "/swat/Scenario_Gloria_linux"
+project_path <- "/swat/Scenario_Gloria_linux"
 # Parameter change
 par_cal <- c("cn2.hru | change=absval" = -15.238,
               "esco.hru | change=absval" = 0.805,
@@ -63,7 +63,7 @@ par_cal <- c("cn2.hru | change=absval" = -15.238,
               "cn3_swf.hru | change=absval" = 0.819
               )
 
-q_plus_result <- run_swat_process(path_TxtInOut, par_cal, out_result_path, out_result_file)
+q_plus_result <- run_swat_process(project_path, par_cal, out_result_path, out_result_file)
 
 # View the result
 head(q_plus_result)
