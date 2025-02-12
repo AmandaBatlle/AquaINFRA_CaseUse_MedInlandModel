@@ -5,6 +5,24 @@ import os
 from pathlib import Path
 from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 
+'''
+How to call this process:
+
+# NOT COMMIT:
+curl -X POST "https://aquainfra.ogc.igb-berlin.de/pygeoapi/processes/tordera-gloria/execution" --header "Content-Type: application/json" --data '{
+curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" --header "Content-Type: application/json" --data '{
+  "inputs": {
+    "unit": 1,
+    "file": "channel_sd_day",
+    "variable": "flo_out",
+    "start_date": 20160101,
+    "end_date": 20201231,
+    "start_date_print": 20190601
+    }
+}'
+
+'''
+
 
 LOGGER = logging.getLogger(__name__)
 
