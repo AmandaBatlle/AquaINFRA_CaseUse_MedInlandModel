@@ -19,8 +19,8 @@
     }],
     "inputs": {
         "unit": {
-            "title": "Spatial unit",
-            "description": "Number of the spatial unit. Example: 1. This could be for example the channel number, which would be the portion of the river that you want to know about (TODO Amanda where exactly?). You ",
+            "title": "Output Spatial unit",
+            "description": "Number of the spatial unit that we want to generate an output for. This could be the spatial unit for a river section, HRU, or LSU as defined by the Tordera watershed delineation in (link to the watershed map)",
             "schema": {
                 "type": "integer"
             },
