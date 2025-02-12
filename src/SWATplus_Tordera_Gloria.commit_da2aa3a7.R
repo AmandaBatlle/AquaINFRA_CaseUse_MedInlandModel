@@ -43,7 +43,7 @@ run_swat_process <- function (TxtInOut) {
 
 # Example of how to call the function
 #path_TxtInOut <- "C:/Users/a.batlle/OneDrive - CREAF/Documentos/local_AquaINFRA/SWATrunR_model/Tordera_Data/Scenario_Gloria_windows"
-path_TxtInOut <- "/swat/Scenario_Gloria_linux"
+path_TxtInOut <- "./swat/swatplus_rev60_demo"
 q_plus_result <- run_swat_process(path_TxtInOut)
 
 # View the result
