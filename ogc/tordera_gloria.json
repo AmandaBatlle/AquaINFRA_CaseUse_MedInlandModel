@@ -20,7 +20,7 @@
     "inputs": {
         "unit": {
             "title": "Output Spatial unit",
-            "description": "Number of the spatial unit that we want to generate an output for. This could be the spatial unit for a river section, HRU, or LSU as defined by the Tordera watershed delineation in (link to the watershed map)",
+            "description": "Number of the spatial unit that we want to generate an output for. This could be the spatial unit for a river section, HRU, or LSU as defined by the Tordera watershed delineation in (LINK TO WATERSHED MAP)",
             "schema": {
                 "type": "integer"
             },
@@ -30,7 +30,7 @@
         },
         "file": {
             "title": "SWAT Output File",
-            "description": "SWAT Output File to use. Example: 'channel_sd_day'. For possible values, please check the SWAT documentation (TODO Amanda where exactly?).<br />Note: You can look into print.prt, take any of the variables there and append '_day' or '_month', or '_year'. TODO Amanda please check.",
+            "description": "SWAT Output File to use. Example: 'channel_sd_day'. For possible values, please check the SWAT documentation (https://swatplus.gitbook.io/io-docs), SWAT+ OUTPUT FILES section. Outputs can be obtained at different time steps by appending a suffix to the output file: _day for daily, _mon for monthly, _yr for yearly, and _aa for annual average.",
             "schema": {
                 "type": "string"
             },
@@ -40,7 +40,7 @@
         },
         "variable": {
             "title": "SWAT Variable",
-            "description": "Variable to simulate. Example: 'flo_out'. For possible values, please check the SWAT documentation (TODO Amanda where exactly?)",
+            "description": "Variable to simulate. Example: 'flo_out'. For possible values, please check the SWAT documentation (https://swatplus.gitbook.io/io-docs) inside each of the SWAT+ OUTPUT FILES sections.",
             "schema": {
                 "type": "string"
             },
@@ -50,7 +50,7 @@
         },
         "start_date": {
             "title": "Start date",
-            "description": "Start date of the simulation in the format yyyymmdd. Defaults to: 20160101. Earliest possible date: (TODO).",
+            "description": "Start date of the simulation in the format yyyymmdd. Defaults to: 20160101. Earliest possible date: 20000101.",
             "schema": {
                 "type": "integer"
             },
@@ -60,7 +60,7 @@
         },
         "start_date_print": {
             "title": "Start date",
-            "description": "Start date for printing in the format yyyymmdd. Defaults to: 20190601. Earliest possible date: (TODO).",
+            "description": "Start date for printing in the format yyyymmdd. Defaults to: 20190601. Earliest possible date: 20020101. It is recommended to allow for at least two warm-up years between the model simulation start and the model output printing to ensure relevant results",
             "schema": {
                 "type": "integer"
             },
@@ -70,7 +70,7 @@
         },
         "end_date": {
             "title": "End date",
-            "description": "End date of the simulation in the format yyyymmdd. Defaults to: 20201231. Latest possible date: (TODO).",
+            "description": "End date of the simulation in the format yyyymmdd. Defaults to: 20201231. Latest possible date: 20221231.",
             "schema": {
                 "type": "integer"
             },
