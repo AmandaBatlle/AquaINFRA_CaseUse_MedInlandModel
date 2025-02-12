@@ -30,7 +30,7 @@
         },
         "file": {
             "title": "SWAT Output File",
-            "description": "SWAT Output File to use. Example: 'channel_sd_day'. For possible values, please check the SWAT documentation (https://swatplus.gitbook.io/io-docs), SWAT+ OUTPUT FILES section. Outputs can be obtained at different time steps by appending a suffix to the output file: _day for daily, _mon for monthly, _yr for yearly, and _aa for annual average.",
+            "description": "A SWAT+ output file name consists of three elements separated by underscores (_): spatial unit, output category, and time step. For example, 'channel_sd_day'. The spatial unit defines the scale of the output and can be basin, hru, lsunit, channel, aquifer, or reservoir. The output category specifies the type of data: wb (water balance), nb (nutrient balance), ls (losses), pw (plant and weather), or sd (streamflow and sediment in channels). The time step indicates the temporal resolution and can be day (daily), mon (monthly), yr (yearly), or aa (annual average). Combining these elements forms the output file name. For more details, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs)",
             "schema": {
                 "type": "string"
             },
