@@ -20,7 +20,7 @@
     "inputs": {
         "unit": {
             "title": "Output Spatial unit",
-            "description": "Number of the spatial unit that we want to generate an output for. This could be the spatial unit for a river section, HRU, or LSU as defined by the Tordera watershed delineation in (LINK TO WATERSHED MAP)",
+            "description": "Define the spatial unit for which to generate an output. Spatial unit refers to river section, HRU, or LSU as defined by La Tordera watershed delineation in (LINK TO WATERSHED MAP)",
             "schema": {
                 "type": "integer"
             },
@@ -30,7 +30,7 @@
         },
         "file": {
             "title": "SWAT Output File",
-            "description": "A SWAT+ output file name consists of three elements separated by underscores (_): spatial unit, output category, and time step. For example, 'channel_sd_day'. The spatial unit defines the scale of the output and can be basin, hru, lsunit, channel, aquifer, or reservoir. The output category specifies the type of data: wb (water balance), nb (nutrient balance), ls (losses), pw (plant and weather), or sd (streamflow and sediment in channels). The time step indicates the temporal resolution and can be day (daily), mon (monthly), yr (yearly), or aa (annual average). Combining these elements forms the output file name. For more details, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs)",
+            "description": "A SWAT+ output file name consists of three elements separated by underscores (_): spatial unit, output category, and time step. For example, 'channel_sd_day'. The spatial unit defines the scale of the output and can be basin, hru, lsunit, channel, aquifer, or reservoir. The output category specifies the type of data: wb (water balance), nb (nutrient balance), ls (losses), pw (plant and weather), or sd (streamflow and sediment in channels). The time step indicates the temporal resolution and can be day (daily), mon (monthly), yr (yearly), or aa (annual average). Combining these elements forms the output file name. Galaxy platform will offer a subset of the most common outputs. For more details, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs).",
             "schema": {
                 "type": "string"
             },
@@ -40,7 +40,7 @@
         },
         "variable": {
             "title": "SWAT Variable",
-            "description": "Variable to simulate. Example: 'flo_out'. For possible values, please check the SWAT documentation (https://swatplus.gitbook.io/io-docs) inside each of the SWAT+ OUTPUT FILES sections.",
+            "description": "Variable to simulate. Example: 'flo_out'. Galaxy platform will offer a subset of the most common variable outputs. For more details, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs).",
             "schema": {
                 "type": "string"
             },
