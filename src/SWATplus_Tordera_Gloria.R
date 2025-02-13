@@ -1,7 +1,7 @@
 # Author: Amanda Batlle Morera (a.batll@creaf.uab.cat)
 # AquaINFRA Case Study: Mediterranean Inland Model - SWAT+ TORDERA MODEL
 
-if (!requireNamespace("SWATrunR", quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')
+#if (!requireNamespace("SWATrunR", quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')
 
 library(SWATrunR)
 library(dplyr)
