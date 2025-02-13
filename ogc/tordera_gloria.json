@@ -6,7 +6,7 @@
         "en": "First process from Amanda"
     },
     "description": {
-        "en": "This process models the hydrological behaviour of La Tordera Basin from 2000 to 2022 using SWAT+ ( https://swat.tamu.edu/). The default tool settings generate daily outputs of flow, water temperature, and nutrient levels at the mouth of La Tordera River between July 2019 and December 2020, allowing for an assessment of river flow parameters during Storm Gloria (19 January 2020)."
+        "en": "This process models the hydrological behaviour of La Tordera Basin from 2000 to 2022 using SWAT+ ( https://swat.tamu.edu/). The default tool settings generate daily outputs of flow, water temperature, and nutrient levels at the mouth of La Tordera River between July 2019 and December 2020, allowing for an assessment of river flow parameters during Storm Gloria (19 January 2020). The model is executed using SWATrunR ( https://github.com/chrisschuerz/SWATplusR ) with the SWAT+ rev60.5.7_64rel_linux executable."
     },
     "jobControlOptions": ["sync-execute", "async-execute"],
     "keywords": ["tordera use case", "AquaINFRA", "R"],
@@ -40,7 +40,7 @@
         },
         "variable": {
             "title": "SWAT Variable",
-            "description": "Variable to simulate. Example: 'flo_out'. Galaxy platform will offer a subset of the most common variable outputs. For more details and extended capabilities, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs).Defaults to: 'flo_out'. ",
+            "description": "Variable to simulate. Example: 'flo_out'. Galaxy platform will offer a subset of the most common variable outputs. For more details and extended capabilities, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs). Defaults to: 'flo_out'. ",
             "schema": {
                 "type": "string"
             },
