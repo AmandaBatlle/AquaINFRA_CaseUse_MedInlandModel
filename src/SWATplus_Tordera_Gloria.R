@@ -1,19 +1,16 @@
 # Author: Amanda Batlle Morera (a.batll@creaf.uab.cat)
 # AquaINFRA Case Study: Mediterranean Inland Model - SWAT+ TORDERA MODEL
 
-#if (!requireNamespace("SWATrunR", quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')
+# Install required libraries only if not already installed
+if (!requireNamespace("SWATrunR", quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')
 
 library(SWATrunR)
 library(dplyr)
+library(readr)
 
 run_swat_process <- function(
     project_path, parameter_calibration, swat_file, variable, unit_number,
-    start_date, end_date, start_date_print,
-    out_result_path, out_result_file) {
-  
-  # Display messages for output storage
-  message("Storing results in: ", out_result_path)
-  message("Output file name: ", out_result_file)
+    start_date, end_date, start_date_print) {
   
   # Run SWAT+ simulation
   message("Executing SWAT+ simulation...")
@@ -27,10 +24,7 @@ run_swat_process <- function(
     start_date = start_date,
     end_date = end_date,
     start_date_print = start_date_print,
-    parameter = parameter_calibration,
-    save_path = out_result_path,
-    save_file = out_result_file,
-    return_output = TRUE
+    parameter = parameter_calibration
   )
   message("SWAT+ simulation completed.")
   
@@ -54,8 +48,7 @@ unit_number <- as.integer(args[3])  # Convert to integer
 start_date <- args[4]
 end_date <- args[5]
 start_date_print <- args[6]
-out_result_path <- args[7]
-out_result_file <- args[8]
+out_result_file <- args[7]
 
 project_path <- "../swat/swatplus_rev60_demo"
 
@@ -70,8 +63,10 @@ par_cal <- c(
 
 q_plus_result <- run_swat_process(
   project_path, par_cal, swat_file, variable, unit_number,
-  start_date, end_date, start_date_print,
-  out_result_path, out_result_file
+  start_date, end_date, start_date_print
 )
 
-head(q_plus_result)
+# Save result to a CSV file
+output_csv <- file.path(out_result_file)
+write_csv(q_plus_result, output_csv)
+message("Results saved to: ", output_csv)
