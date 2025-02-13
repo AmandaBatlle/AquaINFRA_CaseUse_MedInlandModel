@@ -11,13 +11,13 @@ How to call this process:
 # NOT COMMIT:
 curl -X POST "https://aquainfra.ogc.igb-berlin.de/pygeoapi/processes/tordera-gloria/execution" --header "Content-Type: application/json" --data '{
 curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" --header "Content-Type: application/json" --data '{
-  "inputs": {
-    "unit": 1,
-    "file": "channel_sd_day",
-    "variable": "flo_out",
-    "start_date": 20160101,
-    "end_date": 20201231,
-    "start_date_print": 20190601
+  "inputs":{
+        "file": "channel_sd_day", 
+        "variable":"flo_out", 
+        "unit": 1, 
+        "start_date": 20000101,
+        "end_date": 20051231,
+        "start_date_print": 20020601
     }
 }'
 
@@ -93,7 +93,7 @@ class TorderaGloriaProcessor(BaseProcessor):
             raise ProcessorExecuteError(user_msg = err_msg)
 
         else:
-            downloadlink_swat_output_file      = own_url.rstrip('/')+os.sep+"out"+os.sep+downloadfilename_swat_output_file
+            downloadlink_swat_output_file = own_url.rstrip('/')+os.sep+"out"+os.sep+downloadfilename_swat_output_file
             response_object = {
                 "outputs": {
                     "swat_output_file": {
@@ -147,14 +147,13 @@ def run_docker_container(
         "-e", f"R_SCRIPT={script}",  # Set the R_SCRIPT environment variable
         image_name,
         "--",  # Indicates the end of Docker's internal arguments and the start of the user's arguments
-        container_out,
-        downloadfilename_swat_output_file,
         in_swat_file,
         in_variable,
         in_unit,
         in_start_date,
         in_end_date,
-        in_start_date_print
+        in_start_date_print,
+        f"{container_out}/{downloadfilename_swat_output_file}"
     ]
 
     LOGGER.debug('Docker command: %s' % docker_command)
