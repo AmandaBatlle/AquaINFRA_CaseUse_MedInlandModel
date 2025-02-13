@@ -1,102 +1,77 @@
-# Amanda Batlle Morera (a.batll@creaf.uab.cat)
+# Author: Amanda Batlle Morera (a.batll@creaf.uab.cat)
+# AquaINFRA Case Study: Mediterranean Inland Model - SWAT+ TORDERA MODEL
 
-# AquaINFRA Case Study: Mediterranean Inland Model- SWAT+ TORDERA MODEL
+if (!requireNamespace("SWATrunR", quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')
 
-# Load required libraries
-library(SWATrunR) # To run SWAT
-library(dplyr) # To convert data for export
-
-
-# Funtion to run SWAt+ and process output
+library(SWATrunR)
+library(dplyr)
 
 run_swat_process <- function(
-  project_path, parameter_calibration, swat_file, variable, unit_number,
-  start_date, end_date, start_date_print,
-  out_result_path, out_result_file) {
-
-  #Run SWAT+ simulation
-  message("Will store result to: ", out_result_path)
-  message("Will name result as:  ", out_result_file)
-  message("Running run_swatplus...")
-  q_sim_plus <- run_swatplus(project_path = project_path,
-                             output = define_output(file = swat_file,
-                                                    variable = variable,
-                                                    unit = unit_number),
-                             start_date = start_date,
-                             end_date =  end_date,
-                             start_date_print = start_date_print,
-                             parameter = parameter_calibration,
-                             save_path = out_result_path,
-                             save_file = out_result_file,
-                             return_output = TRUE)
-  message("Running run_swatplus... Done.")
-
-  # check:
-  message("Debug: Is the result NULL? ", is.null(q_sim_plus))
-  head(q_sim_plus)
-  message("Debug: Display the result:  ", q_sim_plus)
+    project_path, parameter_calibration, swat_file, variable, unit_number,
+    start_date, end_date, start_date_print,
+    out_result_path, out_result_file) {
   
-  # Process the output: rename the column to Sim_Flow
-  # TODO: Test whether single pair of square brackets are enough?
-  message("Renaming the result...")
-  q_plus <- q_sim_plus$simulation[variable] %>%
-    rename(Sim_Flow = run_1)  # Rename the output to Sim_Flow
-  message("Renaming the result... Done.")
+  # Display messages for output storage
+  message("Storing results in: ", out_result_path)
+  message("Output file name: ", out_result_file)
+  
+  # Run SWAT+ simulation
+  message("Executing SWAT+ simulation...")
+  q_sim_plus <- run_swatplus(
+    project_path = project_path,
+    output = define_output(
+      file = swat_file,
+      variable = variable,
+      unit = unit_number
+    ),
+    start_date = start_date,
+    end_date = end_date,
+    start_date_print = start_date_print,
+    parameter = parameter_calibration,
+    save_path = out_result_path,
+    save_file = out_result_file,
+    return_output = TRUE
+  )
+  message("SWAT+ simulation completed.")
+  
+  # Rename the result variable for clarity
+  message("Processing simulation results...")
+  q_plus <- q_sim_plus$simulation[[variable]] %>% rename(Sim_Flow = run_1)
+  message("Results processed successfully.")
   
   return(q_plus)
-  
 }
 
-# Executable has to be marked: (Done in Dockerfile)
-# ‘chmod +x rev688_64rel_linux’ 
+# Ensure executable permissions are set (Handled in Dockerfile)
+# Command: chmod +x rev688_64rel_linux
 
-# Retrieve command line arguments
 args <- commandArgs(trailingOnly = TRUE)
-print(paste0('R Command line args: ', args))
-out_result_path <- args[1]
-out_result_file <- args[2]
-swat_file <- args[3]
-variable <- args[4]
-unit_number <- args[5]
-start_date <- args[6]
-end_date <- args[7]
-start_date_print <- args[8]
-out_param_file <- args[9]
+print(paste0('R Command line arguments: ', args))
 
-# Make integer from those that need:
-unit_number <- as.integer(unit_number)
-start_date <- as.integer(start_date)
-end_date <- as.integer(end_date)
-start_date_print <- as.integer(start_date_print)
+swat_file <- args[1]
+variable <- args[2]
+unit_number <- as.integer(args[3])  # Convert to integer
+start_date <- args[4]
+end_date <- args[5]
+start_date_print <- args[6]
+out_result_path <- args[7]
+out_result_file <- args[8]
 
-# Function call
-# TODO ONE DAY: Let users pass individual (or all of the) input files!
-project_path <- "/swat/Scenario_Gloria_linux"
+project_path <- "../swat/swatplus_rev60_demo"
 
-
-# Parameter change
-# TODO ONE DAY: Let user change/pass these, instead of using Amanda's defaults!
-par_cal <- c("cn2.hru | change=absval" = -15.238,
-              "esco.hru | change=absval" = 0.805,
-              "canmx.hru | change=absval" = 81.537,
-              "perco.hru | change=absval" = 0.892,
-              "cn3_swf.hru | change=absval" = 0.819
-              )
-
-# Store parameter files to pass back to user
-out_param_path <- file.path(out_result_path, out_param_file)
-message("Storing parameter calibration to: ", out_param_path)
-par_cal_string <- paste(names(par_cal), par_cal, sep = ": ", collapse = ", ")
-fileConn<-file(out_param_path)
-writeLines(par_cal_string, fileConn)
-close(fileConn)
-
+# Define parameter modifications for calibration
+par_cal <- c(
+  "cn2.hru | change=absval" = -15.238,
+  "esco.hru | change=absval" = 0.805,
+  "canmx.hru | change=absval" = 81.537,
+  "perco.hru | change=absval" = 0.892,
+  "cn3_swf.hru | change=absval" = 0.819
+)
 
 q_plus_result <- run_swat_process(
   project_path, par_cal, swat_file, variable, unit_number,
   start_date, end_date, start_date_print,
-  out_result_path, out_result_file)
+  out_result_path, out_result_file
+)
 
-# View the result
 head(q_plus_result)
-

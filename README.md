@@ -29,6 +29,7 @@ unzip Scenario_Gloria_linux.zip
 today=$(date '+%Y%m%d')
 docker build -t catalunya-tordera-image:${today} .
 docker build -t catalunya-tordera-image:latest .
+docker run -it -v ./in:/in -v ./out:/out -e R_SCRIPT="SWATplus_Tordera_Gloria.R" catalunya-tordera-image -- "channel_sd_day" "flo_out" 1 20000101 20051231 20020601 "result" "tmp.csv"
 ```
 
 ## How to deploy as OGC service on pygeoapi
