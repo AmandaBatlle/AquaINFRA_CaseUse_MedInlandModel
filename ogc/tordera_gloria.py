@@ -9,8 +9,8 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 How to call this process:
 
 curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" \
---header "Content-Type: application/json"
- --data '{
+  --header "Content-Type: application/json" \
+  --data '{
   "inputs":{
         "file": "channel_sd_day", 
         "variable":"flo_out", 
@@ -86,11 +86,19 @@ class TorderaGloriaProcessor(BaseProcessor):
                 LOGGER.debug('R stderr: %s' % line)
 
         if not returncode == 0:
-            err_msg = 'Running docker container failed.'
-            for line in stderr.split('\n'):
-                if line.startswith('Error'): # TODO: Sometimes error messages span several lines.
-                    err_msg = 'Running docker container failed: %s' % (line)
-            raise ProcessorExecuteError(user_msg = err_msg)
+            very_debug = True # TODO: This is only a temporary solution!
+            if very_debug:
+                # TODO: This prints all the content to the response. Remove this after debug period!
+                err_msg = 'Running docker container failed. Stderr: ' + ' - '.join(stderr.split('\n'))
+            else:
+                err_msg = 'Running docker container failed.'
+                for line in stderr.split('\n'):
+                    if line.startswith('Error'): # TODO: Sometimes error messages span several lines.
+                        err_msg = 'Running docker container failed: %s' % (line)
+                raise ProcessorExecuteError(user_msg = err_msg)
+
+
+
 
         else:
             downloadlink_swat_output_file = own_url.rstrip('/')+os.sep+"out"+os.sep+downloadfilename_swat_output_file
