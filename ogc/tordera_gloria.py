@@ -8,9 +8,9 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 '''
 How to call this process:
 
-# NOT COMMIT:
-curl -X POST "https://aquainfra.ogc.igb-berlin.de/pygeoapi/processes/tordera-gloria/execution" --header "Content-Type: application/json" --data '{
-curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" --header "Content-Type: application/json" --data '{
+curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" \
+--header "Content-Type: application/json"
+ --data '{
   "inputs":{
         "file": "channel_sd_day", 
         "variable":"flo_out", 
