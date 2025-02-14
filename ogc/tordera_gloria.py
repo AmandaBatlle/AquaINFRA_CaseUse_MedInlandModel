@@ -11,13 +11,13 @@ How to call this process:
 # NOT COMMIT:
 curl -X POST "https://aquainfra.ogc.igb-berlin.de/pygeoapi/processes/tordera-gloria/execution" --header "Content-Type: application/json" --data '{
 curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" --header "Content-Type: application/json" --data '{
-  "inputs": {
-    "unit": 1,
-    "file": "channel_sd_day",
-    "variable": "flo_out",
-    "start_date": 20160101,
-    "end_date": 20201231,
-    "start_date_print": 20190601
+  "inputs":{
+        "file": "channel_sd_day", 
+        "variable":"flo_out", 
+        "unit": 1, 
+        "start_date": 20000101,
+        "end_date": 20051231,
+        "start_date_print": 20020601
     }
 }'
 
@@ -55,21 +55,14 @@ class TorderaGloriaProcessor(BaseProcessor):
         docker_executable = configJSON.get("docker_executable", "docker")
 
         # Get user inputs
-        in_unit = data.get('unit')
         in_swat_file = data.get('file')
         in_variable = data.get('variable')
+        in_unit = data.get('unit')        
         in_start_date = data.get('start_date')
         in_end_date = data.get('end_date')
         in_start_date_print = data.get('start_date_print')
 
-        # Check: TODO
-        #if in_regions_url is None:
-        #    raise ProcessorExecuteError('Missing parameter "regions". Please provide a URL to your input study area (as zipped shapefile).')
-        #if in_dpoints_url is None:
-        #    raise ProcessorExecuteError('Missing parameter "input_data". Please provide a URL to your input table.')
-
         downloadfilename_swat_output_file = 'swat_output_file-%s.csv' % self.my_job_id
-        downloadfilename_parameter_calibration = 'parameter_calibration-%s.txt' % self.my_job_id
         
         returncode, stdout, stderr = run_docker_container(
             docker_executable,
@@ -80,8 +73,7 @@ class TorderaGloriaProcessor(BaseProcessor):
             str(in_end_date),
             str(in_start_date_print),
             download_dir, 
-            downloadfilename_swat_output_file,
-            downloadfilename_parameter_calibration
+            downloadfilename_swat_output_file
         )
 
         # print R stderr/stdout to debug log:
@@ -101,20 +93,14 @@ class TorderaGloriaProcessor(BaseProcessor):
             raise ProcessorExecuteError(user_msg = err_msg)
 
         else:
-            downloadlink_swat_output_file      = own_url.rstrip('/')+os.sep+"out"+os.sep+downloadfilename_swat_output_file
-            downloadlink_parameter_calibration = own_url.rstrip('/')+os.sep+"out"+os.sep+downloadfilename_parameter_calibration
+            downloadlink_swat_output_file = own_url.rstrip('/')+os.sep+"out"+os.sep+downloadfilename_swat_output_file
             response_object = {
                 "outputs": {
                     "swat_output_file": {
                         "title": self.metadata['outputs']['swat_output_file']['title'],
                         "description": self.metadata['outputs']['swat_output_file']['description'],
                         "href": downloadlink_swat_output_file
-                    },
-                    "parameter_calibration": {
-                        "title": self.metadata['outputs']['parameter_calibration']['title'],
-                        "description": self.metadata['outputs']['parameter_calibration']['description'],
-                        "href": downloadlink_parameter_calibration
-                    },
+                    }
                 }
             }
 
@@ -129,8 +115,7 @@ def run_docker_container(
         in_end_date,
         in_start_date_print,
         download_dir, 
-        downloadfilename_swat_output_file,
-        downloadfilename_parameter_calibration
+        downloadfilename_swat_output_file
     ):
     LOGGER.debug('Prepare running docker container')
     container_name = f'catalunya-tordera-image_{os.urandom(5).hex()}'
@@ -162,15 +147,13 @@ def run_docker_container(
         "-e", f"R_SCRIPT={script}",  # Set the R_SCRIPT environment variable
         image_name,
         "--",  # Indicates the end of Docker's internal arguments and the start of the user's arguments
-        container_out,
-        downloadfilename_swat_output_file,
         in_swat_file,
         in_variable,
         in_unit,
         in_start_date,
         in_end_date,
         in_start_date_print,
-        downloadfilename_parameter_calibration
+        f"{container_out}/{downloadfilename_swat_output_file}"
     ]
 
     LOGGER.debug('Docker command: %s' % docker_command)

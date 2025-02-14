@@ -1,0 +1,9 @@
+name: r-environment
+channels:
+  - conda-forge
+dependencies:
+  - r-base=4.4.2
+  - r-remotes=2.5.0
+  - r-dplyr=1.1.4
+  - r-data.table=1.16.4
+  - r-readr=2.1.5

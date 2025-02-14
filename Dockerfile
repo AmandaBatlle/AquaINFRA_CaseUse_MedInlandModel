@@ -1,26 +1,27 @@
 FROM rocker/r-ver:4.3.0
 
-# Install remotes (needed to install specific versions of packages)
-RUN R -e "install.packages('remotes', repos='https://cran.rstudio.com/')"
+RUN apt-get update && apt-get install -y \
+    curl
+
+RUN curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o miniconda.sh \
+    && bash miniconda.sh -b -p /opt/conda \
+    && rm miniconda.sh \
+    && /opt/conda/bin/conda init \
+    && ln -s /opt/conda/bin/conda /usr/local/bin/conda \
+    && ln -s /opt/conda/bin/activate /usr/local/bin/activate
 
 # Install SWAT model and make executable:
 COPY swat /swat
-RUN chmod +x /swat/Scenario_Gloria_linux/rev688_64rel_linux
-
-# Install dependencies
-#COPY /.binder/install.R /src/install.R
-#RUN Rscript /src/install.R
-RUN Rscript -e "install.packages('remotes')"
-RUN Rscript -e "install.packages('dplyr')"
-RUN Rscript -e "install.packages(c('remotes', 'devtools', 'data.table'), repos='https://cran.rstudio.com/')"
-#RUN Rscript -e "remotes::install_github('chrisschuerz/SWATrunR')"
-RUN Rscript -e "remotes::install_github('chrisschuerz/SWATrunR', dependencies=TRUE, upgrade='never')"
-
-# Get the actual script:
 COPY src /src
 
-# It has to be run where the executables can be found:
-WORKDIR /swat
+RUN chmod +x /swat/swatplus_rev60_demo/rev60.5.7_64rel_linux
 
-# Use sh -c to expand the environment variables and pass arguments
-ENTRYPOINT ["sh", "-c", "Rscript /src/${R_SCRIPT} $@"]
+WORKDIR /src
+
+COPY /.binder/environment.yml /src/environment.yml
+RUN conda env create -f /src/environment.yml
+
+RUN conda run -n r-environment Rscript -e "if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes', repos='https://cran.rstudio.com/')"
+RUN conda run -n r-environment Rscript -e "if (!requireNamespace('SWATrunR', quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')"
+
+ENTRYPOINT ["conda", "run", "-n", "r-environment", "/bin/bash", "-c", "Rscript /src/${R_SCRIPT} $@"]
