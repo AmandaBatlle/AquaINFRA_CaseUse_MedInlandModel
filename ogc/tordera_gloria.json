@@ -16,6 +16,22 @@
         "title": "GitHub repo",
         "href": "https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel",
         "hreflang": "en-US"
+    },
+    {
+        "type": "text/html",
+        "rel": "about",
+        "is_oer": "yes",
+        "title": "How to use a OGC processing service with R",
+        "href": "https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel",
+        "hreflang": "en-US"
+    },
+    {
+        "type": "text/html",
+        "rel": "about",
+        "is_oer": "yes",
+        "title": "How to use a OGC processing service with python",
+        "href": "https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel",
+        "hreflang": "en-US"
     }],
     "inputs": {
         "unit": {
