@@ -93,14 +93,6 @@
             "minOccurs": 0,
             "maxOccurs": 1,
             "keywords": []
-        },
-        "parameter_calibration": {
-            "title": "Parameter Calibration",
-            "description": "(Optional) SWAT model parameter adjustments. Default values are obtained through a two-step calibration process: an initial soft calibration based on a qualitative evaluation of annual average outputs, followed by an automatic calibration by landscape units using observed gauge data from the Catalan Water Agency (Agència Catalana de l'Aigua, https://aca.gencat.cat/). For more details, refer to the SWAT+ documentation ( https://swatplus.gitbook.io/io-docs) and the SWATrunR documentation ( https://chrisschuerz.github.io/SWATrunR/). Defaults to: (TODO Amanda).",
-            "schema": {
-                "type": "object",
-                "contentMediaType": "application/csv"
-            }
         }
     },
     "outputs": {
