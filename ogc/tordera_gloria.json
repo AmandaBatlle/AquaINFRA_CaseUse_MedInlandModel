@@ -6,7 +6,7 @@
         "en": "First process from Amanda"
     },
     "description": {
-        "en": "This process models the hydrological behaviour of La Tordera Basin from 2000 to 2022 using SWAT+ ( https://swat.tamu.edu/). The default tool settings generate daily outputs of flow, water temperature, and nutrient levels at the mouth of La Tordera River between July 2019 and December 2020, allowing for an assessment of river flow parameters during Storm Gloria (19 January 2020). The model is executed using SWATrunR ( https://github.com/chrisschuerz/SWATplusR ) with the SWAT+ rev60.5.7_64rel_linux executable."
+        "en": "This process models the hydrological behaviour of La Tordera Basin from 2000 to 2022 using SWAT+ ( https://swat.tamu.edu/). The default tool settings generate daily outputs of flow, water temperature, and nutrient levels at the mouth of La Tordera River between July 2019 and December 2020, allowing for an assessment of river flow parameters during Storm Gloria (19 January 2020). The model is calibrated through a two-step calibration process: an initial soft calibration based on a qualitative evaluation of annual average outputs, followed by an automatic calibration by landscape units using observed gauge data from the Catalan Water Agency (Agència Catalana de l'Aigua, https://aca.gencat.cat/). Final parameter calibration values: XXXXXXX. The model is executed using SWATrunR ( https://github.com/chrisschuerz/SWATplusR ) with the SWAT+ rev60.5.7_64rel_linux executable."
     },
     "jobControlOptions": ["sync-execute", "async-execute"],
     "keywords": ["tordera use case", "AquaINFRA", "R"],
