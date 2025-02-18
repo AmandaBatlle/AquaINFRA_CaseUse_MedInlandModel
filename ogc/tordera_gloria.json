@@ -46,7 +46,7 @@
         },
         "file": {
             "title": "SWAT Output File",
-            "description": "A SWAT+ output file name consists of three elements separated by underscores (_): spatial unit, output category, and time step. For example, 'channel_sd_day'. The spatial unit defines the scale of the output and can be basin, hru, lsunit, channel, aquifer, or reservoir. The output category specifies the type of data: wb (water balance), nb (nutrient balance), ls (losses), pw (plant and weather), or sd (streamflow and sediment in channels). The time step indicates the temporal resolution and can be day (daily), mon (monthly), yr (yearly), or aa (annual average). Combining these elements forms the output file name. Galaxy platform will offer a subset of the most common outputs. For more details and extended capabilities, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs). Defaults to: (TODO AMANDA).",
+            "description": "A SWAT+ output file name consists of three elements separated by underscores (_): spatial unit, output category, and time step. For example, 'channel_sd_day'. The spatial unit defines the scale of the output and can be basin, hru, lsunit, channel, aquifer, or reservoir. The output category specifies the type of data such as wb (water balance), nb (nutrient balance), ls (losses), pw (plant and weather), or sd (streamflow and sediment in channels). The time step indicates the temporal resolution and can be day (daily), mon (monthly), yr (yearly), or aa (annual average). Combining these elements forms the output file name. For more details, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs). Defaults to: \"channel_sd_day\".",
             "schema": {
                 "type": "string"
             },
@@ -56,7 +56,7 @@
         },
         "variable": {
             "title": "SWAT Variable",
-            "description": "Variable to simulate. Example: 'flo_out'. Galaxy platform will offer a subset of the most common variable outputs. For more details and extended capabilities, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs). Defaults to: (TODO AMANDA). ",
+            "description": "Variable to simulate. Example: \"flo_out\".For more details and extended capabilities, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs). For one variable, enter the string name of the variable. For multiple variables in the same output file, enter a vector in R style format. Defaults to: c(\"flo_out\", \"water_temp\", \"no3_out\", \"solp_out\"). ",
             "schema": {
                 "type": "string"
             },
@@ -65,7 +65,7 @@
             "keywords": []
         },
         "start_date": {
-            "title": "Start date",
+            "title": "Start Date",
             "description": "(optional) Start date of the simulation in the format yyyymmdd. Defaults to: 20160101. Earliest possible date: 20000101.",
             "schema": {
                 "type": "integer"
@@ -75,8 +75,8 @@
             "keywords": []
         },
         "start_date_print": {
-            "title": "Start date",
-            "description": "(optional) Start date for printing in the format yyyymmdd. Defaults to: 20190601. Earliest possible date: 20020101. It is recommended to allow for at least two warm-up years between the model simulation start and the model output printing to ensure relevant results",
+            "title": "Start Date",
+            "description": "(optional) Start date for printing in the format yyyymmdd. Defaults to: 20190601. Earliest possible date: 20020101. It is recommended to allow for at least two warm-up years between the model simulation start and the model output printing to ensure relevant results.",
             "schema": {
                 "type": "integer"
             },
@@ -98,7 +98,7 @@
     "outputs": {
         "swat_output_file": {
             "title": "Variable Simulation",
-            "description": "A CSV file containing simulated values for the specified time range and time step (daily, monthly, yearly, or annual average). Default output files include: channel flow out in m3 (flow_out.csv), water temperature Degrees Celcius (water_temp.csv), nitrate nitrogen leaving the channel in kg (no3_out.csv), and soluble phosphorus leaving the channel in kg (solp_out.csv).",
+            "description": "A CSV file containing simulated values for the specified time range and time step (daily, monthly, yearly, or annual average). Default output files include: channel flow out in m3 (simulation_flow_out.csv), water temperature Degrees Celcius (simulation_water_temp.csv), nitrate nitrogen leaving the channel in kg (simulation_no3_out.csv), and soluble phosphorus leaving the channel in kg (simulation_solp_out.csv).",
             "schema": {
                 "type": "object",
                 "contentMediaType": "application/csv"
