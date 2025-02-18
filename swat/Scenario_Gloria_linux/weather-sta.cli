@@ -1,0 +1,12 @@
+weather-sta.cli: written by SWAT+ editor v3.0.1 on 2024-10-31 16:57 for SWAT+ rev.61.0.1
+name                           wgn                        pcp                        tmp                        slr                        hmd                        wnd                        pet          atmo_dep  
+s41620n2445e               Dosrius              Dosrius_p.pcp              Dosrius_t.tmp            Dosrius_slr.slr              Dosrius_h.hmd              Dosrius_w.wnd                       null              null  
+s41647n2757e               Malgrat              Malgrat_p.pcp              Malgrat_t.tmp            Malgrat_slr.slr              Malgrat_h.hmd               Vilobi_w.wnd                       null              null  
+s41684n2446e             PalauTord            PalauTord_p.pcp            PalauTord_t.tmp            Dosrius_slr.slr              Dosrius_h.hmd              Dosrius_w.wnd                       null              null  
+s41739n2694e                Fogars               Fogars_p.pcp               Fogars_t.tmp            Malgrat_slr.slr               Fogars_h.hmd             StHilari_w.wnd                       null              null  
+s41748n2303e                 Tagam                Tagam_p.pcp                Tagam_t.tmp          PSesolles_slr.slr                Tagam_h.hmd              Dosrius_w.wnd                       null              null  
+s41752n2558e                 Breda                Breda_p.pcp                Breda_t.tmp          PSesolles_slr.slr            PSesolles_h.hmd             StHilari_w.wnd                       null              null  
+s41774n2438e             PSesolles            PSesolles_p.pcp            PSesolles_t.tmp          PSesolles_slr.slr            PSesolles_h.hmd              Dosrius_w.wnd                       null              null  
+s41840n2419e              Viladrau             Viladrau_p.pcp             Viladrau_t.tmp           Viladrau_slr.slr             Viladrau_h.hmd              Dosrius_w.wnd                       null              null  
+s41865n2664e                StColo               StColo_p.pcp               StColo_t.tmp            Malgrat_slr.slr               StColo_h.hmd             StHilari_w.wnd                       null              null  
+s41882n2743e                Vilobi               Vilobi_p.pcp               Vilobi_t.tmp            Malgrat_slr.slr               Vilobi_h.hmd               Vilobi_w.wnd                       null              null  
