@@ -3,8 +3,8 @@
 Files  AquaINFRA Case Study: Mediterranean Inland Model
 
 Gloria Scenario SWATplus model:
-- Code: SWATplus_Tordera_Gloria.R
-- Project Data: Download and unzip https://drive.google.com/file/d/1btu8f4gktr-FXeo7NjfYa2ODJWLxu3Yc/view?usp=sharing
+- Code: SWATplus_AquaGalaxy_v2.R 
+- Project Data: https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/tree/main/swat/Scenario_Gloria_linux
 - La Tordera shapefiles: Download and unzip https://drive.google.com/file/d/1gFPHRyKm2SaGwG6xHtL8uzNFC_0_vF78/view?usp=sharing
 
 
