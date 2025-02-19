@@ -150,6 +150,6 @@ run_swat_process(TxtInOut_Tordera,
                  par_cal)
 
 #Outputs (csv files) will have to be accessible in AquaGalaxy for visualization as graphs, and to be processed by the next step in the chain process.
-# Step 2 Mediterranean inland to marine model connection: SWAT+output to MITGCMinput conversion tool. (Under development with R code  by AMANDA)
+# Step 2 Mediterranean inland to marine model connection: SWAT+output to MITGCMinput connection tool. (Under development with R code  by AMANDA)
 
 
