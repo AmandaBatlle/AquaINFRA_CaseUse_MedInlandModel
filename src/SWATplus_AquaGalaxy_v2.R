@@ -5,16 +5,16 @@
 # Step 1 Mediterranean Inland Model, SWAT+ TORDERA TOOL.
 
 # If the package remotes is not installed run first:
-install.packages('remotes', "dplyr")
+#install.packages('remotes', "dplyr")
 
-remotes::install_github('chrisschuerz/SWATrunR')
+#remotes::install_github('chrisschuerz/SWATrunR')
 
 # Load required libraries
 library(SWATrunR) # To run SWAT
 library(dplyr) # To convert data for export
 
 # Set working directory
-setwd("C:/Users/a.batlle/OneDrive - CREAF/Documentos/local_AquaINFRA/SWATrunR_model/SWATrunR_Tordera")
+#setwd("C:/Users/a.batlle/OneDrive - CREAF/Documentos/local_AquaINFRA/SWATrunR_model/SWATrunR_Tordera")
 
 
 # INPUT  __________________________________________________________________________####
@@ -34,7 +34,8 @@ setwd("C:/Users/a.batlle/OneDrive - CREAF/Documentos/local_AquaINFRA/SWATrunR_mo
     #In a second round of implementation we can include the capability to opload your own TextInOut folder and your own parameters to run a model of a different watersheed.
     # But by the moment I think it is better to keep it fixed. 
     # LA TORDERA TEXT IN OUT PROJECT FOLDER: (ADD HERE CORRECT LOCATION THE PROJECT FOLDER)
-    TxtInOut_Tordera <- "C:/Users/a.batlle/OneDrive - CREAF/Documentos/local_AquaINFRA/SWATrunR_model/Tordera_Data/Scenario_Gloria_windows_new"
+    #TxtInOut_Tordera <- "C:/Users/a.batlle/OneDrive - CREAF/Documentos/local_AquaINFRA/SWATrunR_model/Tordera_Data/Scenario_Gloria_windows_new"
+    TxtInOut_Tordera <- "../swat/Scenario_Gloria_linux/"
     
     # Parameter calibration 1: 
     # Calibration performed by Amanda Batlle Morera (CREAF) a.batlle@creaf.uab.cat
@@ -58,7 +59,7 @@ run_swat_process <- function (TxtInOut, fileout, variable, un, startdate, enddat
   # Review Input validity. 
     #fileout validity check: 
         # Read valid outputfile list
-        valid_outputfile <- read.csv ("C:/Users/a.batlle/OneDrive - CREAF/Documentos/local_AquaINFRA/AquaGalaxy/Input data/AquaGalaxy_valid_fileoutputList.csv", 
+        valid_outputfile <- read.csv ("AquaGalaxy_valid_fileoutputList.csv", 
                                       sep = ";",
                                       stringsAsFactors = FALSE)
   
@@ -71,7 +72,7 @@ run_swat_process <- function (TxtInOut, fileout, variable, un, startdate, enddat
     # variable validity check.
         # Conevert to 
         # Read valid variable list
-        valid_variable <- read.csv ("C:/Users/a.batlle/OneDrive - CREAF/Documentos/local_AquaINFRA/AquaGalaxy/Input data/AquaGalaxy_valid_variableList.csv", sep = ";" )
+        valid_variable <- read.csv ("AquaGalaxy_valid_variableList.csv", sep = ";" )
         # Filter valid variables for the given output file
         file <- strsplit(fileout, "_")[[1]][2]
         valid_variable_outputfile <- valid_variable[grepl(file, valid_variable$file), ] 
