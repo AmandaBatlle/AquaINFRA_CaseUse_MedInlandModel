@@ -14,7 +14,7 @@ library(dplyr)
 args <- commandArgs(trailingOnly = TRUE)
 print(paste0('R Command line args: ', args))
 fileout_from_user <- args[1] #"channel_sd_day"
-variable_from_user <- strsplit(args[2], ",")[[1]] #"flo_out,water_temp"
+variable_from_user <- strsplit(gsub(" ", "", args[2]), ",")[[1]] #"flo_out,water_temp"
 unit_from_user <- as.numeric(args[3]) # 1
 start_date_from_user <- args[4] # 20160101
 end_date_from_user <- args[5] # 20201231
