@@ -99,6 +99,3 @@ curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" --header
 ## Contact
 
 AquaINFRA project, WP 4 and 5
-
-
-
