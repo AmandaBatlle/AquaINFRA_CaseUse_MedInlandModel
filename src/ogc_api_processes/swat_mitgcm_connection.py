@@ -8,21 +8,16 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 '''
 How to call this process:
 
-curl -X POST "http://localhost:5000/processes/SWATrunR/execution" \
+curl -X POST "http://localhost:5000/processes/SWATmitgcmConnection/execution" \
   --header "Content-Type: application/json" \
   --data '{
-  "inputs":{
-        "file": "channel_sd_day", 
-        "variable": "flo_out,water_temp,no3_out,solp_out", 
-        "unit": 1, 
-        "start_date": 20160101,
-        "end_date": 20201231,
-        "start_date_print": 20190601
+    "inputs": {
+        "flow_file": "https://raw.githubusercontent.com/MarkusKonk/test-tmp/refs/heads/main/flo_out.csv",
+        "temp_file": "https://raw.githubusercontent.com/MarkusKonk/test-tmp/refs/heads/main/water_temp.csv"
     }
 }'
 
 '''
-
 
 LOGGER = logging.getLogger(__name__)
 
@@ -30,7 +25,7 @@ script_title_and_path = __file__
 metadata_title_and_path = script_title_and_path.replace('.py', '.json')
 PROCESS_METADATA = json.load(open(metadata_title_and_path))
 
-class TorderaGloriaProcessor(BaseProcessor):
+class SwatMitgcmConnectionProcessor(BaseProcessor):
 
     def __init__(self, processor_def):
         super().__init__(processor_def, PROCESS_METADATA)
@@ -41,7 +36,7 @@ class TorderaGloriaProcessor(BaseProcessor):
         self.my_job_id = job_id
 
     def __repr__(self):
-        return f'<TorderaGloriaProcessor> {self.name}'
+        return f'<SwatMitgcmConnectionProcessor> {self.name}'
 
     def execute(self, data, outputs=None):
 
@@ -55,38 +50,23 @@ class TorderaGloriaProcessor(BaseProcessor):
         docker_executable = configJSON.get("docker_executable", "docker")
 
         # Get user inputs
-        in_swat_file = data.get('file')
-        in_variable = data.get('variable')
-        in_unit = data.get('unit')        
-        in_start_date = data.get('start_date')
-        in_end_date = data.get('end_date')
-        in_start_date_print = data.get('start_date_print')
+        in_file1 = data.get('flow_file')
+        in_file2 = data.get('temp_file') 
 
         # Check
-        if in_swat_file is None:
-            raise ProcessorExecuteError('Missing parameter "in_swat_file". Please provide a value.')
-        if in_variable is None:
-            raise ProcessorExecuteError('Missing parameter "colname_date". Please provide a value.')
+        if in_file1 is None:
+            raise ProcessorExecuteError('Missing parameter "in_file1". Please provide a value.')
+        if in_file2 is None:
+            raise ProcessorExecuteError('Missing parameter "in_file2". Please provide a value.')
 
-        # Ensure in_variable is a list (even if it's a single variable)
-        if isinstance(in_variable, str):
-            in_variable = [in_variable]  # Convert to list
-
-        # Create an array of filenames
-        downloadfilenames = [
-            f'swat_output_file-{self.my_job_id}-{var}.csv' for var in in_variable
-        ]        
+        downloadfilename = 'joinedFile-%s.csv' % self.my_job_id
 
         returncode, stdout, stderr = run_docker_container(
             docker_executable,
-            in_swat_file,
-            in_variable,
-            str(in_unit),
-            str(in_start_date),
-            str(in_end_date),
-            str(in_start_date_print),
-            download_dir, 
-            downloadfilenames
+            in_file1,
+            in_file2,
+            download_dir,
+            downloadfilename
         )
 
         # print R stderr/stdout to debug log:
@@ -111,33 +91,25 @@ class TorderaGloriaProcessor(BaseProcessor):
                 raise ProcessorExecuteError(user_msg = err_msg)
 
         else:
-            outputs = {}
-            for var in in_variable:
-                downloadfilename = f'swat_output_file-{self.my_job_id}-{var}.csv'
-                downloadlink = own_url.rstrip('/') + os.sep + "out" + os.sep + downloadfilename
-
-                outputs[f"swat_output_file_{var}"] = {
-                    "title": self.metadata['outputs']['swat_output_file']['title'],
-                    "description": self.metadata['outputs']['swat_output_file']['description'],
-                    "href": downloadlink
-                }
-
+            downloadlink = own_url.rstrip('/')+os.sep+"out"+os.sep+downloadfilename
             response_object = {
-                "outputs": outputs
+                "outputs": {
+                    "joined_file": {
+                        "title": self.metadata['outputs']['output_file']['title'],
+                        "description": self.metadata['outputs']['output_file']['description'],
+                        "href": downloadlink
+                    }
+                }
             }
 
             return 'application/json', response_object
 
 def run_docker_container(
         docker_executable,
-        in_swat_file,
-        in_variable,
-        in_unit,
-        in_start_date,
-        in_end_date,
-        in_start_date_print,
+        in_file1,
+        in_file2,
         download_dir, 
-        downloadfilename_swat_output_file
+        outputFilename
     ):
     LOGGER.debug('Prepare running docker container')
     container_name = f'catalunya-tordera-image_{os.urandom(5).hex()}'
@@ -157,9 +129,7 @@ def run_docker_container(
     os.makedirs(local_in, exist_ok=True)
     os.makedirs(local_out, exist_ok=True)
 
-    script = 'SWATplus_Tordera_Gloria.R'
-
-    print("------------------------------------------------")
+    script = 'swat_mitgcm_connection.R'
 
     # Mount volumes and set command
     docker_command = [
@@ -169,14 +139,9 @@ def run_docker_container(
         "-e", f"R_SCRIPT={script}",  # Set the R_SCRIPT environment variable
         image_name,
         "--",  # Indicates the end of Docker's internal arguments and the start of the user's arguments
-        in_swat_file,
-        in_variable,
-        in_unit,
-        in_start_date,
-        in_end_date,
-        in_start_date_print,
-        container_out,
-        downloadfilename_swat_output_file
+        in_file1,
+        in_file2,
+        f"{container_out}/{outputFilename}"
     ]
 
     LOGGER.debug('Docker command: %s' % docker_command)
