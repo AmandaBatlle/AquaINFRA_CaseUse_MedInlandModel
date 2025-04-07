@@ -1,6 +1,6 @@
 {
     "version": "0.1.0",
-    "id": "tordera-gloria",
+    "id": "tordera-gloria-connection",
     "use_case": "Catalunya Inland",
     "title": {
         "en": "SWAT+ output to MITGCM input connection tool"
