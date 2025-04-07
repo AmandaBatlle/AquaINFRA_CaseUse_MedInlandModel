@@ -50,43 +50,38 @@ class TorderaGloriaProcessor(BaseProcessor):
         with open(config_file_path, 'r') as configFile:
             configJSON = json.load(configFile)
 
-        download_dir = configJSON["download_dir"]
-        own_url = configJSON["own_url"]
+        download_dir = "./pygeoapi/process/"
+        own_url = "./pygeoapi/process/"
         docker_executable = configJSON.get("docker_executable", "docker")
 
         # Get user inputs
         in_swat_file = data.get('file')
         in_variable = data.get('variable')
-        in_unit = data.get('unit')        
+        in_unit = data.get('unit')    
         in_start_date = data.get('start_date')
         in_end_date = data.get('end_date')
         in_start_date_print = data.get('start_date_print')
 
-        # Check
-        if in_swat_file is None:
-            raise ProcessorExecuteError('Missing parameter "in_swat_file". Please provide a value.')
-        if in_variable is None:
-            raise ProcessorExecuteError('Missing parameter "colname_date". Please provide a value.')
-
-        # Ensure in_variable is a list (even if it's a single variable)
-        if isinstance(in_variable, str):
-            in_variable = [in_variable]  # Convert to list
+        variables = [var.strip() for var in in_variable.split(',')]
+        if isinstance(variables, str):
+            variables = [variables]  # Convert to list
 
         # Create an array of filenames
         downloadfilenames = [
-            f'swat_output_file-{self.my_job_id}-{var}.csv' for var in in_variable
+            f'swat_output_file-{self.my_job_id}-{var}.csv' for var in variables
         ]        
+        downloadfilenames_string = ','.join(downloadfilenames)
 
         returncode, stdout, stderr = run_docker_container(
             docker_executable,
             in_swat_file,
-            in_variable,
+            in_variable.replace(" ", ""),
             str(in_unit),
             str(in_start_date),
             str(in_end_date),
             str(in_start_date_print),
             download_dir, 
-            downloadfilenames
+            downloadfilenames_string
         )
 
         # print R stderr/stdout to debug log:
@@ -112,7 +107,7 @@ class TorderaGloriaProcessor(BaseProcessor):
 
         else:
             outputs = {}
-            for var in in_variable:
+            for var in variables:
                 downloadfilename = f'swat_output_file-{self.my_job_id}-{var}.csv'
                 downloadlink = own_url.rstrip('/') + os.sep + "out" + os.sep + downloadfilename
 
@@ -137,7 +132,7 @@ def run_docker_container(
         in_end_date,
         in_start_date_print,
         download_dir, 
-        downloadfilename_swat_output_file
+        downloadfilenames
     ):
     LOGGER.debug('Prepare running docker container')
     container_name = f'catalunya-tordera-image_{os.urandom(5).hex()}'
@@ -147,7 +142,7 @@ def run_docker_container(
 
     # Define paths inside the container
     container_in = '/in'
-    container_out = '/out'
+    container_out = '/out/'
 
     # Define local paths
     local_in = os.path.join(download_dir, "in")
@@ -157,9 +152,7 @@ def run_docker_container(
     os.makedirs(local_in, exist_ok=True)
     os.makedirs(local_out, exist_ok=True)
 
-    script = 'SWATplus_Tordera_Gloria.R'
-
-    print("------------------------------------------------")
+    script = 'swat_tordera_gloria.R'
 
     # Mount volumes and set command
     docker_command = [
@@ -176,8 +169,9 @@ def run_docker_container(
         in_end_date,
         in_start_date_print,
         container_out,
-        downloadfilename_swat_output_file
+        downloadfilenames
     ]
+
 
     LOGGER.debug('Docker command: %s' % docker_command)
     print(docker_command)
