@@ -1,22 +1,27 @@
 # AquaINFRA_CaseUse_MedInlandModel
 
-Files  AquaINFRA Case Study: Mediterranean Inland Model
+AquaINFRA Case Study: Mediterranean Inland Model
 
 Gloria Scenario SWATplus model:
-- Code: SWATplus_AquaGalaxy_v2.R 
+- Code: swat_tordera_gloria.R 
 - Project Data: https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/tree/main/swat/Scenario_Gloria_linux
 - La Tordera shapefiles: Download and unzip https://drive.google.com/file/d/1gFPHRyKm2SaGwG6xHtL8uzNFC_0_vF78/view?usp=sharing
 
-
 ## Running analysis in R
 
-`Rscript SWATplus_AquaGalaxy_v2.R channel_sd_day "flo_out,water_temp" 1 20160101 20201231 20190601 "/out/" "flo_out.csv,water_temp.csv"`
+Step 1:
+
+`Rscript swat_tordera_gloria.R "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "/out/" "flo_out.csv,water_temp.csv"`
+
+Step 2:
+
+`Rscript swat_mitgcm_connection.R flo_out.csv water_temp.csv joinedFile.txt`
 
 ## Running analysis using Docker
 
 Step 1:
 
-`docker run -it -v ./in:/in -v ./out:/out -e R_SCRIPT="swat_tordera_gloria.R" catalunya-tordera-image -- "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "/out/" "flo_out.csv, water_temp.csv"`
+`docker run -it -v ./in:/in -v ./out:/out -e R_SCRIPT="swat_tordera_gloria.R" catalunya-tordera-image -- "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "/out/" "flo_out.csv,water_temp.csv"`
 
 Step 2:
 
