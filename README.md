@@ -8,6 +8,20 @@ Gloria Scenario SWATplus model:
 - La Tordera shapefiles: Download and unzip https://drive.google.com/file/d/1gFPHRyKm2SaGwG6xHtL8uzNFC_0_vF78/view?usp=sharing
 
 
+## Running analysis in R
+
+`Rscript SWATplus_AquaGalaxy_v2.R channel_sd_day "flo_out,water_temp" 1 20160101 20201231 20190601 "/out/" "flo_out.csv,water_temp.csv"`
+
+## Running analysis using Docker
+
+Step 1:
+
+`docker run -it -v ./in:/in -v ./out:/out -e R_SCRIPT="swat_tordera_gloria.R" catalunya-tordera-image -- "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "/out/" "flo_out.csv, water_temp.csv"`
+
+Step 2:
+
+`docker run -it -v ./in:/in -v ./out:/out -e R_SCRIPT="swat_mitgcm_connection.R" catalunya-tordera-image -- "../out/flo_out.csv" "../out/water_temp.csv" "../out/joined.txt"`
+
 ## How to dockerize
 
 You can make a Docker image from this code as follows:
@@ -30,7 +44,6 @@ unzip Scenario_Gloria_linux.zip
 today=$(date '+%Y%m%d')
 docker build -t catalunya-tordera-image:${today} .
 docker build -t catalunya-tordera-image:latest .
-docker run -it -v ./in:/in -v ./out:/out -e R_SCRIPT="SWATplus_Tordera_Gloria.R" catalunya-tordera-image -- "channel_sd_day" "flo_out" 1 20000101 20051231 20020601 "result" "tmp.csv"
 ```
 
 ## How to deploy as OGC service on pygeoapi
