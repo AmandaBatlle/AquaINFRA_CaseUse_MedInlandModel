@@ -50,8 +50,8 @@ class TorderaGloriaProcessor(BaseProcessor):
         with open(config_file_path, 'r') as configFile:
             configJSON = json.load(configFile)
 
-        download_dir = "./pygeoapi/process/"
-        own_url = "./pygeoapi/process/"
+        download_dir = configJSON["download_dir"]
+        own_url = configJSON["own_url"]
         docker_executable = configJSON.get("docker_executable", "docker")
 
         # Get user inputs
