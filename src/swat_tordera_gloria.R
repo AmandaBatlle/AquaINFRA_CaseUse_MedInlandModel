@@ -72,7 +72,7 @@ run_swat_process <- function (TxtInOut,
   file <- strsplit(fileout, "_")[[1]][2]
   valid_variable_outputfile <- valid_variable[grepl(file, valid_variable$file), ] 
   
-  for (var_out in variable_from_user) {
+  for (var_out in variable) {
     if (var_out %in% valid_variable_outputfile$SWAT_variable) {
       print(paste("Variable: ", var_out,"is a valid input."))
     } else if (var_out %in% valid_variable$SWAT_variable) {
@@ -99,8 +99,8 @@ run_swat_process <- function (TxtInOut,
   }
   
   # Process the output: Iterate over the elements in variable vector
-  for (i in seq_along(variable_from_user)) {
-    var_out <- variable_from_user[i]
+  for (i in seq_along(variable)) {
+    var_out <- variable[i]
     file_name <- paste0(download_path, download_filenames[i])
     if (!var_out %in% names(q_sim_plus$simulation)) {
       warning(paste("Variable", var_out, "not found in simulation output. Skipping..."))
