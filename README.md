@@ -1,5 +1,7 @@
 # AquaINFRA_CaseUse_MedInlandModel
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/HEAD)
+
 AquaINFRA Case Study: Mediterranean Inland Model
 
 Gloria Scenario SWATplus model:
