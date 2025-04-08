@@ -1,0 +1,2 @@
+#!/bin/bash
+Rscript -e "if (!requireNamespace('SWATrunR', quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')"
