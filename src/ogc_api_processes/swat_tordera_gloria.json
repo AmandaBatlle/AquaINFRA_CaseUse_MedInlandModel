@@ -3,13 +3,13 @@
     "id": "tordera-gloria",
     "use_case": "Catalunya Inland",
     "title": {
-        "en": "SWAT+ La Tordera"
+        "en": "SWAT+, Soil & Water Assessment Tool"
     },
     "description": {
-        "en": "This process models the hydrological behaviour of La Tordera Basin from 2000 to 2022 using SWAT+ ( https://swat.tamu.edu/). The default tool settings generate daily outputs of flow, water temperature, and nutrient levels at the mouth of La Tordera River between July 2019 and December 2020, allowing for an assessment of river flow parameters during Storm Gloria (19 January 2020). The model is calibrated through a two-step calibration process: an initial soft calibration based on a qualitative evaluation of annual average outputs, followed by an automatic calibration by landscape units using observed gauge data from the Catalan Water Agency (Agència Catalana de l'Aigua, https://aca.gencat.cat/). Final parameter calibration values: XXXXXXX. The model is executed using SWATrunR ( https://github.com/chrisschuerz/SWATplusR ) with the SWAT+ rev60.5.7_64rel_linux executable."
+        "en": "The Soil and Water Assessment Tool (SWAT+) is a hydrological model used to simulate processes such as surface runoff, groundwater flow, and water quality across watersheds of varying scales. It evaluates the effects of land use, management practices, and climate scenarios on water resources. SWAT+ is widely used for studying soil erosion, non-point source pollution, and watershed management (https://swat.tamu.edu/) .The tool allows users to upload custom TextInOut folders to model any watershed of interest. Users can define model parameters, the simulation time range, calibration settings, output variables, and temporal resolution. By default, the tool is configured to simulate the hydrological behavior of the La Tordera Basin from 2000 to 2022 using SWAT+. The default tool settings generate daily outputs of flow, water temperature, and nutrient levels at the mouth of La Tordera River between July 2019 and December 2020, allowing for an assessment of river flow parameters during Storm Gloria (19 January 2020). The default La Tordera Basin model is calibrated through a two-step calibration process: an initial soft calibration based on a qualitative evaluation of annual average outputs, followed by an automatic calibration by landscape units using observed gauge data from the Catalan Water Agency (Agència Catalana de l'Aigua, https://aca.gencat.cat/). This tool executes SWAT+ using SWATrunR ( https://github.com/chrisschuerz/SWATplusR ) with the SWAT+ rev60.5.7_64rel_linux executable."
     },
     "jobControlOptions": ["sync-execute", "async-execute"],
-    "keywords": ["tordera use case", "AquaINFRA", "R"],
+    "keywords": ["tordera use case", "AquaINFRA", "R", "SWAT+", "watershed model"],
     "links": [{
         "type": "text/html",
         "rel": "about",
@@ -34,6 +34,27 @@
         "hreflang": "en-US"
     }],
     "inputs": {
+        "TextInOut_URL": {
+            "title": "URL to TextInOut Project folder",
+            "description": "To model a watershed other than the Tordera Basin, users can upload their own TextInOut folder to AquaGalaxy platform. To do this: Compress the TextInOut folder into a ZIP file (Important: Do not include the SWAT executable — AquaGalaxy has integrated the executable version rev60.5.7_64rel_linux). Upload the ZIP file to an online repository such as Google Drive or Dropbox. Share the direct download URL with AquaGalaxy as a string input here. Defaults to: La Tordera TextInOut watershed project.",
+            "schema": {
+                "type": "string"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": []
+        },
+		,
+        "par_cal": {
+            "title": "Parameter inputs",
+            "description": "JSON file including the parameter value change as defined by SWATrunR documentation(https://chrisschuerz.github.io/SWATrunR/articles/SWATrunR.html#parameter-inputs). Download sample JSON file (link). Defaults to: TO BE UPDATED. OPTIONAL.",
+            "schema": {
+                "type": "object"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": []
+        },
         "unit": {
             "title": "Output Spatial unit",
             "description": "Define the spatial unit for which to generate an output. Spatial unit refers to river section, HRU, or LSU as defined by La Tordera watershed delineation in (LINK TO WATERSHED MAP). Defaults to: 1.",
