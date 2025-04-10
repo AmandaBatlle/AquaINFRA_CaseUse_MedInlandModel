@@ -20,7 +20,7 @@ download_shapefile <- function(url, dest_file) {
         file.copy(executable, file.path(project_dir, basename(executable)), overwrite = TRUE)
       },
       warning = function(warn) {
-        message(paste("Warning: Download of shapefile failed, reason: ", warn[1]))
+        message(paste("Warning: Download failed, reason: ", warn[1]))
       },
       error = function(err) {
         stop(paste("Error: Download of shapefile failed, reason: ", err[1]))
