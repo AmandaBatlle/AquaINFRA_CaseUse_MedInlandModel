@@ -69,8 +69,8 @@
     },
     "example": {
         "inputs": {
-            "flow_file": "simulation_flow_out.csv",
-            "temp_file": "simulation_water_temp.csv"
+            "flow_file": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/flo_out.csv",
+            "temp_file": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/water_temp.csv"
         }
     }
 }

@@ -55,6 +55,8 @@ class TorderaGloriaProcessor(BaseProcessor):
         docker_executable = configJSON.get("docker_executable", "docker")
 
         # Get user inputs
+        in_project = data.get('TextInOut_URL')
+        in_parameter_cal = data.get('par_cal')
         in_swat_file = data.get('file')
         in_variable = data.get('variable')
         in_unit = data.get('unit')    
@@ -74,6 +76,8 @@ class TorderaGloriaProcessor(BaseProcessor):
 
         returncode, stdout, stderr = run_docker_container(
             docker_executable,
+            in_project,
+            in_parameter_cal,
             in_swat_file,
             in_variable.replace(" ", ""),
             str(in_unit),
@@ -125,6 +129,8 @@ class TorderaGloriaProcessor(BaseProcessor):
 
 def run_docker_container(
         docker_executable,
+        in_project_folder,
+        in_calibration_parameter,
         in_swat_file,
         in_variable,
         in_unit,
@@ -162,6 +168,8 @@ def run_docker_container(
         "-e", f"R_SCRIPT={script}",  # Set the R_SCRIPT environment variable
         image_name,
         "--",  # Indicates the end of Docker's internal arguments and the start of the user's arguments
+        in_project_folder,
+        in_calibration_parameter,
         in_swat_file,
         in_variable,
         in_unit,

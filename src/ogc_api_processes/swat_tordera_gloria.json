@@ -129,9 +129,11 @@
     },
     "example": {
         "inputs": {
+            "TextInOut_URL": "ttps://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
+            "par_cal": "ttps://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json",
             "unit": 1,
             "file": "channel_sd_day",
-            "variable": "flo_out",
+            "variable": "flo_out,water_temp",
             "start_date": 20160101,
             "end_date": 20201231,
             "start_date_print": 20190601
