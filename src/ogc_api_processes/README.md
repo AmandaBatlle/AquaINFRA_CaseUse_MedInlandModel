@@ -7,11 +7,18 @@ These are some how-tos mainly as reference to ourselves... Frequently needed com
 On the server, go to the directory containing the repo and pull the newest changes from GitHub:
 
 ```
+# Go to the directory:
 cd /opt/.../pygeoapi/pygeoapi/process/AquaINFRA_CaseUse_MedInlandModel
+
+# Make sure you are on the correct branch:
+git status # possibly git stash...
+git checkout main
+
+# Pull changes
 git pull
 ```
 
-If something inside the Docker image changed, re-build the docker image (the )
+If something inside the Docker image changed, re-build the docker image:
 
 ```
 # image name must correspond to the name hard-coded in the process file:
