@@ -36,9 +36,10 @@
     "inputs": {
         "flow_file": {
             "title": "Daily river flow out",
-            "description": "csv file containing daily flow out values (units: m3/s). Defaults to: \"simulation_flo_out.csv\".",
+            "description": "csv file containing daily flow out values (units: m3/s).",
             "schema": {
-                "type": "string"
+                "type": "object",
+                "contentMediaType": "application/csv"
             },
             "minOccurs": 1,
             "maxOccurs": 1,
@@ -46,9 +47,10 @@
         },
         "temp_file": {
             "title": "Daily river water temperature",
-            "description": "Daily river water temperature. Defaults to: \"simulation_water_temp.csv\".",
+            "description": "Daily river water temperature.",
             "schema": {
-                "type": "string"
+                "type": "object",
+                "contentMediaType": "application/csv"
             },
             "minOccurs": 1,
             "maxOccurs": 1,
@@ -57,11 +59,11 @@
     },
     "outputs": {
         "output_file": {
-            "title": "River water quantity MITgcm input",
-            "description": "txt file containing a data frame with the correct formatting and structure to enter MITgcm model. Defaults to: \"MITGCMinput_RiverWaterQuantityFromSWAT.txt\". ",
+            "title": "River water quantity MITgcm output",
+            "description": "txt file containing a data frame with the correct formatting and structure to enter MITgcm model.",
             "schema": {
                 "type": "object",
-                "contentMediaType": "application/csv"
+                "contentMediaType": "text/plain"
             }
         }
     },
