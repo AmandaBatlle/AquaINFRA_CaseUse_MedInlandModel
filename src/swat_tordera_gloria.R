@@ -9,24 +9,32 @@
 
 library(SWATrunR)
 library(dplyr)
+library(jsonlite)
 
 # INPUTS + example values
 args <- commandArgs(trailingOnly = TRUE)
 print(paste0('R Command line args: ', args))
-fileout_from_user <- args[1] #"channel_sd_day"
-variable_from_user <- strsplit(gsub(" ", "", args[2]), ",")[[1]] #"flo_out,water_temp"
-unit_from_user <- as.numeric(args[3]) # 1
-start_date_from_user <- args[4] # 20160101
-end_date_from_user <- args[5] # 20201231
-start_date_print_from_user <- args[6] # 20190601
-download_path <- args[7] #"/out/"
-download_names <- strsplit(args[8], ",")[[1]] #"flow_out.csv,water_temp.csv"
+input_project <- args[1]
+input_calibration <- args[2]
+fileout_from_user <- args[3] #"channel_sd_day"
+variable_from_user <- strsplit(gsub(" ", "", args[4]), ",")[[1]] #"flo_out,water_temp"
+unit_from_user <- as.numeric(args[5]) # 1
+start_date_from_user <- args[6] # 20160101
+end_date_from_user <- args[7] # 20201231
+start_date_print_from_user <- args[8] # 20190601
+download_path <- args[9] #"/out/"
+download_names <- strsplit(args[10], ",")[[1]] #"flow_out.csv,water_temp.csv"
+
+filename <- tools::file_path_sans_ext(basename(input_project))
+#Download input project
+source("download.R")
 
 # FIX INPUT SWAT+ TORDERA TOOL: 
 #In a second round of implementation we can include the capability to opload your own TextInOut folder and your own parameters to run a model of a different watersheed.
 # But by the moment I think it is better to keep it fixed. 
-TxtInOut_Tordera <- "../swat/Scenario_Gloria_linux/"
 
+TxtInOut_Tordera <- paste0("../swat/Scenario_Gloria_linux/", filename)
+print(TxtInOut_Tordera)
 # Parameter calibration 1: 
 # Calibration performed by Amanda Batlle Morera (CREAF) a.batlle@creaf.uab.cat
 # Calibration process: 
@@ -34,13 +42,8 @@ TxtInOut_Tordera <- "../swat/Scenario_Gloria_linux/"
 #     - Automatic calibration at separated landscape units using observed dad from Catalan Water Agencia gauge data (Agència Catalana de l'Aigua: aca.gencat.cat )
 # NOTE AMANDA: THIS CALIBRATION VALUES WILL BE CHANGED WHEN FINAL VERSION OF THE MODEL IS AVAILABLE.
 
-par_cal <- c("cn2.hru | change=absval" = -15.238,
-             "esco.hru | change=absval" = 0.805,
-             "canmx.hru | change=absval" = 81.537,
-             "perco.hru | change=absval" = 0.892,
-             "cn3_swf.hru | change=absval" = 0.819,
-             "awc.sol | change=absval" = -2.853,
-             "k.sol | change=absval" = -0.342)
+json_data <- fromJSON(input_calibration)
+par_cal <- unlist(json_data)
 
 #SWATplus function
 run_swat_process <- function (TxtInOut, 
@@ -146,3 +149,5 @@ run_swat_process(TxtInOut_Tordera,
                  par_cal,
                  download_path,
                  download_names)
+
+#unlink(TxtInOut_Tordera, recursive = TRUE)

@@ -13,7 +13,11 @@ Gloria Scenario SWATplus model:
 
 Step 1:
 
-`Rscript swat_tordera_gloria.R "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "/out/" "flo_out.csv,water_temp.csv"`
+`Rscript swat_tordera_gloria.R "https://raw.githubusercontent.com/MarkusKonk/test-tmp/main/project.zip" https://raw.githubusercontent.com/MarkusKonk/test-tmp/refs/heads/main/tmp.json "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "/out/" "flo_out.csv,water_temp.csv"`
+
+Quick run:
+
+`Rscript swat_tordera_gloria.R "https://raw.githubusercontent.com/MarkusKonk/test-tmp/main/project.zip" https://raw.githubusercontent.com/MarkusKonk/test-tmp/refs/heads/main/tmp.json "channel_sd_day" "flo_out,water_temp" 1 20160101 20160228 20160115 "./" "flo_out.csv,water_temp.csv"`
 
 Step 2:
 
