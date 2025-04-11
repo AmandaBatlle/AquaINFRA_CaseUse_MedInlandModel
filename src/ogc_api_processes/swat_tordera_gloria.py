@@ -55,14 +55,14 @@ class TorderaGloriaProcessor(BaseProcessor):
         docker_executable = configJSON.get("docker_executable", "docker")
 
         # Get user inputs
-        in_project = data.get('TextInOut_URL')
-        in_parameter_cal = data.get('par_cal')
-        in_swat_file = data.get('file')
-        in_variable = data.get('variable')
-        in_unit = data.get('unit')    
-        in_start_date = data.get('start_date')
-        in_end_date = data.get('end_date')
-        in_start_date_print = data.get('start_date_print')
+        in_project = data.get('TextInOut_URL') or "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip"
+        in_parameter_cal = data.get('par_cal') or "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json"
+        in_swat_file = data.get('file') or "channel_sd_day"
+        in_variable = data.get('variable') or "flo_out,water_temp" 
+        in_unit = data.get('unit') or 1
+        in_start_date = data.get('start_date') or 20160101
+        in_end_date = data.get('end_date') or 20201231
+        in_start_date_print = data.get('start_date_print') or 20190601
 
         variables = [var.strip() for var in in_variable.split(',')]
         if isinstance(variables, str):
