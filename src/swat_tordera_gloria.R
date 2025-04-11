@@ -18,7 +18,7 @@ input_project <- args[1]
 input_calibration <- args[2]
 fileout_from_user <- args[3] #"channel_sd_day"
 variable_from_user <- strsplit(gsub(" ", "", args[4]), ",")[[1]] #"flo_out,water_temp"
-unit_from_user <- as.numeric(args[5]) # 1
+unit_from_user <- as.numeric(strsplit(gsub(" ", "", args[5]), ",")[[1]]) # 1
 start_date_from_user <- args[6] # 20160101
 end_date_from_user <- args[7] # 20201231
 start_date_print_from_user <- args[8] # 20190601
