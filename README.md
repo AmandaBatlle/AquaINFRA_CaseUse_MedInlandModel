@@ -39,26 +39,14 @@ Step 2:
 
 ## How to dockerize
 
-You can make a Docker image from this code as follows:
-
-* You need the SWAT executables and calibration to run SWAT with. Here we assume you can download it from somewhere (link is above)
-* First, install docker according to docker documentation.
-* The run the following commands:
+In case you made any changes to the source code, you will need to re-build the image.
 
 ```
 # Clone this directory
 git clone git@github.com:AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel.git
 cd AquaINFRA_CaseUse_MedInlandModel
 
-# Get the input data, unzip it into "swat" directory:
-cd swat
-wget https://..../Scenario_Gloria_linux.zip
-unzip Scenario_Gloria_linux.zip
-
-# Build the image
-today=$(date '+%Y%m%d')
-docker build -t catalunya-tordera-image:${today} .
-docker build -t catalunya-tordera-image:latest .
+docker build -t catalunya-tordera-image .
 ```
 
 ## How to deploy as OGC service on pygeoapi
@@ -94,19 +82,14 @@ docker build -t catalunya-tordera-image:latest .
 ```
 curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" --header "Content-Type: application/json" --data '{
   "inputs": {
-    "unit": 1,
-    "file": "channel_sd_day",
-    "variable": "flo_out",
-    "start_date": 20160101,
-    "end_date": 20201231,
-    "start_date_print": 20190601
+        "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
+        "par_cal": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/water_temp.csv",
+        "unit": 1,
+        "file": "channel_sd_day",
+        "variable": "flo_out,water_temp,no3_out",
+        "start_date": 20160101,
+        "end_date": 20201231,
+        "start_date_print": 20190601
     }
 }'
 ```
-
-(If this example is not up to date, a more up to date example should be located in the respective pygeoapi process file: https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/blob/main/ogc/tordera_gloria.py)
-
-
-## Contact
-
-AquaINFRA project, WP 4 and 5

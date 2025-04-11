@@ -12,8 +12,8 @@ curl -X POST "http://localhost:5000/processes/SWATmitgcmConnection/execution" \
   --header "Content-Type: application/json" \
   --data '{
     "inputs": {
-        "flow_file": "https://raw.githubusercontent.com/MarkusKonk/test-tmp/refs/heads/main/flo_out.csv",
-        "temp_file": "https://raw.githubusercontent.com/MarkusKonk/test-tmp/refs/heads/main/water_temp.csv"
+        "flow_file": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/flo_out.csv",
+        "temp_file": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/water_temp.csv"
     }
 }'
 
