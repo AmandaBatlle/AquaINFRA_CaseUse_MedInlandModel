@@ -58,7 +58,7 @@
         },
         "unit": {
             "title": "Output Spatial unit",
-            "description": "Define the spatial unit for which to generate an output. Spatial unit refers to river section, HRU, or LSU as defined by La Tordera watershed delineation in (??????ADD URL??????LINK TO WATERSHED MAP). Defaults to: 1",
+            "description": "Specify the spatial unit for which to generate output. This corresponds to the ID of a river reach, HRU (Hydrologic Response Unit), or LSU (Landscape Unit) as defined in the SWAT+ watershed delineation. The value can be entered as a single number (e.g., 1), a range (e.g., 1:10), or a list of values (e.g., (1, 3, 25, 40)). The default unit for the La Tordera SWAT+ model is 1.",
             "schema": {
                 "type": "integer"
             },
@@ -118,19 +118,27 @@
         }
     },
     "outputs": {
-        "swat_output_file": {
-            "title": "Variable Simulation",
-            "description": "A CSV file containing simulated values for the specified time range and time step (daily, monthly, yearly, or annual average). Default output files include: channel flow out in m3 (flow_out.csv), water temperature Degrees Celcius (water_temp.csv).",
+        "swat_output_summary": {
+            "title": "SWAT+ run summary",
+            "description": "SQLite database (inputs.sqlite) containing all the parameters used in the executed SWAT+ run",
             "schema": {
                 "type": "object",
-                "contentMediaType": "application/csv"
+                "contentMediaType": "application/sqlite"
+            }
+        },
+        "swat_output_file": {
+            "title": "SWAT+ Variable Outputs Database",
+            "description": "SQLite database (thread_1.sqlite) storing the simulated output values based on the defined time range and time step (daily, monthly, yearly, or annual average).",
+            "schema": {
+                "type": "object",
+                "contentMediaType": "application/sqlite"
             }
         }
     },
     "example": {
         "inputs": {
-            "TextInOut_URL": "ttps://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
-            "par_cal": "ttps://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json",
+            "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
+            "par_cal": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json",
             "unit": 1,
             "file": "channel_sd_day",
             "variable": "flo_out,water_temp",
