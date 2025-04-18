@@ -3,8 +3,8 @@
 # AquaINFRA Mediterranean Case Use: 
 # Step 1 Mediterranean Inland Model, SWAT+ TORDERA TOOL.
 
-# If the package remotes is not installed run first:
-#install.packages('remotes', "dplyr")
+# If the package remotes is not installed, run first:
+#install.packages('remotes', "dplyr", "jsonlite")
 #remotes::install_github('chrisschuerz/SWATrunR')
 
 library(SWATrunR)
@@ -18,29 +18,41 @@ input_project <- args[1]
 input_calibration <- args[2]
 fileout_from_user <- args[3] #"channel_sd_day"
 variable_from_user <- strsplit(gsub(" ", "", args[4]), ",")[[1]] #"flo_out,water_temp"
-unit_from_user <- as.numeric(strsplit(gsub(" ", "", args[5]), ",")[[1]]) # 1
+unit_input <- gsub(" ", "", args[5])  # Remove spaces in unit input. Default 1
+# Processing unit input to a correct format: 
+  # Handle combined unit input like "1:3,5,7"
+  if (grepl(":", unit_input) && grepl(",", unit_input)) {
+    # Split by commas
+    ranges <- strsplit(unit_input, ",")[[1]]
+    unit_from_user <- numeric(0)  # Initialize an empty numeric vector
+    for (range in ranges) {
+      if (grepl(":", range)) {
+        # Handle range like "1:3"
+        unit_from_user <- c(unit_from_user, eval(parse(text = range)))
+      } else {
+        # Handle individual numbers like "5" or "7"
+        unit_from_user <- c(unit_from_user, as.numeric(range))
+      }
+    }
+  } else if (grepl("^\\d+:\\d+$", unit_input)) {
+    # Handle ranges like "1:10"
+    unit_from_user <- eval(parse(text = unit_input))
+  } else {
+    # Otherwise, treat it as comma-separated numbers
+    unit_from_user <- as.numeric(strsplit(unit_input, ",")[[1]])
+  }
 start_date_from_user <- args[6] # 20160101
 end_date_from_user <- args[7] # 20201231
 start_date_print_from_user <- args[8] # 20190601
 download_path <- args[9] #"/out/"
-download_names <- strsplit(args[10], ",")[[1]] #"flow_out.csv,water_temp.csv"
+download_names <- strsplit(args[10], ",")[[1]] #"inputs.sqlite,thread_1.sqlite"
 
 filename <- tools::file_path_sans_ext(basename(input_project))
 #Download input project
 source("download.R")
 
-# FIX INPUT SWAT+ TORDERA TOOL: 
-#In a second round of implementation we can include the capability to opload your own TextInOut folder and your own parameters to run a model of a different watersheed.
-# But by the moment I think it is better to keep it fixed. 
-
 TxtInOut_Tordera <- paste0("../swat/Scenario_Gloria_linux/", filename)
 print(TxtInOut_Tordera)
-# Parameter calibration 1: 
-# Calibration performed by Amanda Batlle Morera (CREAF) a.batlle@creaf.uab.cat
-# Calibration process: 
-#     - Soft calibration: qualitative evaluation of annual average values.
-#     - Automatic calibration at separated landscape units using observed dad from Catalan Water Agencia gauge data (Agència Catalana de l'Aigua: aca.gencat.cat )
-# NOTE AMANDA: THIS CALIBRATION VALUES WILL BE CHANGED WHEN FINAL VERSION OF THE MODEL IS AVAILABLE.
 
 json_data <- fromJSON(input_calibration)
 par_cal <- unlist(json_data)
@@ -62,13 +74,12 @@ run_swat_process <- function (TxtInOut,
                                 stringsAsFactors = FALSE)
 
   if (fileout %in% valid_outputfile$fileoutput) {
-    print(paste("fileout:", fileout,"is a valid input."))
+    print(paste("fileout:", fileout, "is a valid input."))
   } else {
-    print(paste("fileout", fileout,"is NOT a valid input. Review SWAT+ documentation for a valid input."))
+    print(paste("fileout", fileout, "is NOT a valid input. Review SWAT+ documentation for a valid input."))
   }
         
-  # variable validity check.
-  # Conevert to 
+  # Variable validity check.
   # Read valid variable list
   valid_variable <- read.csv ("in_variableList.csv", sep = ";" )
   # Filter valid variables for the given output file
@@ -94,48 +105,18 @@ run_swat_process <- function (TxtInOut,
                              start_date= startdate,
                              end_date=enddate,
                              start_date_print = printdate,
-                             parameter=par_comb
+                             parameter=par_comb,
+                             save_file= "SWAT_output"
   )
+  
   # Check if simulation output exists
   if (is.null(q_sim_plus$simulation)) {
     stop("SWAT+ simulation did not return any output.")
-  }
-  
-  # Process the output: Iterate over the elements in variable vector
-  for (i in seq_along(variable)) {
-    var_out <- variable[i]
-    file_name <- paste0(download_path, download_filenames[i])
-    if (!var_out %in% names(q_sim_plus$simulation)) {
-      warning(paste("Variable", var_out, "not found in simulation output. Skipping..."))
-      next  # Skip this iteration if the variable does not exist
-    }
-    
-    q_plus <- q_sim_plus$simulation[[var_out]]  # Extract dynamically
-    
-    # Convert to data frame if necessary
-    if (!is.data.frame(q_plus)) {
-      q_plus <- data.frame(run_1 = q_plus)
-    }
-    
-    # Rename dynamically
-    q_plus <- q_plus %>% rename_with(~ var_out, all_of("run_1"))
-    
-    # Write CSV file
-    write.csv(q_plus, file = file_name, row.names = FALSE)
-    
-    # Check if the file exists and has data
-    if (file.exists(file_name)) {
-      file_data <- read.csv(file_name)  # Read file to check content
-      
-      if (nrow(file_data) > 0) {
-        print(paste("Simulation of variable", var_out, "saved successfully."))
-      } else {
-        warning(paste("File", file_name, "was created but is empty."))
-      }
+  } else if (file.exists(paste0(TxtInOut, "/SWAT_output/thread_1.sqlite"))) { # Check if the SQL file exists
+      print("The SWAT_output files created successfully.")
     } else {
-      warning(paste("File", file_name, "was not created."))
+      warning("The SWAT_output does not exist.")
     }
-  }
 }
 
 #Run SWAT+ TORDERA tool
