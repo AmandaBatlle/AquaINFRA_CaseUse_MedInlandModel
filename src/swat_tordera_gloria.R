@@ -50,14 +50,12 @@ start_date_print_from_user <- args[8] # 20190601
 download_path <- args[9] #"/out/"
 
 
-filename <- tools::file_path_sans_ext(basename(input_project))
-print(paste0("Filename: ", filename))
-
 #Download input project
 print(paste0("Downloading..."))
 source("download.R")
 print(paste0("Downloading... done."))
 
+filename <- tools::file_path_sans_ext(basename(input_project))
 TxtInOut_Tordera <- paste0("../swat/Scenario_Gloria_linux/", filename)
 print(paste("project directory", TxtInOut_Tordera))
 
@@ -90,10 +88,11 @@ run_swat_process <- function (TxtInOut,
   print(paste0("run_swat_process: Reading csv file (in_fileoutputList.csv)... done."))
   print(paste0("run_swat_process: Checking valid inputs..."))
   if (fileout %in% valid_outputfile$fileoutput) {
-    print(paste("fileout:", fileout, "is a valid input."))
+    print(paste("run_swat_process: fileout:", fileout, "is a valid input."))
   } else {
-    print(paste("fileout", fileout, "is NOT a valid input. Review SWAT+ documentation for a valid input."))
-    # TODO: Stop here? Or ignore the fileout? Any consequence?
+    msg <- paste("fileout", fileout, "is NOT a valid input. Review SWAT+ documentation for a valid input.")
+    print(paste("run_swat_process:", msg))
+    stop(msg)
   }
   print(paste0("run_swat_process: Checking valid inputs... done."))
 
@@ -118,9 +117,15 @@ run_swat_process <- function (TxtInOut,
       print(paste("run_swat_process: Variable: ", var_out,"is a valid input."))
     } else if (var_out %in% valid_variable$SWAT_variable) {
       correct_fileoutput <- valid_variable$file[valid_variable$SWAT_variable == var_out]
-      stop(paste("Variable: ", var_out," Is not a valid input for fileout", fileout,".Variable",var_out, "belongs to outputfile", correct_fileoutput,"Review SWAT+ documentation for a valid input."))
+      msg <- paste("Variable: ", var_out," Is not a valid input for fileout", fileout,
+		   ".Variable",var_out, "belongs to outputfile", correct_fileoutput,
+		   "Review SWAT+ documentation for a valid input.")
+      print(paste("run_swat_process:", msg))
+      stop(msg)
     }else{
-      stop(paste("Variable: ", var_out,"is NOT a valid SWAT variable.Review SWAT+ documentation for a valid input."))
+      msg <- paste("Variable: ", var_out,"is NOT a valid SWAT variable.Review SWAT+ documentation for a valid input.")
+      print(paste("run_swat_process:", msg))
+      stop(msg)
     }
   } 
   print(paste0("run_swat_process: Iterating and checking variables... done."))
@@ -156,14 +161,15 @@ run_swat_process <- function (TxtInOut,
   
 
   # Check if simulation output exists
-  print(paste0("run_swat_pricess: Did SWAT+ return any output? ", is.null(q_sim_plus$simulation)))
+  print(paste0("run_swat_process: Did SWAT+ return any output? ", is.null(q_sim_plus$simulation)))
   if (is.null(q_sim_plus$simulation)) {
     stop("SWAT+ simulation did not return any output.")
   } else if (file.exists(paste0(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
-    print("The SWAT_output files created successfully.")
+    print("run_swat_process: The SWAT_output files were created successfully.")
   } else {
-    warning("The SWAT_output does not exist.")
-    # TODO: Consequences? What to do then?
+    msg <- "The SWAT_output does not exist."
+    print(paste("run_swat_process:", msg))
+    stop(msg)
   }
 }
 print(paste0("Defining function run_swat_process... done."))
