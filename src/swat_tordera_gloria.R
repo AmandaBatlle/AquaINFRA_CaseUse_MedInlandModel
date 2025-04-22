@@ -45,7 +45,6 @@ start_date_from_user <- args[6] # 20160101
 end_date_from_user <- args[7] # 20201231
 start_date_print_from_user <- args[8] # 20190601
 download_path <- args[9] #"/out/"
-download_names <- strsplit(args[10], ",")[[1]] #"inputs.sqlite,thread_1.sqlite"
 
 filename <- tools::file_path_sans_ext(basename(input_project))
 #Download input project
@@ -66,8 +65,7 @@ run_swat_process <- function (TxtInOut,
                               enddate, 
                               printdate, 
                               par_comb, 
-                              download_path, 
-                              download_filenames) {
+                              download_path) {
   # Review Input validity. 
   valid_outputfile <- read.csv ("in_fileoutputList.csv", 
                                 sep = ";",
@@ -106,7 +104,7 @@ run_swat_process <- function (TxtInOut,
                              end_date=enddate,
                              start_date_print = printdate,
                              parameter=par_comb,
-                             save_file= "SWAT_output"
+                             save_file= paste0("../../../out", download_path) 
   )
   
   # Check if simulation output exists
@@ -128,7 +126,6 @@ run_swat_process(TxtInOut_Tordera,
                  end_date_from_user, 
                  start_date_print_from_user, 
                  par_cal,
-                 download_path,
-                 download_names)
+                 download_path)
 
 #unlink(TxtInOut_Tordera, recursive = TRUE)
