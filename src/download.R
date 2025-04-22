@@ -62,12 +62,14 @@ unzip_shapefile <- function(zip_file, unzip_dir) {
         print(paste0("download: Unzipped to directory ", unzip_dir))
       },
       warning = function(warn) {
-        print(paste("Warning: Unzipping failed, reason: ", warn[1]))
-        # TODO: Any consequence here?
+        msg <- paste("Warning: Unzipping failed, reason: ", warn[1])
+        message(paste0("download: ", msg))
+        stop(msg)
       },
       error = function(err) {
-        print(paste("Error: Unzipping failed, reason: ", err[1]))
-        # TODO: Any consequence here?
+        msg <-paste("Error: Unzipping failed, reason: ", err[1])
+        message(paste0("download: ", msg))
+        stop(msg)
       }
     )
 }
