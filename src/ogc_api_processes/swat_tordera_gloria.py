@@ -101,7 +101,7 @@ class TorderaGloriaProcessor(BaseProcessor):
                 for line in stderr.split('\n'):
                     if line.startswith('Error'): # TODO: Sometimes error messages span several lines.
                         err_msg = 'Running docker container failed: %s' % (line)
-                raise ProcessorExecuteError(user_msg = err_msg)
+            raise ProcessorExecuteError(user_msg = err_msg)
 
         else:
             downloadlink = own_url.rstrip('/')
