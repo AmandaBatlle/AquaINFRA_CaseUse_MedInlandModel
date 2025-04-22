@@ -94,9 +94,11 @@ run_swat_process <- function (TxtInOut,
       stop(paste("Variable: ", var_out,"is NOT a valid SWAT variable.Review SWAT+ documentation for a valid input."))
     }
   } 
-  print(paste("save_file", file.path("../../../out", download_path)))
 
+  # Output dir:
   output_dir <- file.path("../../../out", download_path)
+  print(paste("save_file", output_dir))
+
 
   print(paste("check if directory exists:", dir.exists(output_dir)))
 
@@ -113,13 +115,13 @@ run_swat_process <- function (TxtInOut,
                              end_date=enddate,
                              start_date_print = printdate,
                              parameter=par_comb,
-                             save_file= file.path("../../../out", download_path) 
+                             save_file=output_dir
   )
   
   # Check if simulation output exists
   if (is.null(q_sim_plus$simulation)) {
     stop("SWAT+ simulation did not return any output.")
-  } else if (file.exists(paste0(TxtInOut, "/SWAT_output/thread_1.sqlite"))) { # Check if the SQL file exists
+  } else if (file.exists(paste0(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
       print("The SWAT_output files created successfully.")
     } else {
       warning("The SWAT_output does not exist.")
