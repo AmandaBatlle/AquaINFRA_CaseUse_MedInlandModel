@@ -8,16 +8,18 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 '''
 How to call this process:
 
-curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" --header "Content-Type: application/json" --data '{
+curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" \
+  --header "Content-Type: application/json" \
+  --data '{
   "inputs": {
         "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
-        "par_cal": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/water_temp.csv",
+        "par_cal": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json",
         "unit": 1,
         "file": "channel_sd_day",
-        "variable": "flo_out,water_temp,no3_out",
+        "variable": "flo_out,water_temp",
         "start_date": 20160101,
-        "end_date": 20201231,
-        "start_date_print": 20190601
+        "end_date": 20160228,
+        "start_date_print": 20160115
     }
 }'
 
@@ -61,18 +63,10 @@ class TorderaGloriaProcessor(BaseProcessor):
         in_variable = data.get('variable') or "flo_out,water_temp" 
         in_unit = data.get('unit') or 1
         in_start_date = data.get('start_date') or 20160101
-        in_end_date = data.get('end_date') or 20201231
-        in_start_date_print = data.get('start_date_print') or 20190601
+        in_end_date = data.get('end_date') or 20160228
+        in_start_date_print = data.get('start_date_print') or 20160115
 
-        variables = [var.strip() for var in in_variable.split(',')]
-        if isinstance(variables, str):
-            variables = [variables]  # Convert to list
-
-        # Create an array of filenames
-        downloadfilenames = [
-            f'swat_output_file-{self.my_job_id}-{var}.csv' for var in variables
-        ]        
-        downloadfilenames_string = ','.join(downloadfilenames)
+        downloadFolder = f'/{self.my_job_id}/'
 
         returncode, stdout, stderr = run_docker_container(
             docker_executable,
@@ -84,8 +78,8 @@ class TorderaGloriaProcessor(BaseProcessor):
             str(in_start_date),
             str(in_end_date),
             str(in_start_date_print),
-            download_dir, 
-            downloadfilenames_string
+            download_dir,
+            downloadFolder
         )
 
         # print R stderr/stdout to debug log:
@@ -110,19 +104,20 @@ class TorderaGloriaProcessor(BaseProcessor):
                 raise ProcessorExecuteError(user_msg = err_msg)
 
         else:
-            outputs = {}
-            for var in variables:
-                downloadfilename = f'swat_output_file-{self.my_job_id}-{var}.csv'
-                downloadlink = own_url.rstrip('/') + os.sep + "out" + os.sep + downloadfilename
-
-                outputs[f"swat_output_file_{var}"] = {
-                    "title": self.metadata['outputs']['swat_output_file']['title'],
-                    "description": self.metadata['outputs']['swat_output_file']['description'],
-                    "href": downloadlink
-                }
-
+            downloadlink = own_url.rstrip('/')
             response_object = {
-                "outputs": outputs
+                "outputs": {
+                    "swat_output_summary": {
+                        "title": self.metadata['outputs']['swat_output_summary']['title'],
+                        "description": self.metadata['outputs']['swat_output_summary']['description'],
+                        "href": f'{downloadlink}{downloadFolder}inputs.sqlite'
+                    },
+                    "swat_output_file": {
+                        "title": self.metadata['outputs']['swat_output_file']['title'],
+                        "description": self.metadata['outputs']['swat_output_file']['description'],
+                        "href": f'{downloadlink}{downloadFolder}thread_1.sqlite'
+                    }
+                }
             }
 
             return 'application/json', response_object
@@ -137,8 +132,8 @@ def run_docker_container(
         in_start_date,
         in_end_date,
         in_start_date_print,
-        download_dir, 
-        downloadfilenames
+        download_dir,
+        download_folder
     ):
     LOGGER.debug('Prepare running docker container')
     container_name = f'catalunya-tordera-image_{os.urandom(5).hex()}'
@@ -176,10 +171,8 @@ def run_docker_container(
         in_start_date,
         in_end_date,
         in_start_date_print,
-        container_out,
-        downloadfilenames
+        download_folder
     ]
-
 
     LOGGER.debug('Docker command: %s' % docker_command)
     print(docker_command)
