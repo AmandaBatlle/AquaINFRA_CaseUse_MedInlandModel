@@ -6,10 +6,10 @@
         "en": "SWAT+ output to MITgcm input connection tool"
     },
     "description": {
-        "en": "This code converts SWAT output (https://swat.tamu.edu/) of water quantity (Flow out and Temperature) in csv format to date input for MITgcm in txt format.The tool uses R code al libraries readr, dplyr and lubridate to correct the date format and dataframe structure. "
+        "en": "This code converts SWAT output (https://swat.tamu.edu/) of water quantity (Flow out and Temperature) in sqlite format to date input for MITgcm in txt format.The tool uses R code al libraries DBI, RSQLite, and dplyr to correct the date format and dataframe structure."
     },
     "jobControlOptions": ["sync-execute", "async-execute"],
-    "keywords": ["tordera use case", "AquaINFRA", "R", "conversion", "MITGCM"],
+    "keywords": ["tordera use case", "AquaINFRA", "R", "conversion", "MITgcm"],
     "links": [{
         "type": "text/html",
         "rel": "about",
@@ -34,23 +34,12 @@
         "hreflang": "en-US"
     }],
     "inputs": {
-        "flow_file": {
-            "title": "Daily river flow out",
-            "description": "csv file containing daily flow out values (units: m3/s).",
+        "swat_output_file": {
+            "title": "SWAT+ Variable Outputs Database",
+            "description": "SQLite database (thread_1.sqlite) storing the simulated output values based on the defined time range and time step (daily, monthly, yearly, or annual average).",
             "schema": {
                 "type": "object",
-                "contentMediaType": "application/csv"
-            },
-            "minOccurs": 1,
-            "maxOccurs": 1,
-            "keywords": []
-        },
-        "temp_file": {
-            "title": "Daily river water temperature",
-            "description": "Daily river water temperature.",
-            "schema": {
-                "type": "object",
-                "contentMediaType": "application/csv"
+                "contentMediaType": "application/sqlite"
             },
             "minOccurs": 1,
             "maxOccurs": 1,
@@ -69,8 +58,7 @@
     },
     "example": {
         "inputs": {
-            "flow_file": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/flo_out.csv",
-            "temp_file": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/water_temp.csv"
+            "swat_output_file": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/thread_1.sqlite"
         }
     }
 }
