@@ -68,7 +68,7 @@ class TorderaGloriaProcessor(BaseProcessor):
 
         downloadFolder = f'/{self.my_job_id}/'
 
-        returncode, stdout, stderr = run_docker_container(
+        returncode, stdout, stderr, user_err_msg = run_docker_container(
             docker_executable,
             in_project,
             in_parameter_cal,
@@ -94,15 +94,15 @@ class TorderaGloriaProcessor(BaseProcessor):
                 LOGGER.debug('R stderr: %s' % line)
 
         if not returncode == 0:
-            very_debug = True # TODO: This is only a temporary solution!
+
+            user_err_msg = "no message" if len(user_err_msg) == 0 else user_err_msg
+            err_msg = 'Running docker container failed: %s' % user_err_msg
+
+            very_debug = False # TODO: This is only a temporary solution!
             if very_debug:
                 # TODO: This prints all the content to the response. Remove this after debug period!
                 err_msg = 'Running docker container failed. Stderr: ' + ' - '.join(stderr.split('\n'))
-            else:
-                err_msg = 'Running docker container failed.'
-                for line in stderr.split('\n'):
-                    if line.startswith('Error'): # TODO: Sometimes error messages span several lines.
-                        err_msg = 'Running docker container failed: %s' % (line)
+
             raise ProcessorExecuteError(user_msg = err_msg)
 
         else:
@@ -188,8 +188,71 @@ def run_docker_container(
         stdout = result.stdout.decode()
         stderr = result.stderr.decode()
         LOGGER.debug('Finished running docker container')
-        return result.returncode, stdout, stderr
+        return result.returncode, stdout, stderr, "no error"
 
     except subprocess.CalledProcessError as e:
-        LOGGER.debug('Failed running docker container')
-        return e.returncode, e.stdout.decode(), e.stderr.decode()
+        returncode = e.returncode
+        stdout = e.stdout.decode()
+        stderr = e.stderr.decode()
+        LOGGER.error('Failed running docker container (exit code %s)' % returncode)
+        user_err_msg = get_error_message_from_docker_stderr(stderr)
+        return returncode, stdout, stderr, user_err_msg
+
+
+def get_error_message_from_docker_stderr(stderr, log_all_lines = True):
+    '''
+    We would like to return meaningful messages to users. For example, by
+    printing ALL stderr lines, we get the following:
+
+    R stderr: Error in download_shapefile(input_project, input_data_dir) :
+    R stderr:   object 'warn' not found
+
+    Now, how to capture the meaningful part of that, which we want to return
+    to the user? Here is a first attempt:
+    '''
+
+    user_err_msg = ""
+    error_on_previous_line = False
+    colon_on_previous_line = False
+    for line in stderr.split('\n'):
+
+        # Skip empty lines:
+        if not line:
+            continue
+
+        # Print all non-empty lines to log:
+        if log_all_lines:
+            LOGGER.error('Docker stderr: %s' % line)
+
+        # R error messages may start with the word "Error"
+        if line.startswith("Error"):
+            #LOGGER.debug('### Found explicit error line: %s' % line.strip())
+            user_err_msg += line.strip()
+            error_on_previous_line = True
+
+        # When R error messages are continued on another line, they may be
+        # indented by two spaces.
+        elif line.startswith("  ") and error_on_previous_line:
+            #LOGGER.debug('### Found indented line following an error: %s' % line.strip())
+            user_err_msg += " "+line.strip()
+            error_on_previous_line = True
+
+        # When R error messages end with a colon, they will be continued on
+        # the next line, independently of their indentation I guess!
+        elif colon_on_previous_line and error_on_previous_line:
+            #LOGGER.debug('### Found line following a colon: %s' % line.strip())
+            user_err_msg += " "+line.strip()
+            error_on_previous_line = True
+
+        else:
+            #LOGGER.debug('### Do not pass back to user: %s' % line.strip())
+            error_on_previous_line = False
+
+        # Remember whether this line ended with a colon, indicating that the
+        # next line will continue with the error message:
+        colon_on_previous_line = False
+        if line.strip().endswith(":"):
+            #LOGGER.debug('### Found a colon, next line will still be error!')
+            colon_on_previous_line = True
+
+    return user_err_msg
