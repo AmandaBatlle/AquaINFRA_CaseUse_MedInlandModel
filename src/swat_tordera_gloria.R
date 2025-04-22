@@ -104,7 +104,7 @@ run_swat_process <- function (TxtInOut,
                              end_date=enddate,
                              start_date_print = printdate,
                              parameter=par_comb,
-                             save_file= paste0("../../../out", download_path) 
+                             save_file= file.path("../../../out", download_path) 
   )
   
   # Check if simulation output exists
