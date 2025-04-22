@@ -51,11 +51,12 @@ download_path <- args[9] #"/out/"
 
 
 #Download input project
+filename <- tools::file_path_sans_ext(basename(input_project))
+# Note: filename is needed by download.R. Maybe rather call function instead of source?
 print(paste0("Downloading..."))
 source("download.R")
 print(paste0("Downloading... done."))
 
-filename <- tools::file_path_sans_ext(basename(input_project))
 TxtInOut_Tordera <- paste0("../swat/Scenario_Gloria_linux/", filename)
 print(paste("project directory", TxtInOut_Tordera))
 
