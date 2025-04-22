@@ -51,7 +51,7 @@ filename <- tools::file_path_sans_ext(basename(input_project))
 source("download.R")
 
 TxtInOut_Tordera <- paste0("../swat/Scenario_Gloria_linux/", filename)
-print("project directory", TxtInOut_Tordera)
+print(paste("project directory", TxtInOut_Tordera))
 
 json_data <- fromJSON(input_calibration)
 par_cal <- unlist(json_data)
@@ -94,11 +94,11 @@ run_swat_process <- function (TxtInOut,
       stop(paste("Variable: ", var_out,"is NOT a valid SWAT variable.Review SWAT+ documentation for a valid input."))
     }
   } 
-  print("save_file", file.path("../../../out", download_path))
+  print(paste("save_file", file.path("../../../out", download_path)))
 
   output_dir <- file.path("../../../out", download_path)
 
-  print("check if directory exists:", dir.exists(output_dir)
+  print(paste("check if directory exists:", dir.exists(output_dir)))
 
   if (!dir.exists(output_dir)) {
     dir.create(output_dir, recursive = TRUE)
