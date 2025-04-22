@@ -83,10 +83,12 @@ class TorderaGloriaProcessor(BaseProcessor):
         )
 
         # print R stderr/stdout to debug log:
+        LOGGER.debug('___R stdout___')
         for line in stdout.split("\n"):
             if not len(line.strip()) == 0:
                 LOGGER.debug('R stdout: %s' % line)
 
+        LOGGER.debug('___R stderr___')
         for line in stderr.split("\n"):
             if not len(line.strip()) == 0:
                 LOGGER.debug('R stderr: %s' % line)
@@ -104,6 +106,7 @@ class TorderaGloriaProcessor(BaseProcessor):
             raise ProcessorExecuteError(user_msg = err_msg)
 
         else:
+            LOGGER.debug('Finished running Docker container, now preparing the results to be sent back to client.')
             downloadlink = own_url.rstrip('/')
             response_object = {
                 "outputs": {
@@ -120,6 +123,7 @@ class TorderaGloriaProcessor(BaseProcessor):
                 }
             }
 
+            LOGGER.debug('Returning results to caller.')
             return 'application/json', response_object
 
 def run_docker_container(
