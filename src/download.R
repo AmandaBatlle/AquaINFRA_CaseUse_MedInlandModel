@@ -18,6 +18,7 @@ download_shapefile <- function(url, dest_file) {
         message(paste0("File ", dest_file, " downloaded."))
         unzip_shapefile(input_data_dir, project_dir)
         file.copy(executable, file.path(project_dir, basename(executable)), overwrite = TRUE)
+        message(paste0("Copied file ", executable))
       },
       warning = function(warn) {
         message(paste("Warning: Download failed, reason: ", warn[1]))
