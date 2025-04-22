@@ -8,12 +8,11 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 '''
 How to call this process:
 
-curl -X POST "http://localhost:5000/processes/SWATmitgcmConnection/execution" \
+curl -X POST "localhost:5000/processes/tordera-gloria-connection/execution" \
   --header "Content-Type: application/json" \
   --data '{
-    "inputs": {
-        "flow_file": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/flo_out.csv",
-        "temp_file": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/water_temp.csv"
+  "inputs": {
+        "swat_output_file": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_results/thread_1.sqlite"
     }
 }'
 
@@ -50,21 +49,17 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
         docker_executable = configJSON.get("docker_executable", "docker")
 
         # Get user inputs
-        in_file1 = data.get('flow_file')
-        in_file2 = data.get('temp_file') 
+        in_file1 = data.get('swat_output_file')
 
         # Check
         if in_file1 is None:
             raise ProcessorExecuteError('Missing parameter "in_file1". Please provide a value.')
-        if in_file2 is None:
-            raise ProcessorExecuteError('Missing parameter "in_file2". Please provide a value.')
 
-        downloadfilename = 'joinedFile-%s.csv' % self.my_job_id
+        downloadfilename = 'joinedFile-%s.txt' % self.my_job_id
 
         returncode, stdout, stderr = run_docker_container(
             docker_executable,
             in_file1,
-            in_file2,
             download_dir,
             downloadfilename
         )
@@ -107,7 +102,6 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
 def run_docker_container(
         docker_executable,
         in_file1,
-        in_file2,
         download_dir, 
         outputFilename
     ):
@@ -140,7 +134,6 @@ def run_docker_container(
         image_name,
         "--",  # Indicates the end of Docker's internal arguments and the start of the user's arguments
         in_file1,
-        in_file2,
         f"{container_out}/{outputFilename}"
     ]
 

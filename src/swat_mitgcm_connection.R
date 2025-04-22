@@ -34,10 +34,15 @@ output <- args[2] # /out/MITGCMinput_RiverWaterQuantityFromSWAT.txt
 
 Conversion_SWAT_MITGCM_WaterQuantity <- function( db_path, output_file){
   # Load packages quietly
-  suppressPackageStartupMessages(lapply(requiredPackages, library, character.only = TRUE))
+  #suppressPackageStartupMessages(lapply(requiredPackages, library, character.only = TRUE))
+  
+  url <- db_path
+  destfile <- "thread_1.sqlite"
+  
+  download.file(url, destfile, method = "auto")
   
   # Create a connection to database
-  con <- dbConnect(RSQLite::SQLite(), dbname = db_path)
+  con <- dbConnect(RSQLite::SQLite(), dbname = destfile)
   
   #Connect to DB
   dbListTables(con)
