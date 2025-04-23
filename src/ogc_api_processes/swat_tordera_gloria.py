@@ -8,8 +8,10 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 '''
 How to call this process:
 
-curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" --header "Content-Type: application/json" --data '{
-  "inputs": {
+curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" \
+  --header "Content-Type: application/json" \
+  --data '{
+  "inputs":{
         "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
         "par_cal": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/water_temp.csv",
         "unit": 1,
@@ -22,7 +24,6 @@ curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" --header
 }'
 
 '''
-
 
 LOGGER = logging.getLogger(__name__)
 
