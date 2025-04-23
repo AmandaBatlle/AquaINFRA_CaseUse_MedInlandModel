@@ -123,7 +123,7 @@
             "description": "SQLite database (inputs.sqlite) containing all the parameters used in the executed SWAT+ run",
             "schema": {
                 "type": "object",
-                "contentMediaType": "application/sqlite"
+                "contentMediaType": "application/x-sqlite3"
             }
         },
         "swat_output_file": {
@@ -131,7 +131,7 @@
             "description": "SQLite database (thread_1.sqlite) storing the simulated output values based on the defined time range and time step (daily, monthly, yearly, or annual average).",
             "schema": {
                 "type": "object",
-                "contentMediaType": "application/sqlite"
+                "contentMediaType": "application/x-sqlite3"
             }
         }
     },
