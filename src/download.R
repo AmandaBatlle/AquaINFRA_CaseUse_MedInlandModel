@@ -17,7 +17,9 @@ download_shapefile <- function(url, dest_file) {
         download.file(url, dest_file, mode = "wb")
         message(paste0("File ", dest_file, " downloaded."))
         unzip_shapefile(input_data_dir, project_dir)
+        #dest_exec <- file.path(project_dir, basename(executable))
         file.copy(executable, file.path(project_dir, basename(executable)), overwrite = TRUE)
+        #Sys.chmod(dest_exec, mode = "0755")
       },
       warning = function(warn) {
         message(paste("Warning: Download failed, reason: ", warn[1]))
@@ -31,18 +33,18 @@ download_shapefile <- function(url, dest_file) {
 
 # Function to unzip the downloaded file
 unzip_shapefile <- function(zip_file, unzip_dir) {
-    tryCatch(
-      {
-        unzip(zip_file, exdir = unzip_dir)
-        message(paste0("Unzipped to directory ", unzip_dir))
-      },
-      warning = function(warn) {
-        message(paste("Warning: Unzipping failed, reason: ", warn[1]))
-      },
-      error = function(err) {
-        message(paste("Error: Unzipping failed, reason: ", err[1]))
-      }
-    )
+  tryCatch(
+    {
+      unzip(zip_file, exdir = unzip_dir)
+      message(paste0("Unzipped to directory ", unzip_dir))
+    },
+    warning = function(warn) {
+      message(paste("Warning: Unzipping failed, reason: ", warn[1]))
+    },
+    error = function(err) {
+      message(paste("Error: Unzipping failed, reason: ", err[1]))
+    }
+  )
 }
 
 # Download and unzip shapefile
