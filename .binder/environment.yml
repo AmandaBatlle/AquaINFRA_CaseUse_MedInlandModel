@@ -9,3 +9,5 @@ dependencies:
   - r-readr=2.1.5
   - r-lubridate=1.9.4
   - r-jsonlite=1.8.9
+  - r-dbi=1.2.3
+  - r-rsqlite=2.3.9

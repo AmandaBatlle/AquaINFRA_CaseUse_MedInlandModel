@@ -13,11 +13,12 @@ Gloria Scenario SWATplus model:
 
 Step 1:
 
-`Rscript swat_tordera_gloria.R https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "./" "flo_out.csv,water_temp.csv"`
+`Rscript swat_tordera_gloria.R https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "./"`
 
 Step 1 (Quick run):
 
-`Rscript swat_tordera_gloria.R https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json "channel_sd_day" "flo_out,water_temp" 1 20160101 20160228 20160115 "./" "flo_out.csv,water_temp.csv"`
+
+`Rscript swat_tordera_gloria.R https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json "channel_sd_day" "flo_out,water_temp" 1 20160101 20160228 20160115 "./"`
 
 Step 2:
 
@@ -27,11 +28,11 @@ Step 2:
 
 Step 1:
 
-`docker run -it -v ./in:/in -v ./out:/out -e R_SCRIPT="swat_tordera_gloria.R" catalunya-tordera-image -- "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip" "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json" "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "/out/" "flo_out.csv,water_temp.csv"`
+`docker run -it -v ./in:/in -v ./out:/out -e R_SCRIPT="swat_tordera_gloria.R" catalunya-tordera-image -- "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip" "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json" "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "/jobid123/"`
 
 Step 1 (Quick run):
 
-`docker run -it -v ./in:/in -v ./out:/out -e R_SCRIPT="swat_tordera_gloria.R" catalunya-tordera-image -- "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip" "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json" "channel_sd_day" "flo_out,water_temp" 1 20160101 20160228 20160115 "/out/" "flo_out.csv,water_temp.csv"`
+`docker run -it -v ./in:/in -v ./out:/out -e R_SCRIPT="swat_tordera_gloria.R" catalunya-tordera-image -- "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip" "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json" "channel_sd_day" "flo_out,water_temp" 1 20160101 20160228 20160115 "/jobid123/"`
 
 Step 2:
 
