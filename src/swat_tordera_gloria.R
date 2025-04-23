@@ -77,9 +77,7 @@ run_swat_process <- function (TxtInOut,
                               par_comb, 
                               download_path) {
 
-
   print(paste0("run_swat_process: Starting..."))
-
 
   # Review Input validity. 
   print(paste0("run_swat_process: Reading csv file (in_fileoutputList.csv)..."))
@@ -119,8 +117,8 @@ run_swat_process <- function (TxtInOut,
     } else if (var_out %in% valid_variable$SWAT_variable) {
       correct_fileoutput <- valid_variable$file[valid_variable$SWAT_variable == var_out]
       msg <- paste("Variable: ", var_out," Is not a valid input for fileout", fileout,
-		   ".Variable",var_out, "belongs to outputfile", correct_fileoutput,
-		   "Review SWAT+ documentation for a valid input.")
+                   ".Variable",var_out, "belongs to outputfile", correct_fileoutput,
+                   "Review SWAT+ documentation for a valid input.")
       print(paste("run_swat_process:", msg))
       stop(msg)
     }else{
@@ -128,7 +126,7 @@ run_swat_process <- function (TxtInOut,
       print(paste("run_swat_process:", msg))
       stop(msg)
     }
-  } 
+  }
   print(paste0("run_swat_process: Iterating and checking variables... done."))
 
 
@@ -162,7 +160,7 @@ run_swat_process <- function (TxtInOut,
   
 
   # Check if simulation output exists
-  print(paste0("run_swat_process: Did SWAT+ return any output? ", is.null(q_sim_plus$simulation)))
+  #print(paste0("run_swat_process: Did SWAT+ return any output? ", is.null(q_sim_plus$simulation)))
   if (is.null(q_sim_plus$simulation)) {
     stop("SWAT+ simulation did not return any output.")
   } else if (file.exists(paste0(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists

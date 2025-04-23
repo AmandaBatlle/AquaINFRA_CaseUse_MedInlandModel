@@ -28,6 +28,7 @@ download_shapefile <- function(url, dest_file) {
         print(paste0('download: Unzipping file...'))
         unzip_shapefile(input_data_dir, project_dir)
         print(paste0('download: Unzipping file... done.'))
+
         #if (file.exists(executable)){
         #  print(paste0("download: EXISTS: ", executable))
         #}
@@ -38,9 +39,11 @@ download_shapefile <- function(url, dest_file) {
         #  print(paste0("download: EXISTS: ../swat/Scenario_Gloria_linux/project/"))
         #}
 
-	print(paste0('download: Copying ', executable,' to ', file.path(project_dir, basename(executable)), '...'))
-	file.copy(executable, file.path(project_dir, basename(executable)), overwrite = TRUE)
-	print(paste0("download: Copying ", executable, "... done."))
+        print(paste0('download: Copying ', executable,' to ', file.path(project_dir, basename(executable)), '...'))
+        #dest_exec <- file.path(project_dir, basename(executable))
+        file.copy(executable, file.path(project_dir, basename(executable)), overwrite = TRUE)
+        #Sys.chmod(dest_exec, mode = "0755")
+        print(paste0("download: Copying ", executable, "... done."))
       },
       warning = function(warn) {
         message(paste("download: Warning: Download failed, reason: ", warn[1]))
@@ -56,22 +59,22 @@ download_shapefile <- function(url, dest_file) {
 
 # Function to unzip the downloaded file
 unzip_shapefile <- function(zip_file, unzip_dir) {
-    tryCatch(
-      {
-        unzip(zip_file, exdir = unzip_dir)
-        print(paste0("download: Unzipped to directory ", unzip_dir))
-      },
-      warning = function(warn) {
-        msg <- paste("Warning: Unzipping failed, reason: ", warn[1])
-        message(paste0("download: ", msg))
-        stop(msg)
-      },
-      error = function(err) {
-        msg <-paste("Error: Unzipping failed, reason: ", err[1])
-        message(paste0("download: ", msg))
-        stop(msg)
-      }
-    )
+  tryCatch(
+    {
+      unzip(zip_file, exdir = unzip_dir)
+      message(paste0("download: Unzipped to directory ", unzip_dir))
+    },
+    warning = function(warn) {
+      msg <- paste("Warning: Unzipping failed, reason: ", warn[1])
+      message(paste0("download: ", msg))
+      stop(msg)
+    },
+    error = function(err) {
+      msg <-paste("Error: Unzipping failed, reason: ", err[1])
+      message(paste0("download: ", msg))
+      stop(msg)
+    }
+  )
 }
 
 # Download and unzip shapefile

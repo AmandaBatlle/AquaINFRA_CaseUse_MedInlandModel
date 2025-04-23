@@ -11,7 +11,7 @@ How to call this process:
 curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" \
   --header "Content-Type: application/json" \
   --data '{
-  "inputs": {
+  "inputs":{
         "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
         "par_cal": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json",
         "unit": 1,
@@ -24,7 +24,6 @@ curl -X POST "http://localhost:5000/processes/tordera-gloria/execution" \
 }'
 
 '''
-
 
 LOGGER = logging.getLogger(__name__)
 
@@ -78,7 +77,7 @@ class TorderaGloriaProcessor(BaseProcessor):
             str(in_start_date),
             str(in_end_date),
             str(in_start_date_print),
-            download_dir,
+            download_dir, 
             downloadFolder
         )
 
