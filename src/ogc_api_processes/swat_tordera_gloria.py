@@ -112,12 +112,12 @@ class TorderaGloriaProcessor(BaseProcessor):
                     "swat_output_summary": {
                         "title": self.metadata['outputs']['swat_output_summary']['title'],
                         "description": self.metadata['outputs']['swat_output_summary']['description'],
-                        "href": f'{downloadlink}{downloadFolder}inputs.sqlite'
+                        "href": f'{downloadlink}{downloadFolder}out/inputs.sqlite'
                     },
                     "swat_output_file": {
                         "title": self.metadata['outputs']['swat_output_file']['title'],
                         "description": self.metadata['outputs']['swat_output_file']['description'],
-                        "href": f'{downloadlink}{downloadFolder}thread_1.sqlite'
+                        "href": f'{downloadlink}{downloadFolder}out/thread_1.sqlite'
                     }
                 }
             }
