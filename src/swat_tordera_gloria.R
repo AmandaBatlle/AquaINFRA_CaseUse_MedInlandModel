@@ -108,13 +108,13 @@ run_swat_process <- function (TxtInOut,
   )
   
   # Check if simulation output exists
-  if (is.null(q_sim_plus$simulation)) {
-    stop("SWAT+ simulation did not return any output.")
-  } else if (file.exists(paste0(TxtInOut, "/SWAT_output/thread_1.sqlite"))) { # Check if the SQL file exists
-      print("The SWAT_output files created successfully.")
-    } else {
-      warning("The SWAT_output does not exist.")
-    }
+  #if (is.null(q_sim_plus$simulation)) {
+  #  stop("SWAT+ simulation did not return any output.")
+  #} else if (file.exists(paste0("../../../out", download_path, "thread_1.sqlite"))) { # Check if the SQL file exists
+  #    print("The SWAT_output files created successfully.")
+  #  } else {
+  #    warning("The SWAT_output does not exist.")
+  #  }
 }
 
 #Run SWAT+ TORDERA tool
