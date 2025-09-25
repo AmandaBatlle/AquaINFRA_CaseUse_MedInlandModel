@@ -1,2 +1,8 @@
 #!/bin/bash
+set -e
+
+# install specific R packages from CRAN
+Rscript -e "install.packages('remotes', repos = 'https://cloud.r-project.org')"
+Rscript -e "remotes::install_version('rinat', version = '0.1.9', repos = 'https://cloud.r-project.org')"
+Rscript -e "remotes::install_version('rfishbase', version = '5.0.1', repos = 'https://cloud.r-project.org')"
 Rscript -e "if (!requireNamespace('SWATrunR', quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')"
