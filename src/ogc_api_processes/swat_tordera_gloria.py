@@ -7,10 +7,9 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 
 '''
 How to call this process:
-
-curl -i -X POST "http://localhost:5000/processes/tordera-gloria/execution" \
+curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
   --header "Content-Type: application/json" \
-  --header 'Prefer: respond-async'
+  --header 'Prefer: respond-async' \
   --data '{
   "inputs":{
         "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
@@ -37,10 +36,11 @@ class TorderaGloriaProcessor(BaseProcessor):
     def __init__(self, processor_def):
         super().__init__(processor_def, PROCESS_METADATA)
         self.supports_outputs = True
-        self.my_job_id = 'nothing-yet'
+        self.job_id = 'nothing-yet'
+        self.process_id = self.metadata["id"]
 
     def set_job_id(self, job_id: str):
-        self.my_job_id = job_id
+        self.job_id = job_id
 
     def __repr__(self):
         return f'<TorderaGloriaProcessor> {self.name}'
@@ -51,12 +51,16 @@ class TorderaGloriaProcessor(BaseProcessor):
         config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
         with open(config_file_path, 'r') as configFile:
             configJSON = json.load(configFile)
-
-        download_dir = configJSON["download_dir"]
-        own_url = configJSON["own_url"]
+            self.download_dir = configJSON["download_dir"].rstrip('/')
+            self.download_url = configJSON["download_url"].rstrip('/')
+        
         docker_executable = configJSON.get("docker_executable", "docker")
 
-        # Get user inputs
+
+        #################################
+        ### Get user inputs and check ###
+        #################################
+
         in_project = data.get('TextInOut_URL') or "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip"
         in_parameter_cal = data.get('par_cal') or "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json"
         in_swat_file = data.get('file') or "channel_sd_day"
@@ -66,10 +70,31 @@ class TorderaGloriaProcessor(BaseProcessor):
         in_end_date = data.get('end_date') or 20160228
         in_start_date_print = data.get('start_date_print') or 20160115
 
-        downloadFolder = f'/{self.my_job_id}/'
+        # TODO: Parse/validate dates?
+
+
+        #################################
+        ### Input and output          ###
+        ### storage/download location ###
+        #################################
+
+        # Where to store output data
+        output_dir = f'{self.download_dir}/out/{self.process_id}/job_{self.job_id}'
+        output_url = f'{self.download_url}/out/{self.process_id}/job_{self.job_id}'
+        os.makedirs(output_dir, exist_ok=True)
+        LOGGER.debug(f'All results will be stored     in: {output_dir}')
+        LOGGER.debug(f'All results will be accessible in: {output_url}')
+        downloadlink1 = f'{output_url}/inputs.sqlite'
+        downloadlink2 = f'{output_url}/thread_1.sqlite'
+
+
+        ############################
+        ### Run docker container ###
+        ############################
 
         returncode, stdout, stderr, user_err_msg = run_docker_container(
             docker_executable,
+            output_dir,
             in_project,
             in_parameter_cal,
             in_swat_file,
@@ -77,9 +102,7 @@ class TorderaGloriaProcessor(BaseProcessor):
             str(in_unit),
             str(in_start_date),
             str(in_end_date),
-            str(in_start_date_print),
-            download_dir, 
-            downloadFolder
+            str(in_start_date_print)
         )
 
         # print R stderr/stdout to debug log:
@@ -107,18 +130,17 @@ class TorderaGloriaProcessor(BaseProcessor):
 
         else:
             LOGGER.debug('Finished running Docker container, now preparing the results to be sent back to client.')
-            downloadlink = own_url.rstrip('/')
             response_object = {
                 "outputs": {
                     "swat_output_summary": {
                         "title": self.metadata['outputs']['swat_output_summary']['title'],
                         "description": self.metadata['outputs']['swat_output_summary']['description'],
-                        "href": f'{downloadlink}/out{downloadFolder}inputs.sqlite'
+                        "href": downloadlink1
                     },
                     "swat_output_file": {
                         "title": self.metadata['outputs']['swat_output_file']['title'],
                         "description": self.metadata['outputs']['swat_output_file']['description'],
-                        "href": f'{downloadlink}/out{downloadFolder}thread_1.sqlite'
+                        "href": downloadlink2
                     }
                 }
             }
@@ -126,8 +148,10 @@ class TorderaGloriaProcessor(BaseProcessor):
             LOGGER.debug('Returning results to caller.')
             return 'application/json', response_object
 
+
 def run_docker_container(
         docker_executable,
+        output_dir,
         in_project_folder,
         in_calibration_parameter,
         in_swat_file,
@@ -135,10 +159,9 @@ def run_docker_container(
         in_unit,
         in_start_date,
         in_end_date,
-        in_start_date_print,
-        download_dir,
-        download_folder
+        in_start_date_print
     ):
+
     LOGGER.debug('Prepare running docker container')
     container_name = f'catalunya-tordera-image_{os.urandom(5).hex()}'
     image_name = 'catalunya-tordera-image'
@@ -146,24 +169,14 @@ def run_docker_container(
     # Prepare container command
 
     # Define paths inside the container
-    container_in = '/in'
     container_out = '/out/'
-
-    # Define local paths
-    local_in = os.path.join(download_dir, "in")
-    local_out = os.path.join(download_dir, "out")
-
-    # Ensure directories exist
-    os.makedirs(local_in, exist_ok=True)
-    os.makedirs(local_out, exist_ok=True)
 
     script = 'swat_tordera_gloria.R'
 
     # Mount volumes and set command
     docker_command = [
         docker_executable, "run", "--rm", "--name", container_name,
-        "-v", f"{local_in}:{container_in}",
-        "-v", f"{local_out}:{container_out}",
+        "-v", f"{output_dir}:{container_out}",
         "-e", f"R_SCRIPT={script}",  # Set the R_SCRIPT environment variable
         image_name,
         "--",  # Indicates the end of Docker's internal arguments and the start of the user's arguments
@@ -175,7 +188,7 @@ def run_docker_container(
         in_start_date,
         in_end_date,
         in_start_date_print,
-        download_folder
+        '/'
     ]
 
     LOGGER.debug('Docker command: %s' % docker_command)
