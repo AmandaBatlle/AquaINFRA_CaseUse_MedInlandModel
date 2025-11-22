@@ -8,7 +8,7 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 '''
 How to call this process:
 
-curl -X POST "localhost:5000/processes/tordera-gloria-connection/execution" \
+curl -i -X POST https://${PYSERVER}/processes/tordera-gloria-connection/execution \
   --header "Content-Type: application/json" \
   --data '{
   "inputs": {
@@ -57,7 +57,7 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
 
         # Check
         if in_file1 is None:
-            raise ProcessorExecuteError('Missing parameter "in_file1". Please provide a value.')
+            raise ProcessorExecuteError('Missing parameter "swat_output_file". Please provide a value.')
 
         #################################
         ### Input and output          ###
