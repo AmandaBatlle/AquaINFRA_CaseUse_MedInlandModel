@@ -29,10 +29,11 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
     def __init__(self, processor_def):
         super().__init__(processor_def, PROCESS_METADATA)
         self.supports_outputs = True
-        self.my_job_id = 'nothing-yet'
+        self.job_id = 'nothing-yet'
+        self.process_id = self.metadata["id"]
 
     def set_job_id(self, job_id: str):
-        self.my_job_id = job_id
+        self.job_id = job_id
 
     def __repr__(self):
         return f'<SwatMitgcmConnectionProcessor> {self.name}'
@@ -43,10 +44,16 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
         config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
         with open(config_file_path, 'r') as configFile:
             configJSON = json.load(configFile)
+            self.download_dir = configJSON["download_dir"].rstrip('/')
+            self.download_url = configJSON["download_url"].rstrip('/')
 
-        download_dir = configJSON["download_dir"]
-        own_url = configJSON["own_url"]
+        #download_dir = configJSON["download_dir"]
+        #own_url = configJSON["own_url"]
         docker_executable = configJSON.get("docker_executable", "docker")
+
+        #################################
+        ### Get user inputs and check ###
+        #################################
 
         # Get user inputs
         in_file1 = data.get('swat_output_file')
@@ -55,12 +62,32 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
         if in_file1 is None:
             raise ProcessorExecuteError('Missing parameter "in_file1". Please provide a value.')
 
-        downloadfilename = 'joinedFile-%s.txt' % self.my_job_id
+        #################################
+        ### Input and output          ###
+        ### storage/download location ###
+        #################################
+
+        # Where to store output data
+        output_dir = f'{self.download_dir}/out/{self.process_id}/job_{self.job_id}'
+        output_url = f'{self.download_url}/out/{self.process_id}/job_{self.job_id}'
+        os.makedirs(output_dir, exist_ok=True)
+        LOGGER.debug(f'All results will be stored     in: {output_dir}')
+        LOGGER.debug(f'All results will be accessible in: {output_url}')
+        #downloadlink1 = f'{output_url}/inputs.sqlite'
+        #downloadlink2 = f'{output_url}/thread_1.sqlite'
+        downloadfilename = 'joinedFile-%s.txt' % self.job_id
+        #downloadlink = self.download_url.rstrip('/')+os.sep+"out"+os.sep+downloadfilename
+        downloadlink = f'{output_url}/{downloadfilename}'
+
+
+        ############################
+        ### Run docker container ###
+        ############################
 
         returncode, stdout, stderr = run_docker_container(
             docker_executable,
             in_file1,
-            download_dir,
+            output_dir,
             downloadfilename
         )
 
@@ -86,7 +113,6 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
             raise ProcessorExecuteError(user_msg = err_msg)
 
         else:
-            downloadlink = own_url.rstrip('/')+os.sep+"out"+os.sep+downloadfilename
             response_object = {
                 "outputs": {
                     "joined_file": {
@@ -102,34 +128,22 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
 def run_docker_container(
         docker_executable,
         in_file1,
-        download_dir, 
+        output_dir,
         outputFilename
     ):
     LOGGER.debug('Prepare running docker container')
     container_name = f'catalunya-tordera-image_{os.urandom(5).hex()}'
     image_name = 'catalunya-tordera-image:20240423'
 
-    # Prepare container command
-
     # Define paths inside the container
-    container_in = '/in'
     container_out = '/out'
-
-    # Define local paths
-    local_in = os.path.join(download_dir, "in")
-    local_out = os.path.join(download_dir, "out")
-
-    # Ensure directories exist
-    os.makedirs(local_in, exist_ok=True)
-    os.makedirs(local_out, exist_ok=True)
 
     script = 'swat_mitgcm_connection.R'
 
     # Mount volumes and set command
     docker_command = [
         docker_executable, "run", "--rm", "--name", container_name,
-        "-v", f"{local_in}:{container_in}",
-        "-v", f"{local_out}:{container_out}",
+        "-v", f"{output_dir}:{container_out}",
         "-e", f"R_SCRIPT={script}",  # Set the R_SCRIPT environment variable
         image_name,
         "--",  # Indicates the end of Docker's internal arguments and the start of the user's arguments
