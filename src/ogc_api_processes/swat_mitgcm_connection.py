@@ -31,6 +31,14 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
         self.supports_outputs = True
         self.job_id = 'nothing-yet'
         self.process_id = self.metadata["id"]
+        self.image_name = 'catalunya-tordera-image:20240423'
+        self.script_name = 'swat_mitgcm_connection.R'
+        config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
+        with open(config_file_path, 'r') as config_file:
+            config = json.load(config_file)
+            self.download_dir = config["download_dir"].rstrip('/')
+            self.download_url = config["download_url"].rstrip('/')
+            self.docker_executable = config.get("docker_executable", "docker")
 
     def set_job_id(self, job_id: str):
         self.job_id = job_id
@@ -39,17 +47,6 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
         return f'<SwatMitgcmConnectionProcessor> {self.name}'
 
     def execute(self, data, outputs=None):
-
-        # Get config
-        config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
-        with open(config_file_path, 'r') as configFile:
-            configJSON = json.load(configFile)
-            self.download_dir = configJSON["download_dir"].rstrip('/')
-            self.download_url = configJSON["download_url"].rstrip('/')
-
-        #download_dir = configJSON["download_dir"]
-        #own_url = configJSON["own_url"]
-        docker_executable = configJSON.get("docker_executable", "docker")
 
         #################################
         ### Get user inputs and check ###
@@ -85,9 +82,12 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
         ############################
 
         returncode, stdout, stderr = run_docker_container(
-            docker_executable,
-            in_file1,
+            self.docker_executable,
+            self.image_name,
+            self.script_name,
             output_dir,
+            self.job_id,
+            in_file1,
             downloadfilename
         )
 
@@ -127,24 +127,30 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
 
 def run_docker_container(
         docker_executable,
-        in_file1,
+        image_name,
+        script_name,
         output_dir,
+        job_id,
+        in_file1,
         outputFilename
     ):
-    LOGGER.debug('Prepare running docker container')
-    container_name = f'catalunya-tordera-image_{os.urandom(5).hex()}'
-    image_name = 'catalunya-tordera-image:20240423'
+
+    LOGGER.debug('Will use this image: %s' % image_name)
+
+    # Create container name
+    # Note: Only [a-zA-Z0-9][a-zA-Z0-9_.-] are allowed
+    #container_name = "%s_%s" % (image_name.split(':')[0], os.urandom(5).hex())
+    container_name = "%s_%s" % (image_name.split(':')[0], job_id)
+    LOGGER.debug(f'Prepare running docker (image {image_name}, container: {container_name})')
 
     # Define paths inside the container
     container_out = '/out'
-
-    script = 'swat_mitgcm_connection.R'
 
     # Mount volumes and set command
     docker_command = [
         docker_executable, "run", "--rm", "--name", container_name,
         "-v", f"{output_dir}:{container_out}",
-        "-e", f"R_SCRIPT={script}",  # Set the R_SCRIPT environment variable
+        "-e", f"R_SCRIPT={script_name}",  # Set the R_SCRIPT environment variable
         image_name,
         "--",  # Indicates the end of Docker's internal arguments and the start of the user's arguments
         in_file1,
