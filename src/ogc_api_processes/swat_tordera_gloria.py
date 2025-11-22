@@ -90,12 +90,12 @@ class TorderaGloriaProcessor(BaseProcessor):
         ### Run docker container ###
         ############################
 
-        returncode, stdout, stderr, user_err_msg = run_docker_container(
-            self.docker_executable,
-            self.image_name,
-            self.script_name,
-            output_dir,
-            self.job_id,
+        # Assemble those args that will be passed to the script:
+        # This is a path that is added between "container_out" and the file name
+        # to store the output files, "inputs.sqlite" and "thread_1.sqlite". (If you
+        # add something here, you also have to add it in the download link.)
+        storage_path = '/'
+        script_args = [
             in_project,
             in_parameter_cal,
             in_swat_file,
@@ -103,7 +103,18 @@ class TorderaGloriaProcessor(BaseProcessor):
             str(in_unit),
             str(in_start_date),
             str(in_end_date),
-            str(in_start_date_print)
+            str(in_start_date_print),
+            storage_path
+        ]
+
+        # Run the container:
+        returncode, stdout, stderr, user_err_msg = run_docker_container(
+            self.docker_executable,
+            self.image_name,
+            self.script_name,
+            output_dir,
+            self.job_id,
+            script_args
         )
 
         # print R stderr/stdout to debug log:
@@ -156,14 +167,7 @@ def run_docker_container(
         script_name,
         output_dir,
         job_id,
-        in_project_folder,
-        in_calibration_parameter,
-        in_swat_file,
-        in_variable,
-        in_unit,
-        in_start_date,
-        in_end_date,
-        in_start_date_print
+        script_args
     ):
 
     LOGGER.debug('Will use this image: %s' % image_name)
@@ -179,10 +183,6 @@ def run_docker_container(
 
     # Define paths inside the container
     container_out = '/out/'
-    # This is a path that is added between "container_out" and the file name
-    # to store the output files, "inputs.sqlite" and "thread_1.sqlite". (If you
-    # add something here, you also have to add it in the download link.)
-    storage_path = '/'
 
     # Mount volumes and set command
     docker_command = [
@@ -191,16 +191,8 @@ def run_docker_container(
         "-e", f"R_SCRIPT={script_name}",  # Set the R_SCRIPT environment variable
         image_name,
         "--",  # Indicates the end of Docker's internal arguments and the start of the user's arguments
-        in_project_folder,
-        in_calibration_parameter,
-        in_swat_file,
-        in_variable,
-        in_unit,
-        in_start_date,
-        in_end_date,
-        in_start_date_print,
-        storage_path
     ]
+    docker_command = docker_command + script_args
 
     LOGGER.debug('Docker command: %s' % docker_command)
     print(docker_command)
