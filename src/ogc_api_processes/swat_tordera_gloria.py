@@ -38,6 +38,14 @@ class TorderaGloriaProcessor(BaseProcessor):
         self.supports_outputs = True
         self.job_id = 'nothing-yet'
         self.process_id = self.metadata["id"]
+        self.image_name = 'catalunya-tordera-image:20240423'
+        self.script_name = 'swat_tordera_gloria.R'
+        config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
+        with open(config_file_path, 'r') as config_file:
+            config = json.load(config_file)
+            self.download_dir = config["download_dir"].rstrip('/')
+            self.download_url = config["download_url"].rstrip('/')
+            self.docker_executable = config.get("docker_executable", "docker")
 
     def set_job_id(self, job_id: str):
         self.job_id = job_id
@@ -46,17 +54,6 @@ class TorderaGloriaProcessor(BaseProcessor):
         return f'<TorderaGloriaProcessor> {self.name}'
 
     def execute(self, data, outputs=None):
-
-        # Get config
-        config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
-        with open(config_file_path, 'r') as configFile:
-            configJSON = json.load(configFile)
-            self.download_dir = configJSON["download_dir"].rstrip('/')
-            self.download_url = configJSON["download_url"].rstrip('/')
-            self.docker_executable = configJSON.get("docker_executable", "docker")
-            self.image_name = 'catalunya-tordera-image:20240423'
-            self.script_name = 'swat_tordera_gloria.R'
-
 
         #################################
         ### Get user inputs and check ###
@@ -182,6 +179,10 @@ def run_docker_container(
 
     # Define paths inside the container
     container_out = '/out/'
+    # This is a path that is added between "container_out" and the file name
+    # to store the output files, "inputs.sqlite" and "thread_1.sqlite". (If you
+    # add something here, you also have to add it in the download link.)
+    storage_path = '/'
 
     # Mount volumes and set command
     docker_command = [
@@ -198,7 +199,7 @@ def run_docker_container(
         in_start_date,
         in_end_date,
         in_start_date_print,
-        '/'
+        storage_path
     ]
 
     LOGGER.debug('Docker command: %s' % docker_command)
