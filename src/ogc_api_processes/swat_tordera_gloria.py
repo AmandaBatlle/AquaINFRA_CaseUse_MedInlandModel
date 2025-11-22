@@ -53,8 +53,9 @@ class TorderaGloriaProcessor(BaseProcessor):
             configJSON = json.load(configFile)
             self.download_dir = configJSON["download_dir"].rstrip('/')
             self.download_url = configJSON["download_url"].rstrip('/')
-        
-        docker_executable = configJSON.get("docker_executable", "docker")
+            self.docker_executable = configJSON.get("docker_executable", "docker")
+            self.image_name = 'catalunya-tordera-image:20240423'
+            self.script_name = 'swat_tordera_gloria.R'
 
 
         #################################
@@ -93,8 +94,11 @@ class TorderaGloriaProcessor(BaseProcessor):
         ############################
 
         returncode, stdout, stderr, user_err_msg = run_docker_container(
-            docker_executable,
+            self.docker_executable,
+            self.image_name,
+            self.script_name,
             output_dir,
+            self.job_id,
             in_project,
             in_parameter_cal,
             in_swat_file,
@@ -151,7 +155,10 @@ class TorderaGloriaProcessor(BaseProcessor):
 
 def run_docker_container(
         docker_executable,
+        image_name,
+        script_name,
         output_dir,
+        job_id,
         in_project_folder,
         in_calibration_parameter,
         in_swat_file,
@@ -162,22 +169,25 @@ def run_docker_container(
         in_start_date_print
     ):
 
-    LOGGER.debug('Prepare running docker container')
-    container_name = f'catalunya-tordera-image_{os.urandom(5).hex()}'
-    image_name = 'catalunya-tordera-image:20240423'
+    LOGGER.debug('Will use this image: %s' % image_name)
+
+    # Create container name
+    # Note: Only [a-zA-Z0-9][a-zA-Z0-9_.-] are allowed
+    #container_name = "%s_%s" % (image_name.split(':')[0], os.urandom(5).hex())
+    container_name = "%s_%s" % (image_name.split(':')[0], job_id)
+    LOGGER.debug(f'Prepare running docker (image {image_name}, container: {container_name})')
+
 
     # Prepare container command
 
     # Define paths inside the container
     container_out = '/out/'
 
-    script = 'swat_tordera_gloria.R'
-
     # Mount volumes and set command
     docker_command = [
         docker_executable, "run", "--rm", "--name", container_name,
         "-v", f"{output_dir}:{container_out}",
-        "-e", f"R_SCRIPT={script}",  # Set the R_SCRIPT environment variable
+        "-e", f"R_SCRIPT={script_name}",  # Set the R_SCRIPT environment variable
         image_name,
         "--",  # Indicates the end of Docker's internal arguments and the start of the user's arguments
         in_project_folder,
