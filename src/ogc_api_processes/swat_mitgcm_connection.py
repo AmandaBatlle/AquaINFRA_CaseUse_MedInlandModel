@@ -107,7 +107,7 @@ def run_docker_container(
     ):
     LOGGER.debug('Prepare running docker container')
     container_name = f'catalunya-tordera-image_{os.urandom(5).hex()}'
-    image_name = 'catalunya-tordera-image'
+    image_name = 'catalunya-tordera-image:20240423'
 
     # Prepare container command
 
