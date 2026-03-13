@@ -13,7 +13,7 @@
 # Step 1 Mediterranean Inland Model, SWAT+ TORDERA TOOL.
 
 # If the package remotes is not installed, run first:
-#install.packages('remotes', "dplyr", "jsonlite")
+#install.packages('remotes', "dplyr", "jsonlite", "DBI", "RSQLite", "purrr")
 #remotes::install_github('chrisschuerz/SWATrunR')
 
 library(SWATrunR)
