@@ -6,10 +6,10 @@
         "en": "SWAT+, Soil and Water Assessment Tool"
     },
     "description": {
-        "en": "The Soil and Water Assessment Tool (SWAT+) is a hydrological model used to simulate processes such as surface runoff, groundwater flow, and water quality across watersheds of varying scales. It evaluates the effects of land use, management practices, and climate scenarios on water resources. SWAT+ is widely used for studying soil erosion, non-point source pollution, and watershed management (https://swat.tamu.edu/) .The tool allows users to upload custom TextInOut folders to model any watershed of interest. Users can define model parameters, the simulation time range, calibration settings, output variables, and temporal resolution. By default, the tool is configured to simulate the hydrological behavior of the La Tordera Basin from 2000 to 2022 using SWAT+. The default tool settings generate daily outputs of flow, water temperature, and nutrient levels at the mouth of La Tordera River between July 2019 and December 2020, allowing for an assessment of river flow parameters during Storm Gloria (19 January 2020). The default La Tordera Basin model is calibrated through a two-step calibration process: an initial soft calibration based on a qualitative evaluation of annual average outputs, followed by an automatic calibration by landscape units using observed gauge data from the Catalan Water Agency (Agència Catalana de l'Aigua, https://aca.gencat.cat/). This tool executes SWAT+ using SWATrunR ( https://github.com/chrisschuerz/SWATplusR ) with the SWAT+ rev60.5.7_64rel_linux executable."
+        "en": ""The Soil and Water Assessment Tool (SWAT) is a hydrological model used to simulate processes such as surface runoff, groundwater flow, and water quality across watersheds of varying scales. It evaluates the effects of land use, management practices, and climate scenarios on water resources. SWAT is widely used for studying soil erosion, non-point source pollution, and watershed management (https://swat.tamu.edu/) .The tool allows users to upload custom TextInOut folders to model any watershed of interest in SWAT+ or SWAT 2012 model version format. Users can define model parameters, the simulation time range, calibration settings, output variables, and temporal resolution. By default, the tool is configured to simulate the hydrological behavior of the La Tordera Basin from 2000 to 2022 using SWAT+. The default tool settings generate daily outputs of flow, water temperature, and nutrient levels at the mouth of La Tordera River between July 2019 and December 2020, allowing for an assessment of river flow parameters during Storm Gloria (19 January 2020). The default La Tordera Basin model is calibrated through a two-step calibration process: an initial soft calibration based on a qualitative evaluation of annual average outputs, followed by an automatic calibration by landscape units using observed gauge data from the Catalan Water Agency (Agència Catalana de l'Aigua, https://aca.gencat.cat/). This tool SWAT using SWATrunR ( https://github.com/chrisschuerz/SWATplusR ) with executables   rev60.5.7_64rel_linux (for SWAT+) and rev688_64rel_linux (for SWAT2012) ."
     },
     "jobControlOptions": ["sync-execute", "async-execute"],
-    "keywords": ["tordera use case", "AquaINFRA", "R", "SWAT+", "watershed model"],
+    "keywords": ["tordera use case", "AquaINFRA", "R", "SWAT+", "SWAT2012", "watershed model"],
     "links": [{
         "type": "text/html",
         "rel": "about",
@@ -34,9 +34,19 @@
         "hreflang": "en-US"
     }],
     "inputs": {
+        "swatversion": {
+            "title": "SWAT version",
+            "description": "Define the SWAT model version 'swatplus' or 'swat2012' . AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012. Defaults to: “swatplus”",
+            "schema": {
+                "type": "string"
+            },
+            "minOccurs": 0,
+            "maxOccurs": 1,
+            "keywords": []
+        },
         "TextInOut_URL": {
             "title": "URL to project folder",
-            "description": "To model a watershed other than the Tordera Basin, users can add a URL to their own zipped project folder. Important: Do not include the SWAT executable to that folder — AquaINFRA has integrated the executable version rev60.5.7_64rel_linux. Defaults to: https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
+            "description": "To model a watershed other than the Tordera Basin, users can add a URL to their own zipped project folder. Important: Do not include the SWAT executable to that folder — AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012. Defaults to: https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
             "schema": {
                 "type": "object",
                 "contentMediaType": "application/zip"
@@ -68,7 +78,7 @@
         },
         "file": {
             "title": "SWAT Output File",
-            "description": "A SWAT+ output file name consists of three elements separated by underscores (_): spatial unit, output category, and time step. For example, 'channel_sd_day'. The spatial unit defines the scale of the output and can be basin, hru, lsunit, channel, aquifer, or reservoir. The output category specifies the type of data such as wb (water balance), nb (nutrient balance), ls (losses), pw (plant and weather), or sd (streamflow and sediment in channels). The time step indicates the temporal resolution and can be day (daily), mon (monthly), yr (yearly), or aa (annual average). Combining these elements forms the output file name. For more details, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs). Defaults to: \"channel_sd_day\"",
+            "description": "Enter output file according to SWAT version. For SWAT+, the output file name consists of three elements separated by underscores (_): spatial unit, output category, and time step. For example, 'channel_sd_day'. The spatial unit defines the scale of the output and can be basin, hru, lsunit, channel, aquifer, or reservoir. The output category specifies the type of data such as wb (water balance), nb (nutrient balance), ls (losses), pw (plant and weather), or sd (streamflow and sediment in channels). The time step indicates the temporal resolution and can be day (daily), mon (monthly), yr (yearly), or aa (annual average). Combining these elements forms the output file name. For more details, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs) and SWATrunR documentation (https://chrisschuerz.github.io/SWATrunR/reference/run_swatplus.html). For SWAT2012 output files, valid inputs are 'rch', 'sub', 'hru', and 'sed', followed by '_', and the required output interval as a character string ('d' for daily, 'm' for monthly, or 'y' for yearly), for example: rch_m.  For more details, refer to the SWAT2012 OUTPUT FILES chapter in the SWAT documentation (https://swat.tamu.edu/media/116601/ch32_output.pdf), and SWATrunR documentation (https://chrisschuerz.github.io/SWATrunR/reference/run_swat2012.html). Defaults to: \"channel_sd_day\"",
             "schema": {
                 "type": "string"
             },
