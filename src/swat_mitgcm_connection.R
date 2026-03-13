@@ -1,4 +1,4 @@
-# Amanda Batlle Morera (a.batll@creaf.uab.cat)
+# Amanda Batlle Morera (a.batlle@creaf.uab.cat)
 # Code to implement in AquaGalaxy.
 
 # AquaINFRA Mediterranean Case Use: 
