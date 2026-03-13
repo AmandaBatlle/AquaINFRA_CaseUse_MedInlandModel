@@ -88,7 +88,7 @@
         },
         "variable": {
             "title": "SWAT Variable",
-            "description": "Variable to simulate. Example: \"flo_out\". For more details and extended capabilities, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs). For one variable, enter the variable name. For multiple variables, enter them separated by comma. Defaults to: \"flo_out,water_temp\"",
+            "description": "Variable to simulate. Example: \"flo_out\". For more details and extended capabilities, refer to the SWAT+ OUTPUT FILES section in the SWAT+ documentation (https://swatplus.gitbook.io/io-docs), or SWAT2012 OUTPUT FILES chapter in the SWAT documentation (https://swat.tamu.edu/media/116601/ch32_output.pdf). For one variable, enter the variable name. For multiple variables, enter them separated by a comma. Defaults to: \"flo_out,water_temp\"",
             "schema": {
                 "type": "string"
             },
@@ -106,9 +106,9 @@
             "maxOccurs": 1,
             "keywords": []
         },
-        "start_date_print": {
-            "title": "Start Date for printing",
-            "description": "Start date for printing in the format yyyymmdd. Defaults to: 20190601. Earliest possible date for the default input project: 20020101. It is recommended to allow for at least two warm-up years between the model simulation start and the model output printing to ensure relevant results.",
+        "years_skip": {
+            "title": "Number of years of warm-up time ",
+            "description": "(optional) Integer value to define the number of simulation years that are skipped before writing SWAT model outputs. Default value: 2.",
             "schema": {
                 "type": "integer"
             },
@@ -147,6 +147,7 @@
     },
     "example": {
         "inputs": {
+            "swatversion": "swatplus"
             "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
             "par_cal": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json",
             "unit": 1,
@@ -154,7 +155,7 @@
             "variable": "flo_out,water_temp",
             "start_date": 20160101,
             "end_date": 20201231,
-            "start_date_print": 20190601
+            "years_skip": 2
         }
     }
 }
