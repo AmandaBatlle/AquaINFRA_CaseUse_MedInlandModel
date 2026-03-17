@@ -10,6 +10,11 @@ RUN curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_6
     && ln -s /opt/conda/bin/activate /usr/local/bin/activate
 
 COPY .binder/environment.yml /tmp/environment.yml
+
+# to avoid build error 2026-03-17
+RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+
 RUN conda env create -f /tmp/environment.yml
 
 RUN conda run -n r-environment Rscript -e "if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes', repos='https://cran.rstudio.com/')"
