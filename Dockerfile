@@ -27,3 +27,13 @@ COPY src /src
 WORKDIR /src
 
 ENTRYPOINT ["conda", "run", "-n", "r-environment", "/bin/bash", "-c", "Rscript /src/${R_SCRIPT} $@"]
+
+# Example build command:
+# This includes the git commit hash, so please
+# make sure all your changes are committed/stashed:
+# today=$(date '+%Y%m%d')
+# githash=$(git rev-parse --short HEAD)
+# docker build \
+#   --build-arg GIT_COMMIT=${githash} \
+#   -t catalunya-tordera:${today}-${githash} .
+
