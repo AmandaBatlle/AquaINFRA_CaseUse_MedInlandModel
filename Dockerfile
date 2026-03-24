@@ -17,7 +17,12 @@ RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkg
 
 RUN conda env create -f /tmp/environment.yml
 
-RUN conda run -n r-environment Rscript -e "if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes', repos='https://cran.rstudio.com/')"
+RUN conda run -n r-environment Rscript -e "\
+if (!requireNamespace('remotes', quietly = TRUE)) install.packages(c('remotes', 'data.table'), repos='https://cran.rstudio.com/'); \
+remotes::install_version('readr', version = '2.1.4', repos = 'https://cran.rstudio.com/', dependencies = TRUE, upgrade = 'never')"
+
+RUN conda run -n r-environment Rscript -e "packageVersion('readr')"
+
 RUN conda run -n r-environment Rscript -e "if (!requireNamespace('SWATrunR', quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')"
 
 COPY swat /swat
@@ -36,4 +41,3 @@ ENTRYPOINT ["conda", "run", "-n", "r-environment", "/bin/bash", "-c", "Rscript /
 # docker build \
 #   --build-arg GIT_COMMIT=${githash} \
 #   -t catalunya-tordera:${today}-${githash} .
-
