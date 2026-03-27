@@ -71,7 +71,7 @@ skipyears_from_user  <- args[9] # 2
 # Processing TxtInOut and calibration files download                        ####  
 # ______________________________________________________________________________
 
-download_path <- args[9] #"/out/"
+download_path <- args[10] #"/out/"
 
 
 #Download input project
