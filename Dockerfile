@@ -20,8 +20,12 @@ RUN conda env create -f /tmp/environment.yml
 RUN conda run -n r-environment Rscript -e "if (!requireNamespace('remotes', quietly = TRUE)) install.packages('remotes', repos='https://cran.rstudio.com/')"
 RUN conda run -n r-environment Rscript -e "if (!requireNamespace('SWATrunR', quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')"
 
+# Copy executables and make executable:
+# /swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux
+# /swat/swat2012scenario/rev688_64rel_linux
 COPY swat /swat
 RUN chmod +x /swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux
+RUN chmod +x /swat/swat2012scenario/rev688_64rel_linux
 
 COPY src /src
 WORKDIR /src
