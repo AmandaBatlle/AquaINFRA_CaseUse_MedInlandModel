@@ -14,12 +14,13 @@ curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
   "inputs":{
         "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
         "par_cal": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json",
+        "swat_version": "swatplus",
         "unit": 1,
         "file": "channel_sd_day",
         "variable": "flo_out,water_temp",
         "start_date": 20160101,
         "end_date": 20160228,
-        "start_date_print": 20160115
+        "skip_years": 2
     }
 }'
 
@@ -39,7 +40,7 @@ class TorderaGloriaProcessor(BaseProcessor):
         self.job_id = 'nothing-yet'
         self.process_id = self.metadata["id"]
         self.image_name = 'catalunya-tordera:20260317-e5e3d92'
-        self.script_name = 'swat_tordera_gloria.R'
+        self.script_name = 'SWATrunR_AquaINFRAtool_v20260313.R'
         config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
         with open(config_file_path, 'r') as config_file:
             config = json.load(config_file)
@@ -61,15 +62,19 @@ class TorderaGloriaProcessor(BaseProcessor):
 
         in_project = data.get('TextInOut_URL') or "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip"
         in_parameter_cal = data.get('par_cal') or "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json"
+        in_swat_version = data.get('swat_version')
         in_swat_file = data.get('file') or "channel_sd_day"
         in_variable = data.get('variable') or "flo_out,water_temp" 
         in_unit = data.get('unit') or 1
         in_start_date = data.get('start_date') or 20160101
         in_end_date = data.get('end_date') or 20160228
-        in_start_date_print = data.get('start_date_print') or 20160115
+        in_skip_years = data.get('skip_years') or 2
 
         # TODO: Parse/validate dates?
 
+        # Validate
+        if not in_swat_version in ['swatplus', 'swat2012']:
+            raise ProcessorExecuteError(f"Unknown value for 'swatversion': {in_swat_version}. Must be either 'swatplus' or 'swat2012'.")
 
         #################################
         ### Input and output          ###
@@ -96,6 +101,7 @@ class TorderaGloriaProcessor(BaseProcessor):
         # add something here, you also have to add it in the download link.)
         storage_path = '/'
         script_args = [
+            in_swat_version,
             in_project,
             in_parameter_cal,
             in_swat_file,
@@ -103,7 +109,7 @@ class TorderaGloriaProcessor(BaseProcessor):
             str(in_unit),
             str(in_start_date),
             str(in_end_date),
-            str(in_start_date_print),
+            str(in_skip_years),
             storage_path
         ]
 
