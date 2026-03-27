@@ -92,9 +92,13 @@ print(paste0("Reading input calibration... done."))
 
 
 if ( swatversion_from_user == "swatplus") {
+# copy SWAT plus executable into project folder: 
+  file.copy(from = "/swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux",
+          to   = TxtInOut_Tordera)
   # ______________________________________________________________________________
   #  SWATplus FUNCTION                                                        ####
-  # ______________________________________________________________________________
+  # _____________________________________________________________________________
+
   print(paste0("Defining function run_swatplus_process..."))
   run_swatplus_process <- function (TxtInOut, 
                                     fileout, 
@@ -225,10 +229,13 @@ if ( swatversion_from_user == "swatplus") {
 
   
 } else if (swatversion_from_user == "swat2012") {
-  
+    # copy SWAT2012 executable into project folder: 
+  file.copy(from = "/swat/swat2012scenario/rev688_64rel_linux",
+          to   = TxtInOut_Tordera)
+
   # ______________________________________________________________________________
   #  SWAT2012 FUNCTION                                                        ####
-  # ______________________________________________________________________________
+  # ______________________________________________________________________________  
   print(paste0("Defining function run_swat2012_process..."))
   run_swat2012_process <- function (TxtInOut, 
                                     fileout, 
