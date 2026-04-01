@@ -92,7 +92,8 @@ dest_dir <- paste0("../swat/Scenario_Gloria_linux/", subdir_name)
 # Target directory with added filename, i.e. entire target path
 dest_file_path <- paste0(dest_dir, "/", dest_file_name)
 # Path of executable to be copied (TODO: Hardcoded! Need to change)
-executable_src_path <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux"
+executable_src_path_swatplus <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux"
+executable_src_path_swat2012 <- "../swat/swat2012scenario/rev688_64rel_linux"
 
 # Now, get the download function and the function to copy the executable:
 source("download.R")
@@ -103,9 +104,9 @@ download_zipped_file(url_zipped_input_project, dest_dir, dest_file_path)
 print(paste0("Downloading... done."))
 
 # Now, copy executable to newly created project directory
-print(paste0('Copying executable...'))
-copy_executable(executable_src_path, dest_dir)
-print(paste0('Copying executable... done.'))
+#print(paste0('Copying executable...'))
+#copy_executable(executable_src_path, dest_dir)
+#print(paste0('Copying executable... done.'))
 
 # The project directory is the directory created by/before downloading
 # and unzipping the zipped input project file:
@@ -121,9 +122,12 @@ print(paste0("Reading input calibration... done."))
 
 
 if ( swatversion_from_user == "swatplus") {
-# copy SWAT plus executable into project folder: 
-  file.copy(from = "/swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux",
-          to   = TxtInOut_Tordera)
+
+  # copy SWAT plus executable into project folder:
+  print(paste0('Copying executable...'))
+  copy_executable(executable_src_path_swatplus, TxtInOut_Tordera)
+  print(paste0('Copying executable... done.'))
+
   # ______________________________________________________________________________
   #  SWATplus FUNCTION                                                        ####
   # _____________________________________________________________________________
@@ -258,9 +262,12 @@ if ( swatversion_from_user == "swatplus") {
 
   
 } else if (swatversion_from_user == "swat2012") {
-    # copy SWAT2012 executable into project folder: 
-  file.copy(from = "/swat/swat2012scenario/rev688_64rel_linux",
-          to   = TxtInOut_Tordera)
+
+  # copy SWAT2012 executable into project folder:
+  print(paste0('Copying executable...'))
+  copy_executable(executable_src_path_swatplus, TxtInOut_Tordera)
+  print(paste0('Copying executable... done.'))
+
 
   # ______________________________________________________________________________
   #  SWAT2012 FUNCTION                                                        ####
