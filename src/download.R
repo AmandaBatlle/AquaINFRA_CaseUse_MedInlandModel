@@ -58,9 +58,13 @@ download_zipped_file <- function(url, dest_dir, dest_file_path) {
         # Copy executable
         print(paste0('download: Copying ', executable,' to ', file.path(dest_dir, basename(executable)), '...'))
         #dest_exec <- file.path(dest_dir, basename(executable))
-        file.copy(executable, file.path(dest_dir, basename(executable)), overwrite = TRUE)
+        copy_success <- file.copy(executable, file.path(dest_dir, basename(executable)), overwrite = TRUE)
         #Sys.chmod(dest_exec, mode = "0755")
-        print(paste0("download: Copying ", executable, "... done."))
+        if (copy_success) {
+          print(paste0("download: Copying ", executable, "... done."))
+        } else {
+          stop(paste0("download: Copying ", executable, "... FAILED."))
+        }
       },
       warning = function(warn) {
         message(paste("download: Warning: Download failed, reason: ", warn[1]))
