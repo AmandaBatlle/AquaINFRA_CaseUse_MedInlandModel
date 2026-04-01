@@ -85,6 +85,25 @@ filename <- tools::file_path_sans_ext(basename(input_project))
 # Note: filename is needed by download.R. Maybe rather call function instead of source?
 print(paste0("Downloading..."))
 source("download.R")
+# Needs to be defined already (in the script that sources this script):
+# * input_project (URL of zipped project directory, passed by user), e.g. "https://.../project.zip"
+# * filename (name of the zipped file, but without extension/suffix), e.g. "project", but is used here as directory name...
+# Rename them to avoid confusion:
+url_zipped_project_file <- input_project
+subdir_name <- filename
+# Define file paths and URLs
+# Target filename: Split URL by slash, take last item, i.e. the filename
+dest_file_name <- tail(strsplit(url_zipped_project_file, "/")[[1]], 1)
+# Target directory:
+dest_dir <- paste0("../swat/Scenario_Gloria_linux/", subdir_name)
+# Target directory with added filename, i.e. entire target path
+dest_file_path <- paste0(dest_dir, "/", dest_file_name)
+# Path of executable to be copied (TODO: Hardcoded! Need to change)
+executable_src_path <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux"
+# Download and unzip project file
+download_zipped_file(url_zipped_project_file, dest_dir, dest_file_path)
+# Copy executable to newly created project directory
+copy_executable(executable_src_path, dest_dir)
 print(paste0("Downloading... done."))
 
 TxtInOut_Tordera <- paste0("../swat/Scenario_Gloria_linux/", filename)
