@@ -34,16 +34,16 @@ fileoutputlist_path    <- "./in_fileoutputList.csv"
 # INPUTS + example values
 args <- commandArgs(trailingOnly = TRUE)
 print(paste0('R Command line args: ', args))
-swatversion_from_user <- args[1]  # swatplus or swat2012
+swatversion_from_user    <- args[1]  # swatplus or swat2012
 url_zipped_input_project <- args[2]  # URL of zipped project file
-input_calibration     <- args[3]  # URL of json calibration file
-fileout_from_user     <- args[4]  # "channel_sd_day"
-variable_from_user    <- args[5]  # "flo_out,water_temp"
-unit_input            <- args[6]  # Default 1
-start_date_from_user  <- args[7]  # 20160101
-end_date_from_user    <- args[8]  # 20201231
-skipyears_from_user   <- args[9]  # 2
-download_path         <- args[10] # "/out/"
+url_input_calibration    <- args[3]  # URL of json calibration file
+fileout_from_user        <- args[4]  # "channel_sd_day"
+variable_from_user       <- args[5]  # "flo_out,water_temp"
+unit_input               <- args[6]  # Default 1
+start_date_from_user     <- args[7]  # 20160101
+end_date_from_user       <- args[8]  # 20201231
+skipyears_from_user      <- args[9]  # 2
+download_path            <- args[10] # "/out/"
 
 # Remove spaces, split at comma:
 variable_from_user <- strsplit(gsub(" ", "", variable_from_user), ",")[[1]]
@@ -84,6 +84,7 @@ skipyears_from_user   <- as.numeric(skipyears_from_user)
 # ______________________________________________________________________________
 # Processing modelling time                                                 ####
 # ______________________________________________________________________________
+
 # Nothing to do
 
 # ______________________________________________________________________________
@@ -125,11 +126,15 @@ TxtInOut_Tordera <- dest_dir
 print(paste("project directory", TxtInOut_Tordera))
 
 print(paste0("Reading input calibration..."))
-json_data <- fromJSON(input_calibration)
+json_data <- fromJSON(url_input_calibration)
 par_cal <- unlist(json_data)
 print(paste0("Reading input calibration... done."))
 
 
+# ______________________________________________________________________________
+# Running the swatplus or swat2012 functions                                ####
+# depending on version specified by user                                    ####
+# ______________________________________________________________________________
 
 if ( swatversion_from_user == "swatplus") {
 
@@ -139,8 +144,8 @@ if ( swatversion_from_user == "swatplus") {
   print(paste0('Copying executable... done.'))
 
   # ______________________________________________________________________________
-  #  SWATplus FUNCTION                                                        ####
-  # _____________________________________________________________________________
+  # SWATplus FUNCTION                                                         ####
+  # ______________________________________________________________________________
 
   print(paste0("Defining function run_swatplus_process..."))
   run_swatplus_process <- function (TxtInOut, 
@@ -255,8 +260,9 @@ if ( swatversion_from_user == "swatplus") {
   
   
   # ______________________________________________________________________________
-  #Run SWAT+ TORDERA tool                                                     ####
+  # Run SWAT+ TORDERA tool                                                    ####
   # ______________________________________________________________________________
+
   print(paste0("Running run_swatplus_process..."))
   run_swatplus_process(TxtInOut_Tordera, 
                    fileout_from_user, 
@@ -280,8 +286,9 @@ if ( swatversion_from_user == "swatplus") {
 
 
   # ______________________________________________________________________________
-  #  SWAT2012 FUNCTION                                                        ####
-  # ______________________________________________________________________________  
+  # SWAT2012 FUNCTION                                                         ####
+  # ______________________________________________________________________________
+
   print(paste0("Defining function run_swat2012_process..."))
   run_swat2012_process <- function (TxtInOut, 
                                     fileout, 
@@ -473,8 +480,9 @@ if ( swatversion_from_user == "swatplus") {
   
   
   # ______________________________________________________________________________
-  #Run SWAT2012 TORDERA tool                                                     ####
+  # Run SWAT2012 TORDERA tool                                                 ####
   # ______________________________________________________________________________
+
   print(paste0("Running run_swat2012_process..."))
   run_swat2012_process(TxtInOut_Tordera, 
                    fileout_from_user, 
@@ -494,11 +502,4 @@ if ( swatversion_from_user == "swatplus") {
 }
 
 print(paste("R Script swat_tordera_gloria.R finished!"))
-
-
-
-
-
-
-
 
