@@ -175,6 +175,9 @@ class TorderaGloriaProcessor(BaseProcessor):
         ### Run docker container ###
         ############################
 
+        if in_parameter_cal is None:
+            in_parameter_cal = "NULL"
+
         # Assemble those args that will be passed to the script:
         # This is a path that is added between "container_out" and the file name
         # to store the output files, "inputs.sqlite" and "thread_1.sqlite". (If you

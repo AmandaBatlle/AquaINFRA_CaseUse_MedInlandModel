@@ -45,6 +45,11 @@ end_date_from_user       <- args[8]  # 20201231
 skipyears_from_user      <- args[9]  # 2
 download_path            <- args[10] # "/out/"
 
+# Convert "NULL" (string) to actual NULL:
+if (url_input_calibration == "NULL") {
+  url_input_calibration <- NULL
+}
+
 # Remove spaces, split at comma:
 variable_from_user <- strsplit(gsub(" ", "", variable_from_user), ",")[[1]]
 
@@ -126,10 +131,14 @@ TxtInOut_Tordera <- dest_dir
 print(paste("project directory", TxtInOut_Tordera))
 
 print(paste0("Reading input calibration..."))
-json_data <- fromJSON(url_input_calibration)
-par_cal <- unlist(json_data)
-print(paste0("Reading input calibration... done."))
-
+if (is.null(url_input_calibration)) {
+  print(paste('The parameter calibration URL is null'))
+  par_cal <- NULL
+} else {
+  json_data <- fromJSON(url_input_calibration)
+  par_cal <- unlist(json_data)
+  print(paste0("Reading input calibration... done."))
+}
 
 # ______________________________________________________________________________
 # Running the swatplus or swat2012 functions                                ####
