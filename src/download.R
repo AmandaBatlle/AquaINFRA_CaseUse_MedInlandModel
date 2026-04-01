@@ -6,12 +6,12 @@ print("download: Starting script download.R")
 # * filename (name of the zipped file, but without extension/suffix), e.g. "project", but is used here as directory name...
 
 # Define file paths and URLs
-# Split input_project by slash, take last item, i.e. the filename
-project_name <- tail(strsplit(input_project, "/")[[1]], 1)
+# Target filename: Split URL by slash, take last item, i.e. the filename
+dest_file_name <- tail(strsplit(input_project, "/")[[1]], 1)
 # Target directory:
-project_dir <- paste0("../swat/Scenario_Gloria_linux/", filename)
+dest_dir <- paste0("../swat/Scenario_Gloria_linux/", filename)
 # Target directory with added filename, i.e. entire target path
-input_data_dir <- paste0(project_dir, "/", project_name)
+dest_file_path <- paste0(dest_dir, "/", dest_file_name)
 # Path of executable to be copied (TODO: Hardcoded! Need to change)
 executable <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux"
 
@@ -92,4 +92,4 @@ unzip_zipped_file <- function(zip_file, unzip_dir) {
 }
 
 # Download and unzip shapefile
-download_zipped_file(input_project, project_dir, input_data_dir)
+download_zipped_file(input_project, dest_dir, dest_file_path)
