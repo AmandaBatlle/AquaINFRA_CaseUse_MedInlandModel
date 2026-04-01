@@ -88,7 +88,9 @@ subdir_name <- tools::file_path_sans_ext(basename(url_zipped_input_project))
 # Target filename: Split URL by slash, take last item, i.e. the filename
 dest_file_name <- tail(strsplit(url_zipped_input_project, "/")[[1]], 1)
 # Target directory (TODO: hardcoded):
-dest_dir <- paste0("../swat/Scenario_Gloria_linux/", subdir_name)
+#dest_dir <- paste0("../swat/Scenario_Gloria_linux/", subdir_name)
+dest_dir <- paste0("../swat/current_swat_run/", subdir_name)
+dir.create(dest_dir)
 # Target directory with added filename, i.e. entire target path
 dest_file_path <- paste0(dest_dir, "/", dest_file_name)
 # Path of executable to be copied (TODO: Hardcoded! Need to change)
