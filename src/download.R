@@ -21,10 +21,7 @@ executable <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux"
 # Check if the file already exists and download if necessary
 download_zipped_file <- function(url, dest_dir, dest_file_path) {
   print(paste0('download: dest_dir=', dest_dir))
-  print(paste0('download: filepath(..)=', file.path(dest_dir, basename(executable))))
   print(paste0('download: getwd()=', getwd()))
-  print(paste0('download: basename(executable)=', basename(executable)))
-  print(paste0('download: executable=', executable))
   print(paste0('download: dest_file_path=', dest_file_path))
 
   if (file.exists(dest_file_path)) {
@@ -54,17 +51,6 @@ download_zipped_file <- function(url, dest_dir, dest_file_path) {
         #if (dir.exists("../swat/Scenario_Gloria_linux/project/")){
         #  print(paste0("download: EXISTS: ../swat/Scenario_Gloria_linux/project/"))
         #}
-
-        # Copy executable
-        print(paste0('download: Copying ', executable,' to ', file.path(dest_dir, basename(executable)), '...'))
-        #dest_exec <- file.path(dest_dir, basename(executable))
-        copy_success <- file.copy(executable, file.path(dest_dir, basename(executable)), overwrite = TRUE)
-        #Sys.chmod(dest_exec, mode = "0755")
-        if (copy_success) {
-          print(paste0("download: Copying ", executable, "... done."))
-        } else {
-          stop(paste0("download: Copying ", executable, "... FAILED."))
-        }
       },
       warning = function(warn) {
         message(paste("download: Warning: Download failed, reason: ", warn[1]))
@@ -98,5 +84,27 @@ unzip_zipped_file <- function(zip_file, unzip_dir) {
   )
 }
 
+# Function to copy executable to destination dir
+copy_executable <- function(executable, dest_dir) {
+  print(paste0('download: Starting to copy executable into newly created project directory...'))
+  print(paste0('download: filepath(..)=', file.path(dest_dir, basename(executable))))
+  print(paste0('download: basename(executable)=', basename(executable)))
+  print(paste0('download: executable=', executable))
+
+  # Copy executable
+  print(paste0('download: Copying ', executable,' to ', file.path(dest_dir, basename(executable)), '...'))
+  #dest_exec <- file.path(dest_dir, basename(executable))
+  copy_success <- file.copy(executable, file.path(dest_dir, basename(executable)), overwrite = TRUE)
+  #Sys.chmod(dest_exec, mode = "0755")
+  if (copy_success) {
+    print(paste0("download: Copying ", executable, "... done."))
+  } else {
+    stop(paste0("download: Copying ", executable, "... FAILED."))
+  }
+}
+
 # Download and unzip shapefile
 download_zipped_file(url_zipped_project_file, dest_dir, dest_file_path)
+
+# Copy executable to newly created project directory
+copy_executable(executable, dest_dir)
