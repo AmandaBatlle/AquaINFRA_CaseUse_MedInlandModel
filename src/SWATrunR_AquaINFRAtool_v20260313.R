@@ -20,6 +20,13 @@ library(SWATrunR)
 library(dplyr)
 library(jsonlite)
 
+# Hardcoded relative paths that are used in this script:
+# Path of executables to be copied (the relevant one must exist, otherwise an error occurs)
+executable_src_path_swatplus <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux"
+executable_src_path_swat2012 <- "../swat/swat2012scenario/rev688_64rel_linux"
+# Name of directory to be used as project directory:
+swat_run_dir <- "../swat/current_swat_run/" # (will be created and filled in this script)
+
 # INPUTS + example values
 args <- commandArgs(trailingOnly = TRUE)
 print(paste0('R Command line args: ', args))
@@ -87,15 +94,12 @@ skipyears_from_user   <- as.numeric(skipyears_from_user)
 subdir_name <- tools::file_path_sans_ext(basename(url_zipped_input_project))
 # Target filename: Split URL by slash, take last item, i.e. the filename
 dest_file_name <- tail(strsplit(url_zipped_input_project, "/")[[1]], 1)
-# Target directory (TODO: hardcoded):
-#dest_dir <- paste0("../swat/Scenario_Gloria_linux/", subdir_name)
-dest_dir <- paste0("../swat/current_swat_run/", subdir_name)
+# Target directory / project directory
+# I assume that the subdir_name is not needed anymore!
+dest_dir <- paste0(swat_run_dir, subdir_name)
 dir.create(dest_dir)
 # Target directory with added filename, i.e. entire target path
 dest_file_path <- paste0(dest_dir, "/", dest_file_name)
-# Path of executable to be copied (TODO: Hardcoded! Need to change)
-executable_src_path_swatplus <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux"
-executable_src_path_swat2012 <- "../swat/swat2012scenario/rev688_64rel_linux"
 
 # Now, get the download function and the function to copy the executable:
 source("download.R")
