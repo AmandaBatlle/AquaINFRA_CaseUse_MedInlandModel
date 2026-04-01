@@ -16,7 +16,7 @@ input_data_dir <- paste0(project_dir, "/", project_name)
 executable <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux"
 
 # Check if the file already exists and download if necessary
-download_zipped_file <- function(url, dest_file) {
+download_zipped_file <- function(url, project_dir, dest_file) {
   print(paste0('download: project_dir=', project_dir))
   print(paste0('download: filepath(..)=', file.path(project_dir, basename(executable))))
   print(paste0('download: getwd()=', getwd()))
@@ -92,4 +92,4 @@ unzip_zipped_file <- function(zip_file, unzip_dir) {
 }
 
 # Download and unzip shapefile
-download_zipped_file(input_project, input_data_dir)
+download_zipped_file(input_project, project_dir, input_data_dir)
