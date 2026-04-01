@@ -26,6 +26,10 @@ executable_src_path_swatplus <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_l
 executable_src_path_swat2012 <- "../swat/swat2012scenario/rev688_64rel_linux"
 # Name of directory to be used as project directory:
 swat_run_dir <- "../swat/current_swat_run/" # (will be created and filled in this script)
+# Path of input csv files that are needed (must exist):
+variablelist_path      <- "./in_variableList.csv"
+variablelist_path_2012 <- "./in_variableList_swat2012.csv"
+fileoutputlist_path    <- "./in_fileoutputList.csv"
 
 # INPUTS + example values
 args <- commandArgs(trailingOnly = TRUE)
@@ -153,7 +157,7 @@ if ( swatversion_from_user == "swatplus") {
     
     # Review Input validity. 
     print(paste0("run_swat_process: Reading csv file (in_fileoutputList.csv)..."))
-    valid_outputfile <- read.csv ("in_fileoutputList.csv", 
+    valid_outputfile <- read.csv (fileoutputlist_path,
                                   sep = ";",
                                   stringsAsFactors = FALSE)
     print(paste0("run_swat_process: Reading csv file (in_fileoutputList.csv)... done."))
@@ -171,7 +175,7 @@ if ( swatversion_from_user == "swatplus") {
     # Variable validity check.
     # Read valid variable list
     print(paste0("run_swat_process: Reading csv file (in_variableList.csv)..."))
-    valid_variable <- read.csv ("in_variableList.csv", sep = ";" )
+    valid_variable <- read.csv (variablelist_path, sep = ";" )
     print(paste0("run_swat_process: Reading csv file (in_variableList.csv)... done."))
     
     # Filter valid variables for the given output file
@@ -322,7 +326,7 @@ if ( swatversion_from_user == "swatplus") {
     # Variable validity check.
     # Read valid variable list
     message(paste0("run_swat2012_process: Reading csv file (in_variableList.csv)..."))
-    valid_variable <- read.csv ("in_variableList_swat2012.csv", sep = ";" )
+    valid_variable <- read.csv (variablelist_path_2012, sep = ";" )
     message(paste0("run_swat2012_process: Reading csv file (in_variableList.csv)... done."))
     
     # Filter valid variables for the given output file
