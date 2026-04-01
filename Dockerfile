@@ -34,6 +34,12 @@ RUN chmod +x /swat/swat2012scenario/rev688_64rel_linux
 
 # Copy required R script version:
 COPY src/SWATrunR_AquaINFRAtool_v20260313.R /src/SWATrunR_AquaINFRAtool_v20260313.R
+COPY src/download.R /src/download.R
+# Copy required input files:
+COPY src/in_fileoutputList.csv /src/in_fileoutputList.csv
+COPY src/in_variableList.csv /src/in_variableList.csv
+COPY src/in_variableList_swat2012.csv /src/in_variableList_swat2012.csv
+
 WORKDIR /src
 
 ENTRYPOINT ["conda", "run", "-n", "r-environment", "/bin/bash", "-c", "Rscript /src/${R_SCRIPT} $@"]
