@@ -42,7 +42,7 @@ download_zipped_file <- function(url, project_dir, dest_file) {
 
         # unzip
         print(paste0('download: Unzipping file...'))
-        unzip_zipped_file(input_data_dir, project_dir)
+        unzip_zipped_file(dest_file, project_dir)
         print(paste0('download: Unzipping file... done.'))
 
         #if (file.exists(executable)){
