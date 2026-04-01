@@ -99,21 +99,62 @@ class TorderaGloriaProcessor(BaseProcessor):
         ### Get user inputs and check ###
         #################################
 
-        in_project = data.get('TextInOut_URL') or "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip"
-        in_parameter_cal = data.get('par_cal') or "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json"
+        in_project = data.get('TextInOut_URL')
+        in_parameter_cal = data.get('par_cal')
         in_swat_version = data.get('swat_version')
-        in_swat_file = data.get('file') or "channel_sd_day"
-        in_variable = data.get('variable') or "flo_out,water_temp" 
-        in_unit = data.get('unit') or 1
-        in_start_date = data.get('start_date') or 20160101
-        in_end_date = data.get('end_date') or 20160228
-        in_skip_years = data.get('skip_years') or 2
+        in_swat_file = data.get('file')
+        in_variable = data.get('variable')
+        in_unit = data.get('unit')
+        in_start_date = data.get('start_date')
+        in_end_date = data.get('end_date')
+        in_skip_years = data.get('skip_years')
 
         # TODO: Parse/validate dates?
 
         # Validate
         if not in_swat_version in ['swatplus', 'swat2012']:
             raise ProcessorExecuteError(f"Unknown value for 'swatversion': {in_swat_version}. Must be either 'swatplus' or 'swat2012'.")
+
+        # Set defaults:
+        if in_project is None:
+            raise ProcessorExecuteError('Missing parameter: TextInOut_URL')
+            #if in_swat_version == 'swatplus':
+            #    in_project = 'https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip'
+            #elif in_swat_version == 'swat2012':
+            #    in_project = 'https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/swat2012_sampledata.zip'
+
+        if in_parameter_cal is None:
+            #raise ProcessorExecuteError('Missing parameter: par_cal')
+            if in_swat_version == 'swatplus':
+                #in_parameter_cal = 'https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json'
+                raise ProcessorExecuteError('Missing parameter: par_cal')
+            elif in_swat_version == 'swat2012':
+                in_parameter_cal = None
+
+        if in_swat_file is None:
+            #in_swat_file = 'channel_sd_day'
+            raise ProcessorExecuteError('Missing parameter: file')
+
+        if in_variable is None:
+            #in_variable = 'flo_out,water_temp'
+            raise ProcessorExecuteError('Missing parameter: variable')
+
+        if in_unit is None:
+            #in_unit = 1
+            raise ProcessorExecuteError('Missing parameter: unit')
+
+        if in_start_date is None:
+            #in_start_date = 20160101
+            raise ProcessorExecuteError('Missing parameter: start_date')
+
+        if in_end_date is None:
+            #in_end_date = 20160228
+            raise ProcessorExecuteError('Missing parameter: end_date')
+
+        if in_skip_years is None:
+            #in_skip_years = 2
+            raise ProcessorExecuteError('Missing parameter: skip_years')
+
 
         #################################
         ### Input and output          ###
