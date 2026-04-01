@@ -23,14 +23,25 @@ library(jsonlite)
 # INPUTS + example values
 args <- commandArgs(trailingOnly = TRUE)
 print(paste0('R Command line args: ', args))
-swatversion_from_user <- args[1] # swatplus or swat2012
-input_project <- args[2]
-input_calibration <- args[3]
-fileout_from_user <- args[4] #"channel_sd_day"
-variable_from_user <- strsplit(gsub(" ", "", args[5]), ",")[[1]] #"flo_out,water_temp"
-unit_input <- gsub(" ", "", args[6])  # Remove spaces in unit input. Default 1
+swatversion_from_user <- args[1]  # swatplus or swat2012
+input_project         <- args[2]  # URL of zipped project file
+input_calibration     <- args[3]  # URL of json calibration file
+fileout_from_user     <- args[4]  # "channel_sd_day"
+variable_from_user    <- args[5]  # "flo_out,water_temp"
+unit_input            <- args[6]  # Default 1
+start_date_from_user  <- args[7]  # 20160101
+end_date_from_user    <- args[8]  # 20201231
+skipyears_from_user   <- args[9]  # 2
+download_path         <- args[10] # "/out/"
 
+# Remove spaces, split at comma:
+variable_from_user <- strsplit(gsub(" ", "", variable_from_user), ",")[[1]]
 
+# Remove spaces:
+units_input <- gsub(" ", "", unit_input)
+
+# Make numeric:
+skipyears_from_user   <- as.numeric(skipyears_from_user)
 
 # ______________________________________________________________________________
 # Processing unit input to a correct format:                                #### 
@@ -62,17 +73,11 @@ unit_input <- gsub(" ", "", args[6])  # Remove spaces in unit input. Default 1
 # ______________________________________________________________________________
 # Processing modelling time                                                 ####
 # ______________________________________________________________________________
-start_date_from_user <- args[7] # 20160101
-end_date_from_user <- args[8] # 20201231
-skipyears_from_user  <- args[9] # 2
-skipyears_from_user <- as.numeric(skipyears_from_user)
-
+# Nothing to do
 
 # ______________________________________________________________________________
 # Processing TxtInOut and calibration files download                        ####  
 # ______________________________________________________________________________
-
-download_path <- args[10] #"/out/"
 
 
 #Download input project
