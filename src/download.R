@@ -19,46 +19,46 @@ dest_file_path <- paste0(dest_dir, "/", dest_file_name)
 executable <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux"
 
 # Check if the file already exists and download if necessary
-download_zipped_file <- function(url, project_dir, dest_file) {
-  print(paste0('download: project_dir=', project_dir))
-  print(paste0('download: filepath(..)=', file.path(project_dir, basename(executable))))
+download_zipped_file <- function(url, dest_dir, dest_file_path) {
+  print(paste0('download: dest_dir=', dest_dir))
+  print(paste0('download: filepath(..)=', file.path(dest_dir, basename(executable))))
   print(paste0('download: getwd()=', getwd()))
   print(paste0('download: basename(executable)=', basename(executable)))
   print(paste0('download: executable=', executable))
-  print(paste0('download: dest_file=', dest_file))
+  print(paste0('download: dest_file_path=', dest_file_path))
 
-  if (file.exists(dest_file)) {
-    print(paste0("download: File ", dest_file, " already exists. Skipping download."))
+  if (file.exists(dest_file_path)) {
+    print(paste0("download: File ", dest_file_path, " already exists. Skipping download."))
   } else {
     tryCatch(
       {
         # create containing dir:
-        dir.create(project_dir)
+        dir.create(dest_dir)
 
         # download file as-is:
-        print(paste0('download: Downloading file (to ', dest_file, ')...'))
-        download.file(url, dest_file, mode = "wb")
-        print(paste0('download: Downloading file (to ', dest_file, ')... done.'))
+        print(paste0('download: Downloading file (to ', dest_file_path, ')...'))
+        download.file(url, dest_file_path, mode = "wb")
+        print(paste0('download: Downloading file (to ', dest_file_path, ')... done.'))
 
         # unzip
         print(paste0('download: Unzipping file...'))
-        unzip_zipped_file(dest_file, project_dir)
+        unzip_zipped_file(dest_file_path, dest_dir)
         print(paste0('download: Unzipping file... done.'))
 
         #if (file.exists(executable)){
         #  print(paste0("download: EXISTS: ", executable))
         #}
-        #if (file.exists(dest_file)){
-        #  print(paste0("download: EXISTS: ", dest_file))
+        #if (file.exists(dest_file_path)){
+        #  print(paste0("download: EXISTS: ", dest_file_path))
         #}
         #if (dir.exists("../swat/Scenario_Gloria_linux/project/")){
         #  print(paste0("download: EXISTS: ../swat/Scenario_Gloria_linux/project/"))
         #}
 
         # Copy executable
-        print(paste0('download: Copying ', executable,' to ', file.path(project_dir, basename(executable)), '...'))
-        #dest_exec <- file.path(project_dir, basename(executable))
-        file.copy(executable, file.path(project_dir, basename(executable)), overwrite = TRUE)
+        print(paste0('download: Copying ', executable,' to ', file.path(dest_dir, basename(executable)), '...'))
+        #dest_exec <- file.path(dest_dir, basename(executable))
+        file.copy(executable, file.path(dest_dir, basename(executable)), overwrite = TRUE)
         #Sys.chmod(dest_exec, mode = "0755")
         print(paste0("download: Copying ", executable, "... done."))
       },
