@@ -16,7 +16,7 @@ dest_dir <- paste0("../swat/Scenario_Gloria_linux/", subdir_name)
 # Target directory with added filename, i.e. entire target path
 dest_file_path <- paste0(dest_dir, "/", dest_file_name)
 # Path of executable to be copied (TODO: Hardcoded! Need to change)
-executable <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux"
+executable_src_path <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux"
 
 # Check if the file already exists and download if necessary
 download_zipped_file <- function(url, dest_dir, dest_file_path) {
@@ -85,26 +85,30 @@ unzip_zipped_file <- function(zip_file, unzip_dir) {
 }
 
 # Function to copy executable to destination dir
-copy_executable <- function(executable, dest_dir) {
+copy_executable <- function(executable_src_path, dest_dir) {
   print(paste0('download: Starting to copy executable into newly created project directory...'))
-  print(paste0('download: filepath(..)=', file.path(dest_dir, basename(executable))))
-  print(paste0('download: basename(executable)=', basename(executable)))
-  print(paste0('download: executable=', executable))
+
+  # Define filename and paths:
+  executable_filename <- basename(executable_src_path)
+  executable_target_path <- file.path(dest_dir, executable_filename)
+  print(paste0('download: executable_src_path=', executable_src_path))
+  print(paste0('download: executable_filename=', executable_filename))
+  print(paste0('download: executable_target_path=', executable_target_path))
 
   # Check existence:
-  if (!(file.exists(executable))) {
-    stop(paste0('Executable file does not exist in expected location (', executable, ')'))
+  if (!(file.exists(executable_src_path))) {
+    stop(paste0('Executable file does not exist in expected location (', executable_src_path, ')'))
   }
 
   # Copy executable
-  print(paste0('download: Copying ', executable,' to ', file.path(dest_dir, basename(executable)), '...'))
+  print(paste0('download: Copying ', executable_src_path,' to ', executable_target_path, '...'))
   #dest_exec <- file.path(dest_dir, basename(executable))
-  copy_success <- file.copy(executable, file.path(dest_dir, basename(executable)), overwrite = TRUE)
+  copy_success <- file.copy(executable_src_path, executable_target_path, overwrite = TRUE)
   #Sys.chmod(dest_exec, mode = "0755")
   if (copy_success) {
-    print(paste0("download: Copying ", executable, "... done."))
+    print(paste0("download: Copying ", executable_src_path, "... done."))
   } else {
-    stop(paste0("download: Copying ", executable, "... FAILED."))
+    stop(paste0("download: Copying ", executable_src_path, "... FAILED."))
   }
 }
 
@@ -112,4 +116,4 @@ copy_executable <- function(executable, dest_dir) {
 download_zipped_file(url_zipped_project_file, dest_dir, dest_file_path)
 
 # Copy executable to newly created project directory
-copy_executable(executable, dest_dir)
+copy_executable(executable_src_path, dest_dir)
