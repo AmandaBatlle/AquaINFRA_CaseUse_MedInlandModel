@@ -1,10 +1,18 @@
 # data_download.R
 print("download: Starting script download.R")
 
+# Needs to be defined already (in the script that sources this script):
+# * input_project (URL of zipped project directory, passed by user), e.g. "https://.../project.zip"
+# * filename (name of the zipped file, but without extension/suffix), e.g. "project", but is used here as directory name...
+
 # Define file paths and URLs
+# Split input_project by slash, take last item, i.e. the filename
 project_name <- tail(strsplit(input_project, "/")[[1]], 1)
+# Target directory:
 project_dir <- paste0("../swat/Scenario_Gloria_linux/", filename)
+# Target directory with added filename, i.e. entire target path
 input_data_dir <- paste0(project_dir, "/", project_name)
+# Path of executable to be copied (TODO: Hardcoded! Need to change)
 executable <- "../swat/Scenario_Gloria_linux/rev60.5.7_64rel_linux"
 
 # Check if the file already exists and download if necessary
@@ -21,10 +29,15 @@ download_zipped_file <- function(url, dest_file) {
   } else {
     tryCatch(
       {
+        # create containing dir:
         dir.create(project_dir)
+
+        # download file as-is:
         print(paste0('download: Downloading file (to ', dest_file, ')...'))
         download.file(url, dest_file, mode = "wb")
         print(paste0('download: Downloading file (to ', dest_file, ')... done.'))
+
+        # unzip
         print(paste0('download: Unzipping file...'))
         unzip_zipped_file(input_data_dir, project_dir)
         print(paste0('download: Unzipping file... done.'))
@@ -39,6 +52,7 @@ download_zipped_file <- function(url, dest_file) {
         #  print(paste0("download: EXISTS: ../swat/Scenario_Gloria_linux/project/"))
         #}
 
+        # Copy executable
         print(paste0('download: Copying ', executable,' to ', file.path(project_dir, basename(executable)), '...'))
         #dest_exec <- file.path(project_dir, basename(executable))
         file.copy(executable, file.path(project_dir, basename(executable)), overwrite = TRUE)
