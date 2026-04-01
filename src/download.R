@@ -57,8 +57,8 @@ download_zipped_file <- function(url, dest_dir, dest_file_path) {
         stop(paste("WARNING: Download failed, reason: ", warn[1]))
       },
       error = function(err) {
-        message(paste("download: Error: Download of shapefile failed, reason: ", err[1]))
-        stop(paste("ERROR: Download of shapefile failed, reason: ", err[1]))
+        message(paste("download: Error: Download failed, reason: ", err[1]))
+        stop(paste("ERROR: Download failed, reason: ", err[1]))
       }
     ) # end trycatch
   } # end ifelse
@@ -91,6 +91,11 @@ copy_executable <- function(executable, dest_dir) {
   print(paste0('download: basename(executable)=', basename(executable)))
   print(paste0('download: executable=', executable))
 
+  # Check existence:
+  if (!(file.exists(executable))) {
+    stop(paste0('Executable file does not exist in expected location (', executable, ')'))
+  }
+
   # Copy executable
   print(paste0('download: Copying ', executable,' to ', file.path(dest_dir, basename(executable)), '...'))
   #dest_exec <- file.path(dest_dir, basename(executable))
@@ -103,7 +108,7 @@ copy_executable <- function(executable, dest_dir) {
   }
 }
 
-# Download and unzip shapefile
+# Download and unzip project file
 download_zipped_file(url_zipped_project_file, dest_dir, dest_file_path)
 
 # Copy executable to newly created project directory
