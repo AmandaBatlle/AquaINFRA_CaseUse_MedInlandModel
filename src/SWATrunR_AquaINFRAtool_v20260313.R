@@ -65,6 +65,7 @@ unit_input <- gsub(" ", "", args[6])  # Remove spaces in unit input. Default 1
 start_date_from_user <- args[7] # 20160101
 end_date_from_user <- args[8] # 20201231
 skipyears_from_user  <- args[9] # 2
+skipyears_from_user <- as.numeric(skipyears_from_user)
 
 
 # ______________________________________________________________________________
