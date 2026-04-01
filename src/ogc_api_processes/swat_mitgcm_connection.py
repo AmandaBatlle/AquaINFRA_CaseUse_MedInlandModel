@@ -31,7 +31,7 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
         self.supports_outputs = True
         self.job_id = 'nothing-yet'
         self.process_id = self.metadata["id"]
-        self.image_name = 'catalunya-tordera:20260317-e5e3d92'
+        self.image_name = 'catalunya-tordera:20260401-b7b2785'
         self.script_name = 'swat_mitgcm_connection.R'
         config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
         with open(config_file_path, 'r') as config_file:
