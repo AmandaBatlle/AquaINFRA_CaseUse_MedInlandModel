@@ -18,7 +18,7 @@ curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
         "unit": 1,
         "file": "channel_sd_day",
         "variable": "flo_out,water_temp",
-        "start_date": 20160101,
+        "start_date": 20140101,
         "end_date": 20160228,
         "skip_years": 2
     }
