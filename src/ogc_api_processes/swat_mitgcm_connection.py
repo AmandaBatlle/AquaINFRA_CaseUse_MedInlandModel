@@ -8,6 +8,8 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 '''
 How to call this process:
 
+# TESTED 2026-04-02: FAILS.
+# DOES NOT WORK YET, script "swat_mitgcm_connection.R" missing!
 curl -i -X POST https://${PYSERVER}/processes/tordera-gloria-connection/execution \
   --header "Content-Type: application/json" \
   --data '{
