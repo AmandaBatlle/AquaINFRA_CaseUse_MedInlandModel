@@ -101,7 +101,7 @@ dest_file_name <- tail(strsplit(url_zipped_input_project, "/")[[1]], 1)
 # Target directory / project directory
 # I assume that the subdir_name is not needed anymore!
 dest_dir <- paste0(swat_run_dir, subdir_name)
-dir.create(dest_dir)
+dir.create(swat_run_dir)
 # Target directory with added filename, i.e. entire target path
 dest_file_path <- paste0(dest_dir, "/", dest_file_name)
 
