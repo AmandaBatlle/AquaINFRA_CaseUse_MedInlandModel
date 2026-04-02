@@ -386,7 +386,7 @@ if ( swatversion_from_user == "swatplus") {
     
     
     #Run SWAT2012 simulation
-    message(paste0("run_swat2012_process: Running run_swatplus(...)."))
+    message(paste0("run_swat2012_process: Running run_swat2012(...)."))
     q_sim_2012 <- run_swat2012(project_path = TxtInOut,
                                output = define_output(file = file,
                                                       variable = variable,
