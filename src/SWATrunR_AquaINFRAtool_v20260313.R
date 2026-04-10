@@ -290,7 +290,7 @@ if ( swatversion_from_user == "swatplus") {
 
   # copy SWAT2012 executable into project folder:
   print(paste0('Copying executable...'))
-  copy_executable(executable_src_path_swatplus, TxtInOut_Tordera)
+  copy_executable(executable_src_path_swat2012, TxtInOut_Tordera)
   print(paste0('Copying executable... done.'))
 
 
