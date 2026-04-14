@@ -391,8 +391,8 @@ if ( swatversion_from_user == "swatplus") {
                                output = define_output(file = file,
                                                       variable = variable,
                                                       unit = unit),
-                               start_date= startdate,
-                               end_date=enddate,
+                               start_date= as.Date(as.character(startdate), format = "%Y%m%d"),
+                               end_date=as.Date(as.character(enddate), format = "%Y%m%d"),
                                years_skip = skipyears,
                                output_interval = timestep ,
                                parameter=par_comb
