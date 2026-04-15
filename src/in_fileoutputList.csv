@@ -91,7 +91,7 @@ basin_res_day
 basin_res_mon
 basin_res_yr
 basin_res_aa
-ecall_day
+recall_day
 recall_mon
 recall_yr
 recall_aa
@@ -111,4 +111,3 @@ ru_day
 ru_mon
 ru_yr
 ru_aa
-ru_aa.txt
