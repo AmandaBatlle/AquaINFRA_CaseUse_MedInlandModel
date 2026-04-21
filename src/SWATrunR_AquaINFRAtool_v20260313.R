@@ -64,7 +64,7 @@ if (url_input_calibration == "NULL") {
 variable_from_user <- strsplit(gsub(" ", "", variable_from_user), ",")[[1]]
 
 # Remove spaces:
-units_input <- gsub(" ", "", unit_input)
+unit_input <- gsub(" ", "", unit_input)
 
 # Make numeric:
 skipyears_from_user   <- as.numeric(skipyears_from_user)
@@ -232,6 +232,7 @@ if ( swatversion_from_user == "swatplus") {
     
     
     # Output dir:
+    # TODO: When download path is "/", this leads to: "Will store to: ../../../out//"
     output_dir <- file.path("../../../out", download_path)
     print(paste0("run_swat_process: Will store to: ", output_dir))
     print(paste0("run_swat_process: Checking if exists: ", output_dir))
@@ -384,6 +385,7 @@ if ( swatversion_from_user == "swatplus") {
     
     
     # Output dir:
+    # TODO: When download path is "/", this leads to: "Will store to: ../../../out//"
     output_dir <- file.path("../../../out", download_path)
     message(paste0("run_swat2012_process: Will store to: ", output_dir))
     message(paste0("run_swat2012_process: Checking if exists: ", output_dir))
