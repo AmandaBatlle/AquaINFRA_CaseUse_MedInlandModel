@@ -45,8 +45,18 @@ end_date_from_user       <- args[8]  # 20201231
 skipyears_from_user      <- args[9]  # 2
 download_path            <- args[10] # "/out/"
 
+
+# Check validity of version:
+valid_swat_versions <- c("swatplus", "swat2012")
+if (swatversion_from_user %in% valid_swat_versions) {
+  message(paste0("swat version is valid: ", swatversion_from_user))
+} else {
+  stop("Wrong SWAT version: Only acceptable variables are swatplus and swat2012")
+}
+
 # Convert "NULL" (string) to actual NULL:
 if (url_input_calibration == "NULL") {
+  message("No input calibration URL provided.")
   url_input_calibration <- NULL
 }
 
@@ -58,6 +68,7 @@ units_input <- gsub(" ", "", unit_input)
 
 # Make numeric:
 skipyears_from_user   <- as.numeric(skipyears_from_user)
+message(paste0("Skip years: ", skipyears_from_user)
 
 # ______________________________________________________________________________
 # Processing unit input to a correct format:                                #### 
@@ -394,8 +405,8 @@ if ( swatversion_from_user == "swatplus") {
                                start_date= as.Date(as.character(startdate), format = "%Y%m%d"),
                                end_date=as.Date(as.character(enddate), format = "%Y%m%d"),
                                years_skip = skipyears,
-                               output_interval = timestep ,
-                               parameter=par_comb
+                               output_interval = timestep,
+                               parameter = par_comb
     )
     
     #### NEED TO FIX THIS OUTPUT TO MATCH SWAT+ OUTPUT
@@ -505,9 +516,6 @@ if ( swatversion_from_user == "swatplus") {
   print(paste0("Running run_swat2012_process... done."))
   #unlink(TxtInOut_Tordera, recursive = TRUE)
   
-  
-} else {
-  print("Wrong SWAT version: Only acceptable variables are swatplus and swat2012")
 }
 
 print(paste("R Script swat_tordera_gloria.R finished!"))
