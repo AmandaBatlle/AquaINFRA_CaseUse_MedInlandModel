@@ -22,7 +22,7 @@ library(jsonlite)
 
 # Hardcoded relative paths that are used in this script:
 # Path of executables to be copied (the relevant one must exist, otherwise an error occurs)
-executable_src_path_swatplus <- "../swat/swatplus_executable/swatplus-61.0.2.61-gnu-lin_x86_64-Rel"
+executable_src_path_swatplus <- "../swat/swatplus_executable/rev60.5.7_64rel_linux"
 executable_src_path_swat2012 <- "../swat/swat2012_executable/rev688_64rel_linux"
 # Name of directory to be used as project directory:
 swat_run_dir <- "../swat/current_swat_run/" # (will be created and filled in this script)
