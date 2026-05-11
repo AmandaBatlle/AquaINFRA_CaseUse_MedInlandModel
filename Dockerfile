@@ -26,10 +26,10 @@ RUN conda run -n r-environment Rscript -e "packageVersion('readr')"
 RUN conda run -n r-environment Rscript -e "if (!requireNamespace('SWATrunR', quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')"
 
 # Copy executables and make executable:
-# /swat/swatplus_executable/swatplus-61.0.2.61-gnu-lin_x86_64-Rel
+# /swat/swatplus_executable/rev60.5.7_64rel_linux
 # /swat/swat2012_executable/rev688_64rel_linux
 COPY swat /swat
-RUN chmod +x /swat/swatplus_executable/swatplus-61.0.2.61-gnu-lin_x86_64-Rel
+RUN chmod +x /swat/swatplus_executable/rev60.5.7_64rel_linux
 RUN chmod +x /swat/swat2012_executable/rev688_64rel_linux
 
 # Copy required input files:
