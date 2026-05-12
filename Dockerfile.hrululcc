@@ -1,0 +1,19 @@
+FROM rocker/r-ver:4.3.0
+
+RUN apt-get update && apt-get install -y \
+    curl \
+    unzip \
+    zip \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN R -e "install.packages('zip', repos='https://cran.rstudio.com/')"
+
+# Create the folders the R script uses
+RUN mkdir -p /swat/current_hrululcc_run
+RUN mkdir -p /out
+
+WORKDIR /src
+COPY src/SWATplus_HRU_LULCchange_AquaINFRAtool_v20260313.R /src/tool.R
+COPY src/download.R /src/download.R
+
+ENTRYPOINT ["Rscript", "/src/tool.R"]
