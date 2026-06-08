@@ -21,11 +21,18 @@ RUN conda env create -f /tmp/environment.yml
 RUN conda run -n r-environment Rscript -e "packageVersion('readr')"
 
 # Now installing SWATrunR:
-# Fails with error:
+# We have to prevent update of dependencies, otherwise it would upgrade package
+# readr to version 2.2.0 (as of 8 June 2026), which caused the install to fail:
 #> Error: object ‘read_table2’ is not exported by 'namespace:readr'
-# because this automatically upgrades the dependencies, and thus upgrades readr
-# to version 2.2.0 (as of 8 June 2026), which causes the install to fail:
-RUN conda run -n r-environment Rscript -e "if (!requireNamespace('SWATrunR', quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')"
+RUN conda run -n r-environment Rscript -e "\
+  options(repos = c(CRAN = 'https://cloud.r-project.org')); \
+  remotes::install_github( \
+    'chrisschuerz/SWATrunR', \
+    dependencies = TRUE, \
+    upgrade = 'never', \
+    quiet = FALSE \
+)"
+
 
 # Check whether it was installed properly:
 RUN conda run -n r-environment Rscript -e "\
