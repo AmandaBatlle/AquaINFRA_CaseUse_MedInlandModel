@@ -28,7 +28,7 @@ library(dplyr)
 
 # INPUTS + example values
 args <- commandArgs(trailingOnly = TRUE)
-print(paste0('R Command line args: ', args))
+message('R Command line args: ', args)
 file1 <- args[1] # thread_1.sqlite
 output <- args[2] # /out/MITGCMinput_RiverWaterQuantityFromSWAT.txt
 

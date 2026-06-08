@@ -102,7 +102,7 @@ run_hrululcc <- function ( LULCchange, TxtInOut) {
 
 # INPUTS + example values
 args <- commandArgs(trailingOnly = TRUE)
-print(paste0('R Command line args: ', args))
+message('R Command line args: ', args)
 url_zipped_input_project <- args[1]  # URL of zipped project file
 url_input_lulcc          <- args[2]  # URL for LULC input data
 download_path            <- args[3] # "/out/"
@@ -132,23 +132,23 @@ dest_file_path <- paste0(dest_dir, "/", dest_file_name)
 source("download.R")
 
 # Now, download and unzip project file:
-print(paste0("Downloading..."))
+message("Downloading...")
 download_zipped_file(url_zipped_input_project, dest_dir, dest_file_path)
-print(paste0("Downloading... done."))
+message("Downloading... done.")
 
 
 # The project directory is the directory created by/before downloading
 # and unzipping the zipped input project file:
 #TxtInOut_Tordera <- paste0("../swat/Scenario_Gloria_linux/", subdir_name)
 TxtInOut_Tordera <- dest_dir
-print(paste("project directory", TxtInOut_Tordera))
+message("project directory", TxtInOut_Tordera)
 
-print(paste0("Reading input csv..."))
+message("Reading input csv...")
   lulcc_csv <- read.csv(url_input_lulcc)
-print(paste0("Reading input LULCC csv... done."))
+message("Reading input LULCC csv... done.")
 
 
-#Csv example
+# CSV example
 run_hrululcc ( LULCchange = lulcc_csv, 
                TxtInOut = TxtInOut_Tordera)
 
