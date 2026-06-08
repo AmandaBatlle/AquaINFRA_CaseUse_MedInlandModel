@@ -17,22 +17,20 @@ RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkg
 
 RUN conda env create -f /tmp/environment.yml
 
-# Installing dependency readr
-# This works and installs 2.2
-RUN conda run -n r-environment Rscript -e "\
-  install.packages('remotes', repos='https://cloud.r-project.org'); \
-  install.packages('readr',   repos='https://cloud.r-project.org')"
-
-# Checking for dependency readr::
+# Checking for dependency readr: Expecting version 2.1.5 (works fine)
 RUN conda run -n r-environment Rscript -e "packageVersion('readr')"
 
-# SWATrunR also needs data.table:
-RUN conda run -n r-environment Rscript -e "\
-  install.packages('data.table',   repos='https://cloud.r-project.org')"
-
-# Now installing SWATrunR fails, with error:
-# Error: object ‘read_table2’ is not exported by 'namespace:readr'
+# Now installing SWATrunR:
+# Fails with error:
+#> Error: object ‘read_table2’ is not exported by 'namespace:readr'
+# because this automatically upgrades the dependencies, and thus upgrades readr
+# to version 2.2.0 (as of 8 June 2026), which causes the install to fail:
 RUN conda run -n r-environment Rscript -e "if (!requireNamespace('SWATrunR', quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')"
+
+# Check whether it was installed properly:
+RUN conda run -n r-environment Rscript -e "\
+  library(SWATrunR); \
+  packageVersion('SWATrunR')"
 
 # Copy executables and make executable:
 # /swat/swatplus_executable/rev60.5.7_64rel_linux
