@@ -7,58 +7,60 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 
 '''
 How to call this process:
-# TESTING WIP 2026-04-02
+
+# swatplus
+# TESTED 2026-06-08: Works
 curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
   --data '{
     "inputs": {
-        "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
-        "par_cal": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json",
         "swat_version": "swatplus",
-        "unit": 1,
+        "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
+        "par_cal":       "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json",
         "file": "channel_sd_day",
         "variable": "flo_out,water_temp",
+        "unit": 1,
         "start_date": 20140101,
-        "end_date": 20160228,
+        "end_date":   20160228,
         "skip_years": 2
     }
 }'
 
-# With SWAT2012:
-# TESTING 2026-04-02: Fails.
+# swat2012:
+# TESTED 2026-06-08: Works
 curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution  \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
   --data '{
     "inputs": {
-        "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/swat2012_sampledata.zip",
-        "par_cal": null,
         "swat_version": "swat2012",
-        "unit": 1,
+        "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/swat2012_sampledata.zip",
         "file": "rch_m",
         "variable": "FLOW_OUT",
+        "unit": 1,
         "start_date": 20000101,
-        "end_date": 20030228,
+        "end_date":   20030228,
         "skip_years": 2
     }
 }'
 
 # OR:
-# With SWAT2012:
-# TESTING 2026-04-02: Fails.
+# swat2012: Same, but explicitly state "par_cal": null
+# TESTED 2026-06-08: Works
 curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution  \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
   --data '{
     "inputs":{
-        "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/swat2012_sampledata.zip",
         "swat_version": "swat2012",
-        "unit": 1,
+        "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/swat2012_sampledata.zip",
+        "par_cal": null,
         "file": "rch_m",
         "variable": "FLOW_OUT",
+        "unit": 1,
         "start_date": 20000101,
-        "end_date": 20030228,
+        "end_date":   20030228,
         "skip_years": 2
     }
 }'
