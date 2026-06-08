@@ -18,26 +18,20 @@ RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkg
 RUN conda env create -f /tmp/environment.yml
 
 # Installing dependency readr
+# This works and installs 2.2
+RUN conda run -n r-environment Rscript -e "\
+  install.packages('remotes', repos='https://cloud.r-project.org'); \
+  install.packages('readr',   repos='https://cloud.r-project.org')"
 
-# This does not seem to work (see check below):
-#RUN conda run -n r-environment Rscript -e "\
-#if (!requireNamespace('remotes', quietly = TRUE)) install.packages(c('remotes', 'data.table'), repos='https://cran.rstudio.com/'); \
-#remotes::install_version('readr', version = '2.1.4', repos = 'https://cran.rstudio.com/', dependencies = TRUE, upgrade = 'never')"
-
-# This also does not seem to work (see check below):
-#RUN conda run -n r-environment Rscript -e "\
-#if (!requireNamespace('remotes', quietly = TRUE)) install.packages(c('remotes', 'data.table'), repos='https://cran.rstudio.com/'); \
-#remotes::install_version('readr', version = '2.1.5', repos = 'https://cran.rstudio.com/', dependencies = TRUE, upgrade = 'never')"
-
-# This also does not seem to work (message: ERROR: compilation failed for package 'readr')
-#RUN conda run -n r-environment Rscript -e "\
-#  install.packages('remotes', repos='https://cloud.r-project.org'); \
-#  remotes::install_version('readr', version='2.1.5', repos='https://cloud.r-project.org')"
-
-# Checking for dependency readr: This causes error during build:
-# Error in packageVersion("readr") : there is no package called 'readr'
+# Checking for dependency readr::
 RUN conda run -n r-environment Rscript -e "packageVersion('readr')"
 
+# SWATrunR also needs data.table:
+RUN conda run -n r-environment Rscript -e "\
+  install.packages('data.table',   repos='https://cloud.r-project.org')"
+
+# Now installing SWATrunR fails, with error:
+# Error: object ‘read_table2’ is not exported by 'namespace:readr'
 RUN conda run -n r-environment Rscript -e "if (!requireNamespace('SWATrunR', quietly = TRUE)) remotes::install_github('chrisschuerz/SWATrunR')"
 
 # Copy executables and make executable:
