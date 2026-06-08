@@ -78,7 +78,7 @@ class TorderaGloriaProcessor(BaseProcessor):
         self.supports_outputs = True
         self.job_id = 'nothing-yet'
         self.process_id = self.metadata["id"]
-        self.image_name = 'catalunya-tordera:20260402-cda2b07'
+        self.image_name = 'catalunya-tordera:20260608-1eccf57'
         self.script_name = 'SWATrunR_AquaINFRAtool_v20260313.R'
         config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
         with open(config_file_path, 'r') as config_file:
