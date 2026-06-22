@@ -112,15 +112,15 @@ message("Skip years: ", skipyears_from_user)
 
 # For downloading and unzipping, first define where it should go...
 # Subdirectory name, derived from the URL:
-subdir_name <- tools::file_path_sans_ext(basename(url_zipped_input_project))
-# Target filename: Split URL by slash, take last item, i.e. the filename
-dest_file_name <- tail(strsplit(url_zipped_input_project, "/")[[1]], 1)
+url_clean <- sub("\\?.*$", "", url_zipped_input_project)
+subdir_name <- tools::file_path_sans_ext(basename(url_clean))
+dest_file_name <- basename(url_clean)
 # Target directory / project directory
 # I assume that the subdir_name is not needed anymore!
-dest_dir <- paste0(swat_run_dir, subdir_name)
-dir.create(swat_run_dir)
+dest_dir <- file.path(swat_run_dir, subdir_name)
+dir.create(dest_dir, recursive = TRUE, showWarnings = FALSE)
 # Target directory with added filename, i.e. entire target path
-dest_file_path <- paste0(dest_dir, "/", dest_file_name)
+dest_file_path <- file.path(dest_dir, dest_file_name)
 
 # Now, get the download function and the function to copy the executable:
 source("download.R")
@@ -128,7 +128,13 @@ source("download.R")
 # Now, download and unzip project file:
 message("Downloading...")
 download_zipped_file(url_zipped_input_project, dest_dir, dest_file_path)
-message("Downloading... done.")
+if (swatversion_from_user == "swatplus") {
+  mandatory_file = "time.sim"
+} else if (swatversion_from_user == "swat2012") {
+  mandatory_file = "file.cio"
+}
+dest_dir <- find_correct_path(target_file=mandatory_file, dest_dir)
+message(paste0("Downloading... done. Using ", dest_dir, " (found ", mandatory_file, " in there)."))
 
 # Now, copy executable to newly created project directory
 #message('Copying executable...')

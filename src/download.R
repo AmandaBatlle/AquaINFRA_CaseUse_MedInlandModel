@@ -69,6 +69,33 @@ unzip_zipped_file <- function(zip_file, unzip_dir) {
   )
 }
 
+# Function to find the correct directory hierarchy form the unzipped
+# one - in the examples during tdevelopment, various hierarchies existed,
+# so instead of making one layout mandatory, we extract it based on a
+# target file that mandatorily exists, according to ChatGPT:
+#> file.cio      # SWAT
+#> time.sim      # SWAT+
+find_correct_path <- function(target_file="file.cio", unzip_dir) {
+
+  matches <- list.files(
+    unzip_dir,
+    pattern = paste0("^", target_file, "$"),
+    recursive = TRUE,
+    full.names = TRUE
+  )
+
+  if (length(matches) == 0) {
+    stop("Could not locate ", target_file)
+  }
+
+  if (length(matches) > 1) {
+    warning("Multiple copies of ", target_file, " found; using first")
+  }
+
+  swat_input_dir <- dirname(matches[1])
+  return(swat_input_dir)
+}
+
 # Function to copy executable to destination dir
 copy_executable <- function(executable_src_path, dest_dir) {
   message('download: Starting to copy executable into newly created project directory...')
