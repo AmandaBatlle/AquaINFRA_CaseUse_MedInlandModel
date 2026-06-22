@@ -7,14 +7,16 @@ download_zipped_file <- function(url, dest_dir, dest_file_path) {
   message('download: getwd()=', getwd())
   message('download: dest_file_path=', dest_file_path)
 
+  # create containing dir:
+  if (!dir.exists(dest_dir)) {
+    dir.create(dest_dir, recursive = TRUE)
+  }
+
   if (file.exists(dest_file_path)) {
     message("download: File ", dest_file_path, " already exists. Skipping download.")
   } else {
     tryCatch(
       {
-        # create containing dir:
-        dir.create(dest_dir)
-
         # download file as-is:
         message('download: Downloading file (to ', dest_file_path, ')...')
         download.file(url, dest_file_path, mode = "wb")

@@ -33,7 +33,7 @@ fileoutputlist_path    <- "./in_fileoutputList.csv"
 
 # INPUTS + example values
 args <- commandArgs(trailingOnly = TRUE)
-message('R Command line args: ', args)
+message('R Command line args: ', paste(args, collapse=","))
 swatversion_from_user    <- args[1]  # swatplus or swat2012
 url_zipped_input_project <- args[2]  # URL of zipped project file
 url_input_calibration    <- args[3]  # URL of json calibration file
