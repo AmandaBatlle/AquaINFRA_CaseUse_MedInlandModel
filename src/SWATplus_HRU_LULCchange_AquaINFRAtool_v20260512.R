@@ -32,7 +32,7 @@ library(zip)
 # Output: 
 #   Updated TxtInOut (object) TxtInOut directory zipped containg the updated "hru-data.hru" rewritten with the new LULC categories for the selected HRU.
 
-run_hrululcc <- function (LULCchange, TxtInOut, output_dir) {
+run_hrululcc <- function (LULCchange, TxtInOut, output_dir, result_file_name=NULL) {
     
   # -------------------------
   # LOAD CHANGES
@@ -83,8 +83,10 @@ run_hrululcc <- function (LULCchange, TxtInOut, output_dir) {
     # 1. Define exactly where the zip should go (Absolute path for Docker)
     # We put it directly into output_dir so Galaxy can find it
     # Note: We expect output_dir to exist!
-    final_zip_path <- file.path(output_dir, paste0(basename(TxtInOut), "_modified.zip"))
-    
+    if (is.null(result_file_name)) {
+      result_file_name <- paste0(basename(TxtInOut), "_modified.zip")
+    }
+    final_zip_path <- file.path(output_dir, result_file_name)
     message(paste("run_hrululcc_process: Creating zip at:", final_zip_path))
     
     # 2. Create the zip file
@@ -106,7 +108,7 @@ args <- commandArgs(trailingOnly = TRUE)
 message('R Command line args: ', args)
 url_zipped_input_project <- args[1]  # URL of zipped project file
 url_input_lulcc          <- args[2]  # URL for LULC input data
-download_path            <- args[3] # "/out/"
+download_path            <- args[3] # "/out/myresult.zip"
 
 hrululcc_run_dir <- "../swat/current_hrululcc_run/" # (will be created and filled in this script)
 
@@ -148,11 +150,24 @@ message("Reading input csv...")
 lulcc_csv <- read.csv(url_input_lulcc)
 message("Reading input LULCC csv... done.")
 
+# Separately pass output dir and output name:
+if (endsWith(download_path, ".zip")) {
+  result_dir <- dirname(download_path)
+  result_file_name <- basename(download_path)
+} else if (endsWith(download_path, "/")) {
+  result_dir <- sub("/+$", "", download_path)
+  result_file_name <- NULL
+} else {
+  result_dir <- dirname(download_path)
+  result_file_name <- basename(download_path)
+}
+
 
 # CSV example
 run_hrululcc ( LULCchange = lulcc_csv, 
                TxtInOut = TxtInOut_Tordera,
-               output_dir = download_path)
+               output_dir = result_dir,
+               result_file_name = result_file_name)
 
 
 
