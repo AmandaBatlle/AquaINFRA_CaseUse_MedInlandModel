@@ -270,13 +270,12 @@ if ( swatversion_from_user == "swatplus") {
     
     
     # Check if simulation output exists
-    #message("run_swat_process: Did SWAT+ return any output? ", is.null(q_sim_plus$simulation))
     if (is.null(q_sim_plus$simulation)) {
       stop("SWAT+ simulation did not return any output.")
     } else if (file.exists(paste0(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
-      message("run_swat_process: The SWAT_output files were created successfully.")
+      message("run_swat_process: The SWAT_output files were created successfully in the output directory.")
     } else {
-      msg <- "The SWAT_output does not exist."
+      msg <- "The SWAT_output does not exist in the output directory."
       message("run_swat_process: ", msg)
       stop(msg)
     }
@@ -344,7 +343,7 @@ if ( swatversion_from_user == "swatplus") {
     }
     
     # timestep validity check.
-    message("run_swat_process: Loading valid time step...")
+    message("run_swat2012_process: Loading valid time step...")
     valid_timestep <- c('d', 'm', 'y')
     timestep <- strsplit(fileout, "_")[[1]][2]
     if (timestep %in% valid_timestep) {
@@ -356,7 +355,7 @@ if ( swatversion_from_user == "swatplus") {
     }
     
     
-    message("run_swat_process: Checking valid inputs... done.")
+    message("run_swat2012_process: Checking valid inputs... done.")
     
     
     # Variable validity check.
@@ -409,6 +408,9 @@ if ( swatversion_from_user == "swatplus") {
     
     # Run SWAT2012 simulation
     message("run_swat2012_process: Running run_swat2012(...).")
+    # Here, neither save_path nor save_dir are defined. The output_dir
+    # is not handed to the run_swat2012 function call! It is only used
+    # to store the databases manually+explicitly, further below.
     q_sim_2012 <- run_swat2012(project_path = TxtInOut,
                                output = define_output(file = file,
                                                       variable = variable,
@@ -441,7 +443,7 @@ if ( swatversion_from_user == "swatplus") {
       }) |>
       reduce(left_join, by = "date")
     
-    # Create SQLite database
+    # Create SQLite database, in output_dir!
     con <- dbConnect(RSQLite::SQLite(), paste0(output_dir,"/thread_1.sqlite"))
     
     # Write SQLite table
@@ -463,7 +465,7 @@ if ( swatversion_from_user == "swatplus") {
     simulation_log <- run_info$simulation_log
     simulation_period <- run_info$simulation_period
     
-    # Create database
+    # Create database, in output_dir!
     con <- dbConnect(RSQLite::SQLite(), paste0(output_dir,"/inputs.sqlite"))
     
     # Write data
@@ -498,10 +500,10 @@ if ( swatversion_from_user == "swatplus") {
     if (is.null(q_sim_2012$simulation)) {
       stop("SWAT2012 simulation did not return any output.")
     } else if (file.exists(paste0(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
-      message("run_swat_process: The SWAT_output files were created successfully.")
+      message("run_swat2012_process: The SWAT_output files were created successfully.")
     } else {
       msg <- "The SWAT_output does not exist."
-      message("run_swat_process: ", msg)
+      message("run_swat2012_process: ", msg)
       stop(msg)
     }
   }
