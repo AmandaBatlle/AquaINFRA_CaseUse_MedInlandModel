@@ -173,6 +173,22 @@ if (is.null(url_input_calibration)) {
   message("Reading input calibration... done.")
 }
 
+# Define helper function to check if simulation output is there:
+check_output_created <- function(q_sim, output_dir, version_string) {
+  if (is.null(q_sim$simulation)) {
+    msg <- "The simulation did not return any output."
+    message(version_string, ": ", msg)
+    stop(msg)
+  } else if (file.exists(file.path(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
+    msg <- "The SWAT_output files were created successfully in the output directory."
+    message(version_string, ": ", msg)
+  } else {
+    msg <- "The SWAT_output does not exist in the output directory."
+    message(version_string, ": ", msg)
+    stop(msg)
+  }
+}
+
 # ______________________________________________________________________________
 # Running the swatplus or swat2012 functions                                ####
 # depending on version specified by user                                    ####
@@ -265,19 +281,10 @@ if ( swatversion_from_user == "swatplus") {
                                save_file=output_dir
     )
     message("run_swatplus_process: Running run_swatplus(...)... done.")
-    message("run_swatplus_process: Content of result dir (", output_dir, "): ", paste(list.files(output_dir), collapse="+"))
-    
     
     # Check if simulation output exists
-    if (is.null(q_sim_plus$simulation)) {
-      stop("SWAT+ simulation did not return any output.")
-    } else if (file.exists(file.path(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
-      message("run_swatplus_process: The SWAT_output files were created successfully in the output directory.")
-    } else {
-      msg <- "The SWAT_output does not exist in the output directory."
-      message("run_swatplus_process: ", msg)
-      stop(msg)
-    }
+    message("run_swatplus_process: Content of result dir (", output_dir, "): ", paste(list.files(output_dir), collapse="+"))
+    check_output_created(q_sim_plus, output_dir, "SWAT+")
   }
   message("Defining function run_swatplus_process... done.")
   
@@ -474,19 +481,10 @@ if ( swatversion_from_user == "swatplus") {
     
     dbDisconnect(con)
     
-    message("run_swat2012_process: Content of result dir (", output_dir, "): ", paste(list.files(output_dir), collapse="+"))
-    
-    
     # Check if simulation output exists
-    if (is.null(q_sim_2012$simulation)) {
-      stop("SWAT2012 simulation did not return any output.")
-    } else if (file.exists(file.path(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
-      message("run_swat2012_process: The SWAT_output files were created successfully.")
-    } else {
-      msg <- "The SWAT_output does not exist."
-      message("run_swat2012_process: ", msg)
-      stop(msg)
-    }
+    message("run_swat2012_process: Content of result dir (", output_dir, "): ", paste(list.files(output_dir), collapse="+"))
+    check_output_created(q_sim_2012, output_dir, "SWAT2012")
+
   }
   message("Defining function run_swat2012_process... done.")
   
