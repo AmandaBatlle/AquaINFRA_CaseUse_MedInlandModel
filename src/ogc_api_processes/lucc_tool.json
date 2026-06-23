@@ -1,0 +1,75 @@
+{
+    "version": "0.1.0",
+    "id": "lucc-tool",
+    "use_case": "Catalunya Inland",
+    "title": {
+        "en": "LUCC Tool"
+    },
+    "description": {
+        "en": "TODO"
+    },
+    "jobControlOptions": ["sync-execute", "async-execute"],
+    "keywords": ["tordera use case", "AquaINFRA", "R", "LUCC"],
+    "links": [{
+        "type": "text/html",
+        "rel": "about",
+        "title": "GitHub repo",
+        "href": "https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel",
+        "hreflang": "en-US"
+    },
+    {
+        "type": "text/html",
+        "rel": "about",
+        "is_oer": "yes",
+        "title": "How to use a OGC processing service with R",
+        "href": "https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel",
+        "hreflang": "en-US"
+    },
+    {
+        "type": "text/html",
+        "rel": "about",
+        "is_oer": "yes",
+        "title": "How to use a OGC processing service with python",
+        "href": "https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel",
+        "hreflang": "en-US"
+    }],
+    "inputs": {
+        "input_project_url": {
+            "title": "TODO input project URL...",
+            "description": "TODO URL zipped input project”",
+            "schema": {
+                "type": "string"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": []
+        },
+        "lulc_changes_csv_url": {
+            "title": "TODO URL to csv",
+            "description": "TODO URL csv lucc changes",
+            "schema": {
+                "type": "object",
+                "contentMediaType": "application/zip"
+            },
+            "minOccurs": 1,
+            "maxOccurs": 1,
+            "keywords": []
+        }
+    },
+    "outputs": {
+        "lulc_changes": {
+            "title": "TODO LUCC tool output",
+            "description": "TODO LUCC tool output",
+            "schema": {
+                "type": "object",
+                "contentMediaType": "application/x-sqlite3"
+            }
+        }
+    },
+    "example": {
+        "inputs": {
+          "input_project_url": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
+          "lulc_changes_csv_url": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/lulc_changes.csv"
+        }
+    }
+}
