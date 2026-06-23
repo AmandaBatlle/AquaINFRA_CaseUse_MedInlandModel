@@ -278,7 +278,8 @@ if ( swatversion_from_user == "swatplus") {
                                end_date=enddate,
                                years_skip = skipyears,
                                parameter=par_comb,
-                               save_file=output_dir
+                               save_path=output_dir,
+                               save_file=""
     )
     message("run_swatplus_process: Running run_swatplus(...)... done.")
     
