@@ -41,8 +41,8 @@ run_hrululcc <- function (LULCchange, TxtInOut, output_dir, result_file_name=NUL
     hru_id <- LULCchange[,1]
     new_lum <- LULCchange[,2]
     
-    message(paste("run_hrululcc_process: hru to change:",  hru_id ))
-    message(paste("run_hrululcc_process: new lulc to change:",  new_lum ))
+    message("run_hrululcc_process: hru to change: ",  paste0(hru_id, collapse=", "))
+    message("run_hrululcc_process: new lulc to change: ",  paste0(new_lum, collapse=","))
             
     
   # -------------------------
@@ -51,7 +51,7 @@ run_hrululcc <- function (LULCchange, TxtInOut, output_dir, result_file_name=NUL
     
     file = paste0(TxtInOut, "/hru-data.hru") 
     
-    message(paste("run_hrululcc_process: Reading",  file ))
+    message(paste("run_hrululcc_process: Reading ",  file))
     lines <- readLines(file)
     
     # loop through all HRUs
@@ -64,17 +64,17 @@ run_hrululcc <- function (LULCchange, TxtInOut, output_dir, result_file_name=NUL
         next
       }
       
-      message("run_hrululcc_process:Replace LULC in HRU ", hru_id[i], " to: ", new_lum[i])
+      message("run_hrululcc_process: Replace LULC in HRU ", hru_id[i], " to: ", new_lum[i])
       # replace the _lum word in that line
       lines[row] <- sub("[A-Za-z0-9]+_lum", paste0(new_lum[i], "_lum"), lines[row])
       
     }
     
-    message("run_hrululcc_process:Rewrite hru-data.hru file with updated LULC")
+    message("run_hrululcc_process: Rewrite hru-data.hru file with updated LULC")
     # write the modified lines back
     writeLines(lines, file)
   
-  message("run_hrululcc_process:LULC change complete")
+  message("run_hrululcc_process: LULC change complete")
     
     # -------------------------
     # PROCESS OUTPUT
@@ -163,6 +163,8 @@ if (endsWith(download_path, ".zip")) {
   result_dir <- dirname(download_path)
   result_file_name <- basename(download_path)
 }
+message("Will store outputs in (output dir)   : ", result_dir)
+message("Will store outputs as (zip file name): ", result_file_name)
 
 
 # CSV example
