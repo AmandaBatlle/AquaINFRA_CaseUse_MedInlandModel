@@ -110,7 +110,7 @@ url_zipped_input_project <- args[1]  # URL of zipped project file
 url_input_lulcc          <- args[2]  # URL for LULC input data
 download_path            <- args[3] # "/out/myresult.zip"
 
-hrululcc_run_dir <- "../swat/current_hrululcc_run/" # (will be created and filled in this script)
+hrululcc_run_dir <- "../swat/current_hrululcc_run" # (will be created and filled in this script)
 
 # ______________________________________________________________________________
 # Processing TxtInOut and calibration files download                        ####  
@@ -126,10 +126,12 @@ subdir_name <- tools::file_path_sans_ext(basename(url_zipped_input_project))
 dest_file_name <- tail(strsplit(url_zipped_input_project, "/")[[1]], 1)
 # Target directory / project directory
 # I assume that the subdir_name is not needed anymore!
-dest_dir <- paste0(hrululcc_run_dir, subdir_name)
-dir.create(hrululcc_run_dir)
+dest_dir <- file.path(hrululcc_run_dir, subdir_name)
+if (!dir.exists(hrululcc_run_dir)) {
+  dir.create(hrululcc_run_dir, recursive = TRUE)
+}
 # Target directory with added filename, i.e. entire target path
-dest_file_path <- paste0(dest_dir, "/", dest_file_name)
+dest_file_path <- file.path(dest_dir, dest_file_name)
 
 # Now, get the download function and the function to copy the executable:
 source("download.R")
