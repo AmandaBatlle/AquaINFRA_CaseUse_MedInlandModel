@@ -26,7 +26,7 @@ library(tools)
 executable_src_path_swatplus <- "../swat/swatplus_executable/rev60.5.7_64rel_linux"
 executable_src_path_swat2012 <- "../swat/swat2012_executable/rev688_64rel_linux"
 # Name of directory to be used as project directory:
-swat_run_dir <- "../swat/current_swat_run/" # (will be created and filled in this script)
+swat_run_dir <- "../swat/current_swat_run" # (will be created and filled in this script)
 # Path of input csv files that are needed (must exist):
 variablelist_path      <- "./in_variableList.csv"
 variablelist_path_2012 <- "./in_variableList_swat2012.csv"
@@ -135,7 +135,7 @@ if (swatversion_from_user == "swatplus") {
   mandatory_file = "file.cio"
 }
 dest_dir <- find_correct_path(target_file=mandatory_file, dest_dir)
-message(paste0("Downloading... done. Using ", dest_dir, " (found ", mandatory_file, " in there)."))
+message("Downloading... done. Using ", dest_dir, " (found ", mandatory_file, " in there).")
 
 # Now, copy executable to newly created project directory
 #message('Copying executable...')
@@ -144,7 +144,7 @@ message(paste0("Downloading... done. Using ", dest_dir, " (found ", mandatory_fi
 
 # The project directory is the directory created by/before downloading
 # and unzipping the zipped input project file:
-#TxtInOut_Tordera <- paste0("../swat/Scenario_Gloria_linux/", subdir_name)
+#TxtInOut_Tordera <- file.path("../swat/Scenario_Gloria_linux", subdir_name)
 TxtInOut_Tordera <- dest_dir
 message("project directory", TxtInOut_Tordera)
 
@@ -272,7 +272,7 @@ if ( swatversion_from_user == "swatplus") {
     # Check if simulation output exists
     if (is.null(q_sim_plus$simulation)) {
       stop("SWAT+ simulation did not return any output.")
-    } else if (file.exists(paste0(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
+    } else if (file.exists(file.path(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
       message("run_swatplus_process: The SWAT_output files were created successfully in the output directory.")
     } else {
       msg <- "The SWAT_output does not exist in the output directory."
@@ -444,7 +444,7 @@ if ( swatversion_from_user == "swatplus") {
       reduce(left_join, by = "date")
     
     # Create SQLite database, in output_dir!
-    con <- dbConnect(RSQLite::SQLite(), paste0(output_dir,"/thread_1.sqlite"))
+    con <- dbConnect(RSQLite::SQLite(), file.path(output_dir, "thread_1.sqlite"))
     
     # Write SQLite table
     dbWriteTable(
@@ -456,17 +456,15 @@ if ( swatversion_from_user == "swatplus") {
     
     dbDisconnect(con)
     
-    # Create inout.sql file:
-    
+    # Create inputs.sql file:
     # Extract data:
     run_info <- q_sim_2012$run_info
-    
     output_definition <- run_info$output_definition
     simulation_log <- run_info$simulation_log
     simulation_period <- run_info$simulation_period
     
     # Create database, in output_dir!
-    con <- dbConnect(RSQLite::SQLite(), paste0(output_dir,"/inputs.sqlite"))
+    con <- dbConnect(RSQLite::SQLite(), file.path(output_dir, "inputs.sqlite"))
     
     # Write data
     dbWriteTable(
@@ -498,7 +496,7 @@ if ( swatversion_from_user == "swatplus") {
     # Check if simulation output exists
     if (is.null(q_sim_2012$simulation)) {
       stop("SWAT2012 simulation did not return any output.")
-    } else if (file.exists(paste0(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
+    } else if (file.exists(file.path(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
       message("run_swat2012_process: The SWAT_output files were created successfully.")
     } else {
       msg <- "The SWAT_output does not exist."
