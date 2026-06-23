@@ -185,76 +185,76 @@ if ( swatversion_from_user == "swatplus") {
                                     par_comb, 
                                     download_path) {
     
-    message("run_swat_process: Starting...")
+    message("run_swatplus_process: Starting...")
     
     # Review Input validity. 
-    message("run_swat_process: Reading csv file (in_fileoutputList.csv)...")
+    message("run_swatplus_process: Reading csv file (in_fileoutputList.csv)...")
     valid_outputfile <- read.csv (fileoutputlist_path,
                                   sep = ";",
                                   stringsAsFactors = FALSE)
-    message("run_swat_process: Reading csv file (in_fileoutputList.csv)... done.")
-    message("run_swat_process: Checking valid inputs...")
+    message("run_swatplus_process: Reading csv file (in_fileoutputList.csv)... done.")
+    message("run_swatplus_process: Checking valid inputs...")
     if (fileout %in% valid_outputfile$fileoutput) {
-      message("run_swat_process: fileout: ", fileout, " is a valid input.")
+      message("run_swatplus_process: fileout: ", fileout, " is a valid input.")
     } else {
       msg <- paste("fileout", fileout, "is NOT a valid input. Review SWAT+ documentation for a valid input.")
-      message("run_swat_process: ", msg)
+      message("run_swatplus_process: ", msg)
       stop(msg)
     }
-    message("run_swat_process: Checking valid inputs... done.")
+    message("run_swatplus_process: Checking valid inputs... done.")
     
     
     # Variable validity check.
     # Read valid variable list
-    message("run_swat_process: Reading csv file (in_variableList.csv)...")
+    message("run_swatplus_process: Reading csv file (in_variableList.csv)...")
     valid_variable <- read.csv (variablelist_path, sep = ";" )
-    message("run_swat_process: Reading csv file (in_variableList.csv)... done.")
+    message("run_swatplus_process: Reading csv file (in_variableList.csv)... done.")
     
     # Filter valid variables for the given output file
-    message("run_swat_process: Filtering variables...")
+    message("run_swatplus_process: Filtering variables...")
     file <- strsplit(fileout, "_")[[1]][2]
     valid_variable_outputfile <- valid_variable[grepl(file, valid_variable$file), ] 
-    message("run_swat_process: Filtering variables... done.")
+    message("run_swatplus_process: Filtering variables... done.")
     
     # Iterate over variables to check them...
-    message("run_swat_process: Iterating and checking variables (", paste(variable, collapse=", "), ")...")
+    message("run_swatplus_process: Iterating and checking variables (", paste(variable, collapse=", "), ")...")
     for (var_out in variable) {
-      message("run_swat_process: Checking variable: ", var_out)
+      message("run_swatplus_process: Checking variable: ", var_out)
       if (var_out %in% valid_variable_outputfile$SWAT_variable) {
-        message("run_swat_process: Variable: ", var_out," is a valid input.")
+        message("run_swatplus_process: Variable: ", var_out," is a valid input.")
       } else if (var_out %in% valid_variable$SWAT_variable) {
         correct_fileoutput <- valid_variable$file[valid_variable$SWAT_variable == var_out]
         msg <- paste("Variable: ", var_out," Is not a valid input for fileout", fileout,
                      ".Variable",var_out, "belongs to outputfile", correct_fileoutput,
                      "Review SWAT+ documentation for a valid input.")
-        message("run_swat_process: ", msg)
+        message("run_swatplus_process: ", msg)
         stop(msg)
       }else{
         msg <- paste("Variable: ", var_out,"is NOT a valid SWAT variable.Review SWAT+ documentation for a valid input.")
-        message("run_swat_process: ", msg)
+        message("run_swatplus_process: ", msg)
         stop(msg)
       }
     }
-    message("run_swat_process: Iterating and checking variables... done.")
+    message("run_swatplus_process: Iterating and checking variables... done.")
     
     
     # Output dir:
     output_dir <- download_path
-    message("run_swat_process: Current working dir: ", getwd())
-    message("run_swat_process: Will store to (rel.): ", output_dir)
-    message("run_swat_process: Will store to (abs.): ", file_path_as_absolute(output_dir))
-    message("run_swat_process: Checking if exists: ", output_dir)
+    message("run_swatplus_process: Current working dir: ", getwd())
+    message("run_swatplus_process: Will store to (rel.): ", output_dir)
+    message("run_swatplus_process: Will store to (abs.): ", file_path_as_absolute(output_dir))
+    message("run_swatplus_process: Checking if exists: ", output_dir)
     if (dir.exists(output_dir)) {
-      message("run_swat_process: Does exist: ", output_dir)
+      message("run_swatplus_process: Does exist: ", output_dir)
     } else {
-      message("run_swat_process: Creating: ", output_dir)
+      message("run_swatplus_process: Creating: ", output_dir)
       dir.create(output_dir, recursive = TRUE)
-      message("run_swat_process: Created:  ", output_dir)
+      message("run_swatplus_process: Created:  ", output_dir)
     }
     
     
     # Run SWAT+ simulation
-    message("run_swat_process: Running run_swatplus(...).")
+    message("run_swatplus_process: Running run_swatplus(...).")
     q_sim_plus <- run_swatplus(project_path = TxtInOut,
                                output = define_output(file = fileout,
                                                       variable = variable,
@@ -265,18 +265,18 @@ if ( swatversion_from_user == "swatplus") {
                                parameter=par_comb,
                                save_file=output_dir
     )
-    message("run_swat_process: Running run_swatplus(...)... done.")
-    message("run_swat_process: Content of result dir (", output_dir, "): ", paste(list.files(output_dir), collapse="+"))
+    message("run_swatplus_process: Running run_swatplus(...)... done.")
+    message("run_swatplus_process: Content of result dir (", output_dir, "): ", paste(list.files(output_dir), collapse="+"))
     
     
     # Check if simulation output exists
     if (is.null(q_sim_plus$simulation)) {
       stop("SWAT+ simulation did not return any output.")
     } else if (file.exists(paste0(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
-      message("run_swat_process: The SWAT_output files were created successfully in the output directory.")
+      message("run_swatplus_process: The SWAT_output files were created successfully in the output directory.")
     } else {
       msg <- "The SWAT_output does not exist in the output directory."
-      message("run_swat_process: ", msg)
+      message("run_swatplus_process: ", msg)
       stop(msg)
     }
   }
@@ -496,7 +496,6 @@ if ( swatversion_from_user == "swatplus") {
     
     
     # Check if simulation output exists
-    #message("run_swat_process: Did SWAT+ return any output? ", is.null(q_sim_plus$simulation))
     if (is.null(q_sim_2012$simulation)) {
       stop("SWAT2012 simulation did not return any output.")
     } else if (file.exists(paste0(output_dir, "thread_1.sqlite"))) { # Check if the SQL file exists
