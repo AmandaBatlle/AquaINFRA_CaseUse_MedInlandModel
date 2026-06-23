@@ -32,7 +32,7 @@ library(zip)
 # Output: 
 #   Updated TxtInOut (object) TxtInOut directory zipped containg the updated "hru-data.hru" rewritten with the new LULC categories for the selected HRU.
 
-run_hrululcc <- function ( LULCchange, TxtInOut) {
+run_hrululcc <- function (LULCchange, TxtInOut, output_dir) {
     
   # -------------------------
   # LOAD CHANGES
@@ -81,8 +81,9 @@ run_hrululcc <- function ( LULCchange, TxtInOut) {
     # -------------------------
     
     # 1. Define exactly where the zip should go (Absolute path for Docker)
-    # We put it directly into /out/ so Galaxy can find it
-    final_zip_path <- file.path("/out", paste0(basename(TxtInOut), "_modified.zip"))
+    # We put it directly into output_dir so Galaxy can find it
+    # Note: We expect output_dir to exist!
+    final_zip_path <- file.path(output_dir, paste0(basename(TxtInOut), "_modified.zip"))
     
     message(paste("run_hrululcc_process: Creating zip at:", final_zip_path))
     
@@ -144,13 +145,14 @@ TxtInOut_Tordera <- dest_dir
 message("project directory", TxtInOut_Tordera)
 
 message("Reading input csv...")
-  lulcc_csv <- read.csv(url_input_lulcc)
+lulcc_csv <- read.csv(url_input_lulcc)
 message("Reading input LULCC csv... done.")
 
 
 # CSV example
 run_hrululcc ( LULCchange = lulcc_csv, 
-               TxtInOut = TxtInOut_Tordera)
+               TxtInOut = TxtInOut_Tordera,
+               output_dir = download_path)
 
 
 

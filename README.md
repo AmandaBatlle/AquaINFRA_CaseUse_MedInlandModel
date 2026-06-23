@@ -38,6 +38,19 @@ Note: For this, you need to build a docker image first! See below on how to do t
 Here, we assume you build a docker image under the name of `catalunya-tordera:20260608-1eccf57`.
 These steps were tested with commit `1eccf57` on 2026-06-08.
 
+LUCC change:
+
+```
+date; docker run --name "test_hru_change" \
+  -v "./test_out_lucc/:/out/" \
+  -v "./testcheckme:/swat/current_hrululcc_run/" \
+  -e "R_SCRIPT=SWATplus_HRU_LULCchange_AquaINFRAtool_v20260512.R" \
+  catalunya-tordera:20260623-dev -- \
+  "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip" \
+  "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/lulc_changes.csv" \
+  "/out" && echo "LUCC docker finished"; date
+```
+
 Step 1 (swat2012):
 
 ```
