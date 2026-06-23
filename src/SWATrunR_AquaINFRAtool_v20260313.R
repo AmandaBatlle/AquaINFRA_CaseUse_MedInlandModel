@@ -28,7 +28,7 @@ executable_src_path_swat2012 <- "../swat/swat2012_executable/rev688_64rel_linux"
 # Name of directory to be used as project directory:
 swat_run_dir <- "../swat/current_swat_run" # (will be created and filled in this script)
 # Path of input csv files that are needed (must exist):
-variablelist_path      <- "./in_variableList.csv"
+variablelist_path_plus <- "./in_variableList.csv"
 variablelist_path_2012 <- "./in_variableList_swat2012.csv"
 fileoutputlist_path    <- "./in_fileoutputList.csv"
 
@@ -91,26 +91,26 @@ if (dir.exists(output_dir)) {
 # ______________________________________________________________________________
 
 # Handle combined unit input like "1:3,5,7"
-  if (grepl(":", unit_input) && grepl(",", unit_input)) {
-    # Split by commas
-    ranges <- strsplit(unit_input, ",")[[1]]
-    unit_from_user <- numeric(0)  # Initialize an empty numeric vector
-    for (range in ranges) {
-      if (grepl(":", range)) {
-        # Handle range like "1:3"
-        unit_from_user <- c(unit_from_user, eval(parse(text = range)))
-      } else {
-        # Handle individual numbers like "5" or "7"
-        unit_from_user <- c(unit_from_user, as.numeric(range))
-      }
+if (grepl(":", unit_input) && grepl(",", unit_input)) {
+  # Split by commas
+  ranges <- strsplit(unit_input, ",")[[1]]
+  unit_from_user <- numeric(0)  # Initialize an empty numeric vector
+  for (range in ranges) {
+    if (grepl(":", range)) {
+      # Handle range like "1:3"
+      unit_from_user <- c(unit_from_user, eval(parse(text = range)))
+    } else {
+      # Handle individual numbers like "5" or "7"
+      unit_from_user <- c(unit_from_user, as.numeric(range))
     }
-  } else if (grepl("^\\d+:\\d+$", unit_input)) {
-    # Handle ranges like "1:10"
-    unit_from_user <- eval(parse(text = unit_input))
-  } else {
-    # Otherwise, treat it as comma-separated numbers
-    unit_from_user <- as.numeric(strsplit(unit_input, ",")[[1]])
   }
+} else if (grepl("^\\d+:\\d+$", unit_input)) {
+  # Handle ranges like "1:10"
+  unit_from_user <- eval(parse(text = unit_input))
+} else {
+  # Otherwise, treat it as comma-separated numbers
+  unit_from_user <- as.numeric(strsplit(unit_input, ",")[[1]])
+}
 
 
 # ______________________________________________________________________________
@@ -215,14 +215,14 @@ if ( swatversion_from_user == "swatplus") {
                                     skipyears, 
                                     par_comb, 
                                     output_dir) {
-    
+
     message("run_swatplus_process: Starting...")
-    
-    # Review Input validity. 
+
+    # Review Input validity, by checking against a list read from a CSV file.
     message("run_swatplus_process: Reading csv file (in_fileoutputList.csv)...")
-    valid_outputfile <- read.csv (fileoutputlist_path,
-                                  sep = ";",
-                                  stringsAsFactors = FALSE)
+    valid_outputfile <- read.csv(fileoutputlist_path,
+                                 sep = ";",
+                                 stringsAsFactors = FALSE)
     message("run_swatplus_process: Reading csv file (in_fileoutputList.csv)... done.")
     message("run_swatplus_process: Checking valid inputs...")
     if (fileout %in% valid_outputfile$fileoutput) {
@@ -233,20 +233,21 @@ if ( swatversion_from_user == "swatplus") {
       stop(msg)
     }
     message("run_swatplus_process: Checking valid inputs... done.")
-    
-    
+
+
     # Variable validity check.
+    # TODO: This is very similar to how it is done in the swat2012 section, so make a function from it?
     # Read valid variable list
     message("run_swatplus_process: Reading csv file (in_variableList.csv)...")
-    valid_variable <- read.csv (variablelist_path, sep = ";" )
+    valid_variable <- read.csv(variablelist_path_plus, sep = ";" )
     message("run_swatplus_process: Reading csv file (in_variableList.csv)... done.")
-    
+
     # Filter valid variables for the given output file
     message("run_swatplus_process: Filtering variables...")
     file <- strsplit(fileout, "_")[[1]][2]
-    valid_variable_outputfile <- valid_variable[grepl(file, valid_variable$file), ] 
+    valid_variable_outputfile <- valid_variable[grepl(file, valid_variable$file), ]
     message("run_swatplus_process: Filtering variables... done.")
-    
+
     # Iterate over variables to check them...
     message("run_swatplus_process: Iterating and checking variables (", paste(variable, collapse=", "), ")...")
     for (var_out in variable) {
@@ -260,14 +261,14 @@ if ( swatversion_from_user == "swatplus") {
                      "Review SWAT+ documentation for a valid input.")
         message("run_swatplus_process: ", msg)
         stop(msg)
-      }else{
+      } else {
         msg <- paste("Variable: ", var_out,"is NOT a valid SWAT variable.Review SWAT+ documentation for a valid input.")
         message("run_swatplus_process: ", msg)
         stop(msg)
       }
     }
     message("run_swatplus_process: Iterating and checking variables... done.")
-    
+
     # Run SWAT+ simulation
     message("run_swatplus_process: Running run_swatplus(...).")
     q_sim_plus <- run_swatplus(project_path = TxtInOut,
@@ -282,36 +283,36 @@ if ( swatversion_from_user == "swatplus") {
                                save_file=""
     )
     message("run_swatplus_process: Running run_swatplus(...)... done.")
-    
+
     # Check if simulation output exists
     message("run_swatplus_process: Content of result dir (", output_dir, "): ", paste(list.files(output_dir), collapse="+"))
     check_output_created(q_sim_plus, output_dir, "SWAT+")
   }
   message("Defining function run_swatplus_process... done.")
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   # ______________________________________________________________________________
   # Run SWAT+ TORDERA tool                                                    ####
   # ______________________________________________________________________________
 
   message("Running run_swatplus_process...")
-  run_swatplus_process(TxtInOut_Tordera, 
-                   fileout_from_user, 
-                   variable_from_user, 
-                   unit_from_user, 
-                   start_date_from_user, 
-                   end_date_from_user, 
-                   skipyears_from_user , 
+  run_swatplus_process(TxtInOut_Tordera,
+                   fileout_from_user,
+                   variable_from_user,
+                   unit_from_user,
+                   start_date_from_user,
+                   end_date_from_user,
+                   skipyears_from_user,
                    par_cal,
                    output_dir)
   message("Running run_swatplus_process... done.")
   #unlink(TxtInOut_Tordera, recursive = TRUE)
 
-  
+
 } else if (swatversion_from_user == "swat2012") {
 
   # copy SWAT2012 executable into project folder:
@@ -325,19 +326,19 @@ if ( swatversion_from_user == "swatplus") {
   # ______________________________________________________________________________
 
   message("Defining function run_swat2012_process...")
-  run_swat2012_process <- function (TxtInOut, 
-                                    fileout, 
-                                    variable, 
-                                    unit, 
-                                    startdate, 
-                                    enddate, 
-                                    skipyears, 
-                                    par_comb, 
+  run_swat2012_process <- function (TxtInOut,
+                                    fileout,
+                                    variable,
+                                    unit,
+                                    startdate,
+                                    enddate,
+                                    skipyears,
+                                    par_comb,
                                     download_path) {
-    
+
     message("run_swat2012_process: Starting...")
-    
-    # Review Input validity. 
+
+    # Review Input validity, by checking against hard-coded list of valid values.
     message("run_swat2012_process: review outputfile validity...")
     valid_outputfile <- c('rch', 'sub', 'hru','sed')
     file <- strsplit(fileout, "_")[[1]][1]
@@ -348,7 +349,7 @@ if ( swatversion_from_user == "swatplus") {
       message("run_swat2012_process: ", msg)
       stop(msg)
     }
-    
+
     # timestep validity check.
     message("run_swat2012_process: Loading valid time step...")
     valid_timestep <- c('d', 'm', 'y')
@@ -360,22 +361,22 @@ if ( swatversion_from_user == "swatplus") {
       message("run_swat2012_process: ", msg)
       stop(msg)
     }
-    
-    
+
+
     message("run_swat2012_process: Checking valid inputs... done.")
-    
-    
+
+
     # Variable validity check.
     # Read valid variable list
     message("run_swat2012_process: Reading csv file (in_variableList.csv)...")
     valid_variable <- read.csv (variablelist_path_2012, sep = ";" )
     message("run_swat2012_process: Reading csv file (in_variableList.csv)... done.")
-    
+
     # Filter valid variables for the given output file
     message("run_swat2012_process: Filtering variables...")
     valid_variable_outputfile <- valid_variable[grepl(tolower(file), tolower(valid_variable$file)), ]
     message("run_swat2012_process: Filtering variables... done.")
-    
+
     # Iterate over variables to check them...
     message("run_swat2012_process: Iterating and checking variables (", paste(variable, collapse=", "), ")...")
     for (var_out in variable) {
@@ -389,14 +390,14 @@ if ( swatversion_from_user == "swatplus") {
                      "Review SWAT2012 documentation for a valid input.")
         message("run_swat2012_process: ", msg)
         stop(msg)
-      }else{
+      } else {
         msg <- paste("Variable: ", var_out,"is NOT a valid SWAT variable.Review SWAT2012 documentation for a valid input.")
         message("run_swat2012_process: ", msg)
         stop(msg)
       }
     }
     message("run_swat2012_process: Iterating and checking variables... done.")
-    
+
 
     # Run SWAT2012 simulation
     message("run_swat2012_process: Running run_swat2012(...).")
@@ -413,31 +414,31 @@ if ( swatversion_from_user == "swatplus") {
                                output_interval = timestep,
                                parameter = par_comb
     )
-    
+
     #### NEED TO FIX THIS OUTPUT TO MATCH SWAT+ OUTPUT
     message("run_swat2012_process: Running run_swat2012(...)... done.")
-    
+
     # Build sql output tables
     library(DBI)
     library(RSQLite)
     library(dplyr)
     library(purrr)
-    
+
     # Build SWAT output table
     sim_list <- q_sim_2012$simulation
-    
+
     run_table <- sim_list |>
       imap(function(df, name) {
-        
+
         df |>
           rename(!!tolower(name) := run_1)
-        
+
       }) |>
       reduce(left_join, by = "date")
-    
+
     # Create SQLite database, in output_dir!
     con <- dbConnect(RSQLite::SQLite(), file.path(output_dir, "thread_1.sqlite"))
-    
+
     # Write SQLite table
     dbWriteTable(
       con,
@@ -445,19 +446,19 @@ if ( swatversion_from_user == "swatplus") {
       run_table,
       overwrite = TRUE
     )
-    
+
     dbDisconnect(con)
-    
+
     # Create inputs.sql file:
     # Extract data:
     run_info <- q_sim_2012$run_info
     output_definition <- run_info$output_definition
     simulation_log <- run_info$simulation_log
     simulation_period <- run_info$simulation_period
-    
+
     # Create database, in output_dir!
     con <- dbConnect(RSQLite::SQLite(), file.path(output_dir, "inputs.sqlite"))
-    
+
     # Write data
     dbWriteTable(
       con,
@@ -465,48 +466,48 @@ if ( swatversion_from_user == "swatplus") {
       output_definition,
       overwrite = TRUE
     )
-    
+
     dbWriteTable(
       con,
       "simulation_log",
       simulation_log,
       overwrite = TRUE
     )
-    
+
     dbWriteTable(
       con,
       "simulation_period",
       simulation_period,
       overwrite = TRUE
     )
-    
+
     dbDisconnect(con)
-    
+
     # Check if simulation output exists
     message("run_swat2012_process: Content of result dir (", output_dir, "): ", paste(list.files(output_dir), collapse="+"))
     check_output_created(q_sim_2012, output_dir, "SWAT2012")
 
   }
   message("Defining function run_swat2012_process... done.")
-  
-  
+
+
   # ______________________________________________________________________________
   # Run SWAT2012 TORDERA tool                                                 ####
   # ______________________________________________________________________________
 
   message("Running run_swat2012_process...")
-  run_swat2012_process(TxtInOut_Tordera, 
-                   fileout_from_user, 
-                   variable_from_user, 
-                   unit_from_user, 
-                   start_date_from_user, 
-                   end_date_from_user, 
-                   skipyears_from_user , 
+  run_swat2012_process(TxtInOut_Tordera,
+                   fileout_from_user,
+                   variable_from_user,
+                   unit_from_user,
+                   start_date_from_user,
+                   end_date_from_user,
+                   skipyears_from_user,
                    par_cal,
                    download_path)
   message("Running run_swat2012_process... done.")
   #unlink(TxtInOut_Tordera, recursive = TRUE)
-  
+
 }
 
 message("R Script swat_tordera_gloria.R finished!")
