@@ -37,7 +37,7 @@ curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
     "inputs": {
         "swat_version": "swatplus",
         "TextInOut_URL": "https://b2share.eudat.eu/records/am3bh-05a34/files/TxtInOut.zip?download=1",
-        "par_cal":       "NULL",
+        "par_cal":       null,
         "file": "channel_sd_day",
         "variable": "flo_out,water_temp",
         "unit": 1,
@@ -149,7 +149,8 @@ class TorderaGloriaProcessor(BaseProcessor):
             #raise ProcessorExecuteError('Missing parameter: par_cal')
             if in_swat_version == 'swatplus':
                 #in_parameter_cal = 'https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json'
-                raise ProcessorExecuteError('Missing parameter: par_cal')
+                #raise ProcessorExecuteError('Missing parameter: par_cal')
+                in_parameter_cal = None
             elif in_swat_version == 'swat2012':
                 in_parameter_cal = None
 
