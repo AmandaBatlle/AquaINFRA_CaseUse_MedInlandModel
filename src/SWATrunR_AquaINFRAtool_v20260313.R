@@ -44,7 +44,7 @@ unit_input               <- args[6]  # Default 1
 start_date_from_user     <- args[7]  # 20160101
 end_date_from_user       <- args[8]  # 20201231
 skipyears_from_user      <- args[9]  # 2
-download_path            <- args[10] # "/out/"
+output_dir               <- args[10] # "/out/"
 
 
 # Check validity of version:
@@ -70,6 +70,21 @@ unit_input <- gsub(" ", "", unit_input)
 # Make numeric:
 skipyears_from_user   <- as.numeric(skipyears_from_user)
 message("Skip years: ", skipyears_from_user)
+
+# Output dir:
+#message("Current working dir: ", getwd())
+message("Will store to (rel.): ", output_dir)
+message("Will store to (abs.): ", file_path_as_absolute(output_dir))
+#message("Checking if exists: ", output_dir)
+if (dir.exists(output_dir)) {
+  message("Output directory does exist: ", output_dir)
+} else {
+  message("Creating output directory: ", output_dir)
+  dir.create(output_dir, recursive = TRUE)
+  message("Created output directory:  ", output_dir)
+}
+
+
 
 # ______________________________________________________________________________
 # Processing unit input to a correct format:                                #### 
@@ -183,7 +198,7 @@ if ( swatversion_from_user == "swatplus") {
                                     enddate, 
                                     skipyears, 
                                     par_comb, 
-                                    download_path) {
+                                    output_dir) {
     
     message("run_swatplus_process: Starting...")
     
@@ -237,22 +252,6 @@ if ( swatversion_from_user == "swatplus") {
     }
     message("run_swatplus_process: Iterating and checking variables... done.")
     
-    
-    # Output dir:
-    output_dir <- download_path
-    message("run_swatplus_process: Current working dir: ", getwd())
-    message("run_swatplus_process: Will store to (rel.): ", output_dir)
-    message("run_swatplus_process: Will store to (abs.): ", file_path_as_absolute(output_dir))
-    message("run_swatplus_process: Checking if exists: ", output_dir)
-    if (dir.exists(output_dir)) {
-      message("run_swatplus_process: Does exist: ", output_dir)
-    } else {
-      message("run_swatplus_process: Creating: ", output_dir)
-      dir.create(output_dir, recursive = TRUE)
-      message("run_swatplus_process: Created:  ", output_dir)
-    }
-    
-    
     # Run SWAT+ simulation
     message("run_swatplus_process: Running run_swatplus(...).")
     q_sim_plus <- run_swatplus(project_path = TxtInOut,
@@ -300,7 +299,7 @@ if ( swatversion_from_user == "swatplus") {
                    end_date_from_user, 
                    skipyears_from_user , 
                    par_cal,
-                   download_path)
+                   output_dir)
   message("Running run_swatplus_process... done.")
   #unlink(TxtInOut_Tordera, recursive = TRUE)
 
@@ -390,22 +389,7 @@ if ( swatversion_from_user == "swatplus") {
     }
     message("run_swat2012_process: Iterating and checking variables... done.")
     
-    
-    # Output dir:
-    output_dir <- download_path
-    message("run_swat2012_process: Current working dir: ", getwd())
-    message("run_swat2012_process: Will store to (rel.): ", output_dir)
-    message("run_swat2012_process: Will store to (abs.): ", file_path_as_absolute(output_dir))
-    message("run_swat2012_process: Checking if exists: ", output_dir)
-    if (dir.exists(output_dir)) {
-      message("run_swat2012_process: Does exist: ", output_dir)
-    } else {
-      message("run_swat2012_process: Creating: ", output_dir)
-      dir.create(output_dir, recursive = TRUE)
-      message("run_swat2012_process: Created:  ", output_dir)
-    }
-    
-    
+
     # Run SWAT2012 simulation
     message("run_swat2012_process: Running run_swat2012(...).")
     # Here, neither save_path nor save_dir are defined. The output_dir
