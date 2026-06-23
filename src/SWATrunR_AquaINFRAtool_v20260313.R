@@ -19,6 +19,7 @@
 library(SWATrunR)
 library(dplyr)
 library(jsonlite)
+library(tools)
 
 # Hardcoded relative paths that are used in this script:
 # Path of executables to be copied (the relevant one must exist, otherwise an error occurs)
@@ -238,9 +239,10 @@ if ( swatversion_from_user == "swatplus") {
     
     
     # Output dir:
-    # TODO: When download path is "/", this leads to: "Will store to: ../../../out//"
-    output_dir <- file.path("../../../out", download_path)
-    message("run_swat_process: Will store to: ", output_dir)
+    output_dir <- download_path
+    message("run_swat_process: Current working dir: ", getwd())
+    message("run_swat_process: Will store to (rel.): ", output_dir)
+    message("run_swat_process: Will store to (abs.): ", file_path_as_absolute(output_dir))
     message("run_swat_process: Checking if exists: ", output_dir)
     if (dir.exists(output_dir)) {
       message("run_swat_process: Does exist: ", output_dir)
@@ -391,9 +393,10 @@ if ( swatversion_from_user == "swatplus") {
     
     
     # Output dir:
-    # TODO: When download path is "/", this leads to: "Will store to: ../../../out//"
-    output_dir <- file.path("../../../out", download_path)
-    message("run_swat2012_process: Will store to: ", output_dir)
+    output_dir <- download_path
+    message("run_swat2012_process: Current working dir: ", getwd())
+    message("run_swat2012_process: Will store to (rel.): ", output_dir)
+    message("run_swat2012_process: Will store to (abs.): ", file_path_as_absolute(output_dir))
     message("run_swat2012_process: Checking if exists: ", output_dir)
     if (dir.exists(output_dir)) {
       message("run_swat2012_process: Does exist: ", output_dir)
@@ -421,7 +424,6 @@ if ( swatversion_from_user == "swatplus") {
     message("run_swat2012_process: Running run_swat2012(...)... done.")
     
     # Build sql output tables
-    
     library(DBI)
     library(RSQLite)
     library(dplyr)
@@ -443,7 +445,6 @@ if ( swatversion_from_user == "swatplus") {
     con <- dbConnect(RSQLite::SQLite(), paste0(output_dir,"/thread_1.sqlite"))
     
     # Write SQLite table
-    
     dbWriteTable(
       con,
       "run_1_1.1",

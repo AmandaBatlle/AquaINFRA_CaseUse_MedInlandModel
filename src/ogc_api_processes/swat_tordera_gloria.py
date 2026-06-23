@@ -181,10 +181,10 @@ class TorderaGloriaProcessor(BaseProcessor):
             in_parameter_cal = "NULL"
 
         # Assemble those args that will be passed to the script:
-        # This is a path that is added between "container_out" and the file name
-        # to store the output files, "inputs.sqlite" and "thread_1.sqlite". (If you
-        # add something here, you also have to add it in the download link.)
-        storage_path = '/'
+        # This is the path thath the program inside the docker will use
+        # to store the output files, "inputs.sqlite" and "thread_1.sqlite",
+        # so it has to correspond to where you mount the output directory to.
+        storage_path = '/out'
         script_args = [
             in_swat_version,
             in_project,
@@ -273,6 +273,7 @@ def run_docker_container(
     # Prepare container command
 
     # Define paths inside the container
+    # This has to be the same as the "storage_path" passed to the R script (see above)
     container_out = '/out/'
 
     # Mount volumes and set command
