@@ -8,8 +8,8 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 '''
 How to call this process:
 
-# swatplus
-# TESTED 2026-06-08: Works
+# swatplus, with example input from the repo
+# TESTED 2026-06-23: Works
 curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
@@ -27,8 +27,28 @@ curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
     }
 }'
 
-# swat2012:
-# TESTED 2026-06-08: Works
+# swatplus, with input from B2SHARE
+# TESTED 2026-06-23: Works
+# TODO par_cal cannot be null here, does amanda allow it?
+curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
+  --header "Content-Type: application/json" \
+  --header 'Prefer: respond-async' \
+  --data '{
+    "inputs": {
+        "swat_version": "swatplus",
+        "TextInOut_URL": "https://b2share.eudat.eu/records/am3bh-05a34/files/TxtInOut.zip?download=1",
+        "par_cal":       "NULL",
+        "file": "channel_sd_day",
+        "variable": "flo_out,water_temp",
+        "unit": 1,
+        "start_date": 20100101,
+        "end_date":   20221231,
+        "skip_years": 2
+    }
+}'
+
+# swat2012, with example input from the repo
+# TESTED 2026-06-23: Works
 curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution  \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
@@ -47,7 +67,7 @@ curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution  \
 
 # OR:
 # swat2012: Same, but explicitly state "par_cal": null
-# TESTED 2026-06-08: Works
+# TESTED 2026-06-23: Works
 curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution  \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
