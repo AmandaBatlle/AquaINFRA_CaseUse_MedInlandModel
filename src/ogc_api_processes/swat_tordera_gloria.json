@@ -46,7 +46,7 @@
         },
         "TextInOut_URL": {
             "title": "URL to project folder",
-            "description": "To model a watershed other than the Tordera Basin, users can add a URL to their own zipped project folder. Important: Do not include the SWAT executable to that folder — AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012. Defaults to: https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
+            "description": "Provide URL to zipped TxtInOut SWAT project folder. Important: Do not include the SWAT executable to that folder — AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012. Defaults to: https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
             "schema": {
                 "type": "object",
                 "contentMediaType": "application/zip"
@@ -57,7 +57,7 @@
         },
         "par_cal": {
             "title": "Parameter inputs",
-            "description": "JSON file including the parameter value change as defined by SWATrunR documentation (https://chrisschuerz.github.io/SWATrunR/articles/SWATrunR.html#parameter-inputs). Defaults to: https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json",
+            "description": "JSON file including the parameter value change as defined by SWATrunR documentation (https://chrisschuerz.github.io/SWATrunR/articles/SWATrunR.html#parameter-inputs). Defaults to: NULL",
             "schema": {
                 "type": "object",
                 "contentMediaType": "application/json"
