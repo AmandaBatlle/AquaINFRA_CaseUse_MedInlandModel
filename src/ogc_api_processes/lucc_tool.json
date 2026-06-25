@@ -35,8 +35,8 @@
     }],
     "inputs": {
         "input_project_url": {
-            "title": "TODO input project URL...",
-            "description": "TODO URL zipped input project”",
+            "title": "URL to project folder",
+            "description": "Provide URL to zipped TxtInOut SWAT project folder. Important: Do not include the SWAT executable to that folder — AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012.",
             "schema": {
                 "type": "string"
             },
@@ -45,8 +45,8 @@
             "keywords": []
         },
         "lulc_changes_csv_url": {
-            "title": "TODO URL to csv",
-            "description": "TODO URL csv lucc changes",
+            "title": "URL to csv listing HRU LULC changes",
+            "description": "CSV file composed of 2 columns, first column must contain HRU ids, second column must contain the new Land Use Land Cover (LULC) to be assigned to the HRU. Note that LULCs used must be present in the plants.plt file. See format example: https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/blob/main/example_inputs/lulc_changes.csv",
             "schema": {
                 "type": "object",
                 "contentMediaType": "application/zip"
@@ -57,12 +57,12 @@
         }
     },
     "outputs": {
-        "lulc_changes": {
-            "title": "TODO LUCC tool output",
-            "description": "TODO LUCC tool output",
+        "updated_txtinout": {
+            "title": "Updated TxtInOut",
+            "description": "TxtInOut directory with updated hru-data.hru file, including new assigned LULC values in column lu_mgt for the selected HRU.",
             "schema": {
                 "type": "object",
-                "contentMediaType": "application/x-sqlite3"
+                "contentMediaType": "application/zip"
             }
         }
     },
