@@ -1,6 +1,6 @@
 {
     "version": "0.1.0",
-    "id": "lucc-tool",
+    "id": "swatplus-lulc-change",
     "use_case": "Catalunya Inland",
     "title": {
         "en": "Land Use Land Cover Change for SWAT+ Models"
