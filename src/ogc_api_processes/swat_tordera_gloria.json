@@ -6,7 +6,7 @@
         "en": "SWAT, Soil and Water Assessment Tool"
     },
     "description": {
-        "en": "The Soil and Water Assessment Tool (SWAT) is a hydrological model used to simulate processes such as surface runoff, groundwater flow, and water quality across watersheds of varying scales. It evaluates the effects of land use, management practices, and climate scenarios on water resources. SWAT is widely used to study soil erosion, nonpoint source pollution, and watershed management (https://swat.tamu.edu/). The tool allows users to upload custom TxtInOut folders to model any watershed of interest in SWAT+ or SWAT 2012 model version format. Users can define the simulation time range, calibration settings, output variables, and temporal resolution. This tool is using SWATrunR functions ( https://github.com/chrisschuerz/SWATplusR ) with executables rev60.5.7_64rel_linux (for SWAT+) and rev688_64rel_linux (for SWAT2012)."
+        "en": "The Soil and Water Assessment Tool (SWAT) is a hydrological model used to simulate processes such as surface runoff, groundwater flow, and water quality across watersheds of varying scales. It evaluates the effects of land use, management practices, and climate scenarios on water resources. SWAT is widely used to study soil erosion, nonpoint source pollution, and watershed management (https://swat.tamu.edu/). The tool allows users to upload custom TxtInOut folders to model any watershed of interest in SWAT+ or SWAT2012 model version format. Users can define the simulation time range, calibration settings, output variables, and temporal resolution. This tool is using SWATrunR functions ( https://github.com/chrisschuerz/SWATplusR ) with executables rev60.5.7_64rel_linux (for SWAT+) and rev688_64rel_linux (for SWAT2012)."
     },
     "jobControlOptions": ["sync-execute", "async-execute"],
     "keywords": ["hydrology", "AquaINFRA", "R", "SWAT+", "SWAT2012", "watershed model"],
@@ -36,7 +36,7 @@
     "inputs": {
         "swatversion": {
             "title": "SWAT version",
-            "description": "Define the SWAT model version 'swatplus' or 'swat2012'. AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012.",
+            "description": "Define the SWAT model version 'swatplus' or 'swat2012'. AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012. Example: "swatplus".",
             "schema": {
                 "type": "string"
             },
@@ -46,7 +46,7 @@
         },
         "TextInOut_URL": {
             "title": "URL to project folder",
-            "description": "Provide URL to zipped TxtInOut SWAT project folder. Important: Do not include the SWAT executable in that folder — AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012. Example, SWAT+ La Tordera watershed (Catalonia, Spain) model calibrated for water quantity (period 2000-2022) (Batlle-Morera, et al, 2026)  https://b2share.eudat.eu/records/am3bh-05a34/files/TxtInOut.zip?download=1 .",
+            "description": "Provide URL to zipped TxtInOut SWAT project folder. Important: Do not include the SWAT executable in that folder — AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012. Example, SWAT+ La Tordera watershed (Catalonia, Spain) model calibrated for water quantity (period 2000-2022) (Batlle-Morera, et al, 2026. https://doi.org/10.23728/b2share.am3bh-05a34):  https://b2share.eudat.eu/records/am3bh-05a34/files/TxtInOut.zip?download=1 .",
             "schema": {
                 "type": "object",
                 "contentMediaType": "application/zip"
@@ -148,8 +148,8 @@
     "example": {
         "inputs": {
             "swatversion": "swatplus",
-            "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
-            "par_cal": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json",
+            "TextInOut_URL": "https://b2share.eudat.eu/records/am3bh-05a34/files/TxtInOut.zip?download=1",
+            "par_cal": "NULL",
             "unit": 1,
             "file": "channel_sd_day",
             "variable": "flo_out,water_temp",
