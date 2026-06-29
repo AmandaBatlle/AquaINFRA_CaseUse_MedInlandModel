@@ -48,8 +48,8 @@
     },
     "outputs": {
         "output_file": {
-            "title": "River water quantity MITgcm output",
-            "description": "txt file containing a data frame with the correct formatting and structure to enter MITgcm model.",
+            "title": "River water quantity Marine Modelling System input",
+            "description": "txt file containing a data frame with the correct formatting and structure to enter Marine Modelling System (AquqINFRA).",
             "schema": {
                 "type": "object",
                 "contentMediaType": "text/plain"
