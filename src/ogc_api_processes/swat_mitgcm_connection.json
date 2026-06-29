@@ -1,12 +1,12 @@
 {
     "version": "0.1.0",
-    "id": "tordera-gloria-connection",
+    "id": "swat-marine-connection",
     "use_case": "Catalunya Inland",
     "title": {
         "en": "SWAT+ output to Marine Modelling System (AquaINFRA) input connection tool"
     },
     "description": {
-        "en": "This code converts SWAT output (https://swat.tamu.edu/) of water quantity (Flow out and Temperature) in sqlite format to date input for the Marine Modelling System (based in MITgcm) in txt format. The tool uses R code al libraries DBI, RSQLite, and dplyr to correct the date format and dataframe structure."
+        "en": "This code converts SWAT+ output (https://swat.tamu.edu/) of water quantity (Flow out and Temperature) in sqlite format to date input for the Marine Modelling System (based in MITgcm) in txt format. The tool uses R code and libraries DBI, RSQLite, and dplyr to correct the date format and dataframe structure."
     },
     "jobControlOptions": ["sync-execute", "async-execute"],
     "keywords": ["tordera use case", "AquaINFRA", "R", "conversion", "MITgcm"],
