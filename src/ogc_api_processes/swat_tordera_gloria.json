@@ -1,6 +1,6 @@
 {
     "version": "0.1.0",
-    "id": "GalaxySWAT",
+    "id": "swat-simulation",
     "use_case": "Catalunya Inland",
     "title": {
         "en": "SWAT, Soil and Water Assessment Tool"
