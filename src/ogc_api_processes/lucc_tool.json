@@ -3,10 +3,10 @@
     "id": "lucc-tool",
     "use_case": "Catalunya Inland",
     "title": {
-        "en": "LUCC Tool"
+        "en": "Land Use Land Cover Change for SWAT+ model Tool"
     },
     "description": {
-        "en": "TODO"
+        "en": "Land Use Land Cover Quick Change for SWAT+ models. ThThe tools assigns new a land use a list of HRUs (Hidrological Response Units)"
     },
     "jobControlOptions": ["sync-execute", "async-execute"],
     "keywords": ["tordera use case", "AquaINFRA", "R", "LUCC"],
