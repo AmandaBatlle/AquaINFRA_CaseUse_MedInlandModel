@@ -3,10 +3,10 @@
     "id": "lucc-tool",
     "use_case": "Catalunya Inland",
     "title": {
-        "en": "Land Use Land Cover Change for SWAT+ model Tool"
+        "en": "Land Use Land Cover Change for SWAT+ Models"
     },
     "description": {
-        "en": "Land Use Land Cover Quick Change for SWAT+ models. ThThe tools assigns new a land use a list of HRUs (Hidrological Response Units)"
+        "en": "A lightweight tool for rapidly reassigning land use to selected Hydrological Response Units (HRUs) in a SWAT+ model. The user provides a CSV file specifying the target HRUs and their new land cover classes; the tool then updates the land_use field (lu_mgt) in the hru_data.hru file within the provided TxtInOut directory, and returns an updated TxtInOut ready to run on a remote server or download for local execution. Designed as a first approximation for exploring land use/land cover (LULC) change scenarios in watershed modelling, this tool offers a quick and accessible entry point before committing to more complex LULC change workflows."
     },
     "jobControlOptions": ["sync-execute", "async-execute"],
     "keywords": ["tordera use case", "AquaINFRA", "R", "LUCC"],
@@ -35,8 +35,8 @@
     }],
     "inputs": {
         "input_project_url": {
-            "title": "URL to project folder",
-            "description": "Provide URL to zipped TxtInOut SWAT project folder. Important: Do not include the SWAT executable to that folder — AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012.",
+            "title": "URL to TxtInOut folder",
+            "description": "Provide URL to zipped TxtInOut SWAT+ project folder. Important: Do not include the SWAT executable to that folder — AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012.",
             "schema": {
                 "type": "string"
             },
@@ -46,7 +46,7 @@
         },
         "lulc_changes_csv_url": {
             "title": "URL to csv listing HRU LULC changes",
-            "description": "CSV file composed of 2 columns, first column must contain HRU ids, second column must contain the new Land Use Land Cover (LULC) to be assigned to the HRU. Note that LULCs used must be present in the plants.plt file. See format example: https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/blob/main/example_inputs/lulc_changes.csv",
+            "description": "A two-column, comma-separated file where the first column contains the HRU IDs and the second column contains the new Land Use Land Cover (LULC) code to be assigned to each HRU. LULC codes must correspond to valid entries in the plants.plt file of the SWAT+ project. For an example of the expected format, see: https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/blob/main/example_inputs/lulc_changes.csv",
             "schema": {
                 "type": "object",
                 "contentMediaType": "application/zip"
@@ -59,7 +59,7 @@
     "outputs": {
         "updated_txtinout": {
             "title": "Updated TxtInOut",
-            "description": "TxtInOut directory with updated hru-data.hru file, including new assigned LULC values in column lu_mgt for the selected HRU.",
+            "description": "Updated TxtInOut directory containing a modified hru_data.hru file, with the newly assigned LULC values reflected in the lu_mgt column for the selected HRUs.",
             "schema": {
                 "type": "object",
                 "contentMediaType": "application/zip"
