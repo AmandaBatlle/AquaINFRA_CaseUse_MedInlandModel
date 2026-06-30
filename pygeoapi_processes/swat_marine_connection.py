@@ -117,7 +117,7 @@ class SwatMarineConnectionProcessor(BaseProcessor):
         else:
             response_object = {
                 "outputs": {
-                    "joined_file": {
+                    "output_file": {
                         "title": self.metadata['outputs']['output_file']['title'],
                         "description": self.metadata['outputs']['output_file']['description'],
                         "href": downloadlink

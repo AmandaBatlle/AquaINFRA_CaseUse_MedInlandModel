@@ -8,7 +8,7 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 '''
 How to call this process:
 
-# TESTED 2026-06-23: Works
+# TESTED 2026-06-30: Works
 curl -i -X POST https://${PYSERVER}/processes/swatplus-lulc-change/execution \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
@@ -137,9 +137,9 @@ class SwatplusLulcChangeProcessor(BaseProcessor):
             LOGGER.debug('Finished running Docker container, now preparing the results to be sent back to client.')
             response_object = {
                 "outputs": {
-                    "lulc_changes": {
-                        "title": self.metadata['outputs']['lulc_changes']['title'],
-                        "description": self.metadata['outputs']['lulc_changes']['description'],
+                    "updated_txtinout": {
+                        "title": self.metadata['outputs']['updated_txtinout']['title'],
+                        "description": self.metadata['outputs']['updated_txtinout']['description'],
                         "href": downloadlink
                     }
                 }
