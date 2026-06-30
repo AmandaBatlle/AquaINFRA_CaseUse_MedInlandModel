@@ -146,13 +146,9 @@ class TorderaGloriaProcessor(BaseProcessor):
             #    in_project = 'https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/swat2012_sampledata.zip'
 
         if in_parameter_cal is None:
-            #raise ProcessorExecuteError('Missing parameter: par_cal')
-            if in_swat_version == 'swatplus':
-                #in_parameter_cal = 'https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json'
-                #raise ProcessorExecuteError('Missing parameter: par_cal')
-                in_parameter_cal = None
-            elif in_swat_version == 'swat2012':
-                in_parameter_cal = None
+            in_parameter_cal = None
+            #if in_swat_version == 'swatplus':
+            #    in_parameter_cal = 'https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json'
 
         if in_swat_file is None:
             #in_swat_file = 'channel_sd_day'

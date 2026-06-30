@@ -36,7 +36,7 @@
     "inputs": {
         "swatversion": {
             "title": "SWAT version",
-            "description": "Define the SWAT model version 'swatplus' or 'swat2012'. AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012. Example: "swatplus".",
+            "description": "Define the SWAT model version 'swatplus' or 'swat2012'. AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012. Example: \"swatplus\".",
             "schema": {
                 "type": "string"
             },
