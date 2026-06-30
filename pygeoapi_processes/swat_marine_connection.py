@@ -10,7 +10,7 @@ How to call this process:
 
 # TESTED 2026-04-02: FAILS.
 # DOES NOT WORK YET, script "swat_mitgcm_connection.R" missing!
-curl -i -X POST https://${PYSERVER}/processes/tordera-gloria-connection/execution \
+curl -i -X POST https://${PYSERVER}/processes/swat-marine-connection/execution \
   --header "Content-Type: application/json" \
   --data '{
   "inputs": {
@@ -26,7 +26,7 @@ script_title_and_path = __file__
 metadata_title_and_path = script_title_and_path.replace('.py', '.json')
 PROCESS_METADATA = json.load(open(metadata_title_and_path))
 
-class SwatMitgcmConnectionProcessor(BaseProcessor):
+class SwatMarineConnectionProcessor(BaseProcessor):
 
     def __init__(self, processor_def):
         super().__init__(processor_def, PROCESS_METADATA)
@@ -46,7 +46,7 @@ class SwatMitgcmConnectionProcessor(BaseProcessor):
         self.job_id = job_id
 
     def __repr__(self):
-        return f'<SwatMitgcmConnectionProcessor> {self.name}'
+        return f'<SwatMarineConnectionProcessor> {self.name}'
 
     def execute(self, data, outputs=None):
 

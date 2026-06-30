@@ -10,7 +10,7 @@ How to call this process:
 
 # swatplus, with example input from the repo
 # TESTED 2026-06-23: Works
-curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
+curl -i -X POST https://${PYSERVER}/processes/swat-simulation/execution \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
   --data '{
@@ -29,8 +29,7 @@ curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
 
 # swatplus, with input from B2SHARE
 # TESTED 2026-06-23: Works
-# TODO par_cal cannot be null here, does amanda allow it?
-curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
+curl -i -X POST https://${PYSERVER}/processes/swat-simulation/execution \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
   --data '{
@@ -49,7 +48,7 @@ curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
 
 # swat2012, with example input from the repo
 # TESTED 2026-06-23: Works
-curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution  \
+curl -i -X POST https://${PYSERVER}/processes/swat-simulation/execution  \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
   --data '{
@@ -68,7 +67,7 @@ curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution  \
 # OR:
 # swat2012: Same, but explicitly state "par_cal": null
 # TESTED 2026-06-23: Works
-curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution  \
+curl -i -X POST https://${PYSERVER}/processes/swat-simulation/execution  \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
   --data '{
@@ -93,7 +92,7 @@ script_title_and_path = __file__
 metadata_title_and_path = script_title_and_path.replace('.py', '.json')
 PROCESS_METADATA = json.load(open(metadata_title_and_path))
 
-class TorderaGloriaProcessor(BaseProcessor):
+class SwatSimulationProcessor(BaseProcessor):
 
     def __init__(self, processor_def):
         super().__init__(processor_def, PROCESS_METADATA)
@@ -113,7 +112,7 @@ class TorderaGloriaProcessor(BaseProcessor):
         self.job_id = job_id
 
     def __repr__(self):
-        return f'<TorderaGloriaProcessor> {self.name}'
+        return f'<SwatSimulationProcessor> {self.name}'
 
     def execute(self, data, outputs=None):
 

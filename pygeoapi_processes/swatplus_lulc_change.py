@@ -9,7 +9,7 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 How to call this process:
 
 # TESTED 2026-06-23: Works
-curl -i -X POST https://${PYSERVER}/processes/lucc-tool/execution \
+curl -i -X POST https://${PYSERVER}/processes/swatplus-lulc-change/execution \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
   --data '{
@@ -27,7 +27,7 @@ script_title_and_path = __file__
 metadata_title_and_path = script_title_and_path.replace('.py', '.json')
 PROCESS_METADATA = json.load(open(metadata_title_and_path))
 
-class LuccToolProcessor(BaseProcessor):
+class SwatplusLulcChangeProcessor(BaseProcessor):
 
     def __init__(self, processor_def):
         super().__init__(processor_def, PROCESS_METADATA)
@@ -47,7 +47,7 @@ class LuccToolProcessor(BaseProcessor):
         self.job_id = job_id
 
     def __repr__(self):
-        return f'<LuccToolProcessor> {self.name}'
+        return f'<SwatplusLulcChangeProcessor> {self.name}'
 
     def execute(self, data, outputs=None):
 
