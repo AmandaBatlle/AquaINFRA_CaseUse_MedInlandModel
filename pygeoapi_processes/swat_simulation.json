@@ -34,7 +34,7 @@
         "hreflang": "en-US"
     }],
     "inputs": {
-        "swatversion": {
+        "swat_version": {
             "title": "SWAT version",
             "description": "Define the SWAT model version 'swatplus' or 'swat2012'. AquaINFRA has integrated the executable version rev60.5.7_64rel_linux for SWAT+ and rev688_64rel_linux for SWAT2012. Example: \"swatplus\".",
             "schema": {
@@ -106,7 +106,7 @@
             "maxOccurs": 1,
             "keywords": []
         },
-        "years_skip": {
+        "skip_years": {
             "title": "Number of years of warm-up time ",
             "description": "(optional) Integer value to define the number of simulation years that are skipped before writing SWAT model outputs. Example: 2.",
             "schema": {
