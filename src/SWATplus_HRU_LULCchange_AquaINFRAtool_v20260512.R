@@ -139,7 +139,8 @@ source("download.R")
 # Now, download and unzip project file:
 message("Downloading...")
 download_zipped_file(url_zipped_input_project, dest_dir, dest_file_path)
-message("Downloading... done.")
+dest_dir <- find_correct_path(target_file="file.cio", dest_dir)
+message("Downloading... done. Using ", dest_dir, " (found file.cio in there).")
 
 
 # The project directory is the directory created by/before downloading
