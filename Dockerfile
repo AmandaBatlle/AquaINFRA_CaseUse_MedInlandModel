@@ -52,6 +52,7 @@ COPY src/in_variableList.csv /src/in_variableList.csv
 COPY src/in_variableList_swat2012.csv /src/in_variableList_swat2012.csv
 
 # Copy required R script version:
+COPY src/SWAT_MarineModellingSystem_connection_AquaINFRAtool_v20250418.R /src/SWAT_MarineModellingSystem_connection_AquaINFRAtool_v20250418.R
 COPY src/SWATrunR_AquaINFRAtool_v20260313.R /src/SWATrunR_AquaINFRAtool_v20260313.R
 COPY src/SWATplus_HRU_LULCchange_AquaINFRAtool_v20260512.R /src/SWATplus_HRU_LULCchange_AquaINFRAtool_v20260512.R
 COPY src/download.R /src/download.R

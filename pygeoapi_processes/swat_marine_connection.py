@@ -33,8 +33,8 @@ class SwatMarineConnectionProcessor(BaseProcessor):
         self.supports_outputs = True
         self.job_id = 'nothing-yet'
         self.process_id = self.metadata["id"]
-        self.image_name = 'catalunya-tordera:20260608-1eccf57'
-        self.script_name = 'swat_mitgcm_connection.R'
+        self.image_name = 'catalunya-tordera:20260724-dev'
+        self.script_name = 'SWAT_MarineModellingSystem_connection_AquaINFRAtool_v20250418.R'
         config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
         with open(config_file_path, 'r') as config_file:
             config = json.load(config_file)
