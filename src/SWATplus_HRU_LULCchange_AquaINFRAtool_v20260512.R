@@ -34,47 +34,49 @@ library(zip)
 
 run_hrululcc <- function (LULCchange, TxtInOut, output_dir, result_file_name=NULL) {
     
-  # -------------------------
-  # LOAD CHANGES
-  # -------------------------
-  #Renaming columns
+    # -------------------------
+    # LOAD CHANGES
+    # -------------------------
+    
+    # Renaming columns
     hru_id <- LULCchange[,1]
     new_lum <- LULCchange[,2]
     
     message("run_hrululcc_process: hru to change: ",  paste0(hru_id, collapse=", "))
     message("run_hrululcc_process: new lulc to change: ",  paste0(new_lum, collapse=","))
-            
     
-  # -------------------------
-  # APPLY CHANGE
-  # -------------------------
     
-    file = paste0(TxtInOut, "/hru-data.hru") 
+    # -------------------------
+    # APPLY CHANGE
+    # -------------------------
     
-    message(paste("run_hrululcc_process: Reading ",  file))
-    lines <- readLines(file)
+    filepath = paste0(TxtInOut, "/hru-data.hru")
+    
+    message(paste("run_hrululcc_process: Reading ", filepath))
+    lines <- readLines(filepath)
     
     # loop through all HRUs
-    for(i in seq_along(hru_id)) {
+    verbose <- FALSE
+    for (i in seq_along(hru_id)) {
       # find the line corresponding to this HRU
       row <- grep(paste0("^\\s*", hru_id[i], "\\s"), lines)
       
-      if(length(row) == 0) {
+      if (length(row) == 0) {
         #warning(paste("HRU ID", hru_id[i], "not found"))
         next
       }
       
-      message("run_hrululcc_process: Replace LULC in HRU ", hru_id[i], " to: ", new_lum[i])
+      if (verbose) message("run_hrululcc_process: Replace LULC in HRU ", hru_id[i], " to: ", new_lum[i])
       # replace the _lum word in that line
       lines[row] <- sub("[A-Za-z0-9]+_lum", paste0(new_lum[i], "_lum"), lines[row])
       
     }
     
-    message("run_hrululcc_process: Rewrite hru-data.hru file with updated LULC")
     # write the modified lines back
-    writeLines(lines, file)
-  
-  message("run_hrululcc_process: LULC change complete")
+    message(paste("run_hrululcc_process: Rewrite file ", filepath, "with updated LULC"))
+    writeLines(lines, filepath)
+    
+    message("run_hrululcc_process: LULC change complete")
     
     # -------------------------
     # PROCESS OUTPUT
@@ -98,7 +100,7 @@ run_hrululcc <- function (LULCchange, TxtInOut, output_dir, result_file_name=NUL
     setwd(original_wd)
     
     message("run_hrululcc_process: Zip creation complete.")
-  
+    
 }
 
 
@@ -169,7 +171,7 @@ message("Will store outputs as (zip file name): ", result_file_name)
 
 
 # CSV example
-run_hrululcc ( LULCchange = lulcc_csv, 
+run_hrululcc ( LULCchange = lulcc_csv,
                TxtInOut = TxtInOut_Tordera,
                output_dir = result_dir,
                result_file_name = result_file_name)
