@@ -99,7 +99,7 @@ class SwatSimulationProcessor(BaseProcessor):
         self.supports_outputs = True
         self.job_id = 'nothing-yet'
         self.process_id = self.metadata["id"]
-        self.image_name = 'catalunya-tordera:20260724-a0782e6'
+        self.image_name = 'catalunya-tordera:20260724-67d2e76'
         self.script_name = 'SWATrunR_AquaINFRAtool_v20260313.R'
         config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
         with open(config_file_path, 'r') as config_file:
