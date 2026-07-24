@@ -29,17 +29,15 @@ library(dplyr)
 # INPUTS + example values
 args <- commandArgs(trailingOnly = TRUE)
 message('R Command line args: ', args)
-file1 <- args[1] # thread_1.sqlite
+url_input_file <- args[1] # thread_1.sqlite
 output <- args[2] # /out/MITGCMinput_RiverWaterQuantityFromSWAT.txt
 
-Conversion_SWAT_MITGCM_WaterQuantity <- function( db_path, output_file){
+Conversion_SWAT_MITGCM_WaterQuantity <- function(url_input_file_db, output_file){
   # Load packages quietly
   #suppressPackageStartupMessages(lapply(requiredPackages, library, character.only = TRUE))
   
-  url <- db_path
   destfile <- "thread_1.sqlite"
-  
-  download.file(url, destfile, method = "auto")
+  download.file(url_input_file_db, destfile, method = "auto")
   
   # Create a connection to database
   con <- dbConnect(RSQLite::SQLite(), dbname = destfile)
@@ -68,4 +66,4 @@ Conversion_SWAT_MITGCM_WaterQuantity <- function( db_path, output_file){
   message("File successfully written: ", output_file)
 }
 
-Conversion_SWAT_MITGCM_WaterQuantity(file1, output)
+Conversion_SWAT_MITGCM_WaterQuantity(url_input_file, output)
