@@ -9,9 +9,9 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 How to call this process:
 
 # TESTED 2026-06-30: Works
-curl -i -X POST https://${PYSERVER}/processes/swatplus-lulc-change/execution \
+# TESTED 2026-07-24: Works
+curl -X POST https://${PYSERVER}/processes/swatplus-lulc-change/execution \
   --header "Content-Type: application/json" \
-  --header 'Prefer: respond-async' \
   --data '{
     "inputs": {
         "input_project_url": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
@@ -34,7 +34,7 @@ class SwatplusLulcChangeProcessor(BaseProcessor):
         self.supports_outputs = True
         self.job_id = 'nothing-yet'
         self.process_id = self.metadata["id"]
-        self.image_name = 'catalunya-tordera:20260623-dev'
+        self.image_name = 'catalunya-tordera:20260724-a0782e6'
         self.script_name = 'SWATplus_HRU_LULCchange_AquaINFRAtool_v20260512.R'
         config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
         with open(config_file_path, 'r') as config_file:

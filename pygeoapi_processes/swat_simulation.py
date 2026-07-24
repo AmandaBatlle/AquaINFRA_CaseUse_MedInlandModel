@@ -9,7 +9,7 @@ from pygeoapi.process.base import BaseProcessor, ProcessorExecuteError
 How to call this process:
 
 # swatplus, with example input from the repo
-# TESTED 2026-06-23: Works
+# TESTED 2026-07-24: Works
 curl -i -X POST https://${PYSERVER}/processes/swat-simulation/execution \
   --header "Content-Type: application/json" \
   --header 'Prefer: respond-async' \
@@ -99,7 +99,7 @@ class SwatSimulationProcessor(BaseProcessor):
         self.supports_outputs = True
         self.job_id = 'nothing-yet'
         self.process_id = self.metadata["id"]
-        self.image_name = 'catalunya-tordera:20260623-36f61b2'
+        self.image_name = 'catalunya-tordera:20260724-a0782e6'
         self.script_name = 'SWATrunR_AquaINFRAtool_v20260313.R'
         config_file_path = os.environ.get('AQUAINFRA_CONFIG_FILE', "./config.json")
         with open(config_file_path, 'r') as config_file:
