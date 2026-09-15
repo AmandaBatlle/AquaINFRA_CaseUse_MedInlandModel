@@ -6,31 +6,9 @@ AquaINFRA Case Study: Mediterranean Inland Model
 
 Gloria Scenario SWATplus model:
 - Code: `SWATrunR_AquaINFRAtool_v20260313.R` (previously: `swat_tordera_gloria.R`)
-- Project Data: https://github.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/tree/main/swat/Scenario_Gloria_linux
-- La Tordera shapefiles: Download and unzip https://drive.google.com/file/d/1gFPHRyKm2SaGwG6xHtL8uzNFC_0_vF78/view?usp=sharing
+- TxtInOut model Data: https://b2share.eudat.eu/records/am3bh-05a34/files/TxtInOut.zip?download=1
+- La Tordera shapefiles: Download and unzip https://b2share.eudat.eu/records/am3bh-05a34/files/Shapefiles.zip?download=1
 
-## Running analysis in R
-
-Step 1:
-
-```
-# old (needs fixing/testing/discarding)
-Rscript swat_tordera_gloria.R https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "./myoutputs"
-```
-
-Step 1 (Quick run):
-
-```
-# old (needs fixing/testing/discarding)
-Rscript swat_tordera_gloria.R https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json "channel_sd_day" "flo_out,water_temp" 1 20160101 20160228 20160115 "./myoutputs"
-```
-
-Step 2:
-
-```
-# old (needs fixing/testing/discarding)
-Rscript swat_mitgcm_connection.R https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_results/thread_1.sqlite joinedFile.txt
-```
 
 ## Running analysis using Docker
 
@@ -46,41 +24,40 @@ date; docker run --name "test_hru_change" \
   -v "./testcheckme:/swat/current_hrululcc_run/" \
   -e "R_SCRIPT=SWATplus_HRU_LULCchange_AquaINFRAtool_v20260512.R" \
   catalunya-tordera:20260623-dev -- \
-  "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip" \
-  "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/lulc_changes.csv" \
+  "https://b2share.eudat.eu/records/am3bh-05a34/files/TxtInOut.zip?download=1" \
+  "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/new-lulc_changes.csv" \
   "/out" && echo "LUCC docker finished"; date
 ```
 
-Step 1 (swat2012):
+SWATrun tool:  
+(swat2012):
 
 ```
 # works (2026-06-08)
 date; docker run -v ./test_out_swat2012:/out/ -e "R_SCRIPT=SWATrunR_AquaINFRAtool_v20260313.R" catalunya-tordera:20260608-1eccf57 -- "swat2012" "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/swat2012_sampledata.zip" "NULL" "rch_m" "FLOW_OUT" "1" "20000101" "20030228" "2" "/out"; date
 
-# old (needs fixing/testing/discarding)
-#docker run -it -v ./in:/in -v ./out/jobid123:/out/ -e R_SCRIPT="swat_tordera_gloria.R" catalunya-tordera-image -- "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip" "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json" "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "/out"
 ```
 
-Step 1 (swatplus):
+(swatplus):
 
 ```
 # works (2026-06-08)
 # Note: This takes about 15 minutes to finish
-date; docker run -v ./test_out_swatplus:/out/ -e "R_SCRIPT=SWATrunR_AquaINFRAtool_v20260313.R" catalunya-tordera:20260608-1eccf57 -- "swatplus" "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip" "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json" "channel_sd_day" "flo_out,water_temp" "1" "20140101" "20160228" "2" "/out"; date
+date; docker run -v ./test_out_swatplus:/out/ -e "R_SCRIPT=SWATrunR_AquaINFRAtool_v20260313.R" catalunya-tordera:20260608-1eccf57 -- "swatplus" "https://b2share.eudat.eu/records/am3bh-05a34/files/TxtInOut.zip?download=1" "NULL" "channel_sd_day" "flo_out,water_temp" "1" "20140101" "20160228" "2" "/out"; date
+
+# works (2026-06-08)
+# Example using json file to update calibration parameters in the calibration file.
+# This execution will not produce any meaningfull results, is is simply to showcase how to integrate calibration changes into the tool. 
+# Note: This takes about 15 minutes to finish
+date; docker run -v ./test_out_swatplus:/out/ -e "R_SCRIPT=SWATrunR_AquaINFRAtool_v20260313.R" catalunya-tordera:20260608-1eccf57 -- "swatplus" "https://b2share.eudat.eu/records/am3bh-05a34/files/TxtInOut.zip?download=1" "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json" "channel_sd_day" "flo_out,water_temp" "1" "20140101" "20160228" "2" "/out"; date
 ```
 
-Step 1 (Quick run):
+SWAT connection to Marine Model tool:
 
 ```
-# old (needs fixing/testing/discarding)
-#docker run -it -v ./in:/in -v ./out/jobid123:/out -e R_SCRIPT="swat_tordera_gloria.R" catalunya-tordera-image -- "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip" "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/par_cal.json" "channel_sd_day" "flo_out,water_temp" 1 20160101 20201231 20190601 "/out"
-```
-
-Step 2:
-
-```
-# old (needs fixing/testing/discarding)
+# works (2026-06-08)
 date; docker run -it -v ./in:/in -v ./out:/out -e R_SCRIPT="swat_mitgcm_connection.R" catalunya-tordera-image -- https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_results/thread_1.sqlite "/out/joined.txt"
+
 ```
 
 ## How to dockerize
@@ -216,26 +193,6 @@ curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
         "start_date": 20140101,
         "end_date":   20160228,
         "skip_years": 2
-    }
-}'
-```
-
-Old (to be fixed/tested/discarded):
-
-```
-curl -i -X POST https://${PYSERVER}/processes/tordera-gloria/execution \
-  --header "Content-Type: application/json" \
-  --header 'Prefer: respond-async' \
-  --data '{
-    "inputs": {
-        "TextInOut_URL": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/project.zip",
-        "par_cal": "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/water_temp.csv",
-        "unit": 1,
-        "file": "channel_sd_day",
-        "variable": "flo_out,water_temp,no3_out",
-        "start_date": 20160101,
-        "end_date": 20201231,
-        "start_date_print": 20190601
     }
 }'
 ```
