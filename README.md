@@ -4,7 +4,7 @@
 
 AquaINFRA Case Study: Mediterranean Inland Model
 
-Gloria Scenario SWATplus model:
+La Tordera SWATplus model during Gloria Storm:
 - Code: `SWATrunR_AquaINFRAtool_v20260313.R` (previously: `swat_tordera_gloria.R`)
 - TxtInOut model Data: https://b2share.eudat.eu/records/am3bh-05a34/files/TxtInOut.zip?download=1
 - La Tordera shapefiles: Download and unzip https://b2share.eudat.eu/records/am3bh-05a34/files/Shapefiles.zip?download=1
