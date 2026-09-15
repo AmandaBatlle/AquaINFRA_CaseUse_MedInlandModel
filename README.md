@@ -25,7 +25,7 @@ date; docker run --name "test_hru_change" \
   -e "R_SCRIPT=SWATplus_HRU_LULCchange_AquaINFRAtool_v20260512.R" \
   catalunya-tordera:20260623-dev -- \
   "https://b2share.eudat.eu/records/am3bh-05a34/files/TxtInOut.zip?download=1" \
-  "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/new-lulc_changes.csv" \
+  "https://raw.githubusercontent.com/AmandaBatlle/AquaINFRA_CaseUse_MedInlandModel/refs/heads/main/example_inputs/lulc_changes-5-pix.csv" \
   "/out" && echo "LUCC docker finished"; date
 ```
 
