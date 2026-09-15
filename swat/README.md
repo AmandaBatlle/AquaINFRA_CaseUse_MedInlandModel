@@ -1,6 +1,6 @@
 
 
-### Please download
+### SWAT executable folder
 
-Please download and unzip the Scenario_Gloria_linux.zip from Amanda Batlle to this directory!
+Executables for SWAT+ and SWAT2012 downloaded from https://swat.tamu.edu/
 
